@@ -28,7 +28,7 @@ Specyfikacja v0.4: `/home/noaidi/clawd/greenleaf-crm-spec-v0.4.md` (835 linii, 2
 ## Stack technologiczny
 
 - **Frontend/Backend:** Next.js (React, SSR)
-- **Baza danych:** PostgreSQL
+- **Baza danych:** SQLite
 - **ORM:** Prisma
 - **UI:** Mobile-first PWA
 - **Eksport:** XLSX (ExcelJS)
@@ -45,7 +45,7 @@ Specyfikacja v0.4: `/home/noaidi/clawd/greenleaf-crm-spec-v0.4.md` (835 linii, 2
 ## GitHub
 
 - **Nazwa repo:** `greenleaf-crm`
-- **Opis repo:** `CRM system for regenerative CSA farm — managing vegetable box subscriptions, egg/chicken orders, delivery logistics and customer communication. Built with Next.js, PostgreSQL, Prisma.`
+- **Opis repo:** `CRM system for regenerative CSA farm — managing vegetable box subscriptions, egg/chicken orders, delivery logistics and customer communication. Built with Next.js, SQLite, Prisma.`
 - **`.gitignore` entries:**
 
 ```

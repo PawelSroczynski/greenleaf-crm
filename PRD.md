@@ -3,7 +3,7 @@
 > System zarządzania gospodarstwa regeneracyjnego w modelu RWS (CSA)
 > Gospodarstwo: Green Leaf Farm / AgroPartyka — Kąkolewice 17a, 64-840 Budzyń
 > Prowadzący: Magda i Filip Partyka
-> Stack: Next.js + PostgreSQL + Prisma
+> Stack: Next.js + SQLite + Prisma
 > Data: 2026-03-20 | Status: PRD produkcyjny
 
 ---
@@ -255,7 +255,7 @@ Przycisk "Eksportuj" w panelu admina generuje plik XLSX z aktualnymi danymi.
 
 - **Czas ładowania strony:** max 3s na LTE (mobile), max 2s na WiFi (desktop)
 - **Concurrent users peak:** ~50 (sobota rano — wszyscy klienci sprawdzają odbiory)
-- **Baza danych:** 125 klientów, ~3000 paczek/sezon, ~500 rezerwacji kurczaków — mały system, PostgreSQL wystarczy bez optymalizacji
+- **Baza danych:** 125 klientów, ~3000 paczek/sezon, ~500 rezerwacji kurczaków — mały system, SQLite wystarczy bez optymalizacji
 - **XLSX export:** generowanie pliku max 5s dla pełnych danych sezonu
 
 ### 5.2 Offline (KRYTYCZNE dla dostawcy)

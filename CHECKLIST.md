@@ -17,10 +17,10 @@
 - [ ] Dodać `.gitignore` (Node + Next.js + env — patrz README.md)
 - [ ] Pierwszy commit + push
 
-## 2. Baza danych (PostgreSQL + Prisma)
+## 2. Baza danych (SQLite + Prisma)
 
-- [ ] Zainstalować PostgreSQL lokalnie lub skonfigurować hosted (Supabase / Neon / VPS)
-- [ ] `npx prisma init` — wygenerować `prisma/schema.prisma`
+- [ ] Zainstalować SQLite lokalnie lub skonfigurować hosted (VPS (plik .db))
+- [ ] `npx prisma init` (provider: sqlite) — wygenerować `prisma/schema.prisma`
 - [ ] Zdefiniować model User (z rolami: admin, dostawca, klient_rws, klient_zewnetrzny)
 - [ ] Zdefiniować model Product (warzywa/zioła z sezonowością)
 - [ ] Zdefiniować model PickupPoint + DeliveryZone
@@ -234,7 +234,7 @@
 - [ ] Skonfigurować domenę/subdomenę (np. crm.agropartyka.com)
 - [ ] Deploy: Docker (Dockerfile + docker-compose) lub Vercel/Railway
 - [ ] Zmienne środowiskowe na produkcji (.env)
-- [ ] PostgreSQL produkcyjny (backup codziennie, retencja 30 dni)
+- [ ] SQLite produkcyjny (backup codziennie, retencja 30 dni)
 - [ ] `npx prisma migrate deploy` na produkcji
 - [ ] Seed danych produkcyjnych (punkty odbioru, produkty sezonowe, konto admina)
 - [ ] SSL/HTTPS (Let's Encrypt lub CDN)

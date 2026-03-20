@@ -2,7 +2,7 @@
 
 > Źródło prawdy dla Prisma schema
 > Konwencje: snake_case w bazie, camelCase w Prisma, UUID jako klucze główne
-> Baza: PostgreSQL
+> Baza: SQLite
 
 ---
 
