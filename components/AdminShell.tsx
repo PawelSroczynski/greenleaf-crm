@@ -9,6 +9,7 @@ import { TopBar } from '@/components/TopBar';
 import { PackageBuilder } from '@/components/admin/PackageBuilder';
 import { SwapSummary } from '@/components/admin/SwapSummary';
 import { PickupList } from '@/components/admin/PickupList';
+import { ExportPanel } from '@/components/admin/ExportPanel';
 import { loadStore } from '@/lib/store';
 
 type Section = 'dashboard' | 'weeklyPackage' | 'clients' | 'pickups' | 'export';
@@ -111,9 +112,11 @@ export function AdminShell() {
           </>
         )}
         {active === 'pickups' && <PickupList />}
-        {active !== 'dashboard' && active !== 'weeklyPackage' && active !== 'pickups' && (
-          <Placeholder section={active} />
-        )}
+        {active === 'export' && <ExportPanel />}
+        {active !== 'dashboard' &&
+          active !== 'weeklyPackage' &&
+          active !== 'pickups' &&
+          active !== 'export' && <Placeholder section={active} />}
       </main>
     </div>
   );

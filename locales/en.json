@@ -69,6 +69,18 @@
       "markPicked": "Mark as picked up",
       "absence": "Reported absence",
       "notReported": "Not reported"
+    },
+    "export": {
+      "noPackage": "No published package — publish the weekly package first.",
+      "intro": "Download an XLSX with this week's data (4 sheets).",
+      "download": "Download XLSX",
+      "rows": "{{n}} rows",
+      "sheet": {
+        "harvest": "Harvest",
+        "packing": "Packing",
+        "swaps": "Swaps",
+        "chickens": "Chickens"
+      }
     }
   },
   "client": {

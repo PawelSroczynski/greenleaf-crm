@@ -45,8 +45,8 @@ ODKŁADAMY: MVP-1 auth (fake login), MVP-8 płatności, MVP-6 konfiguracja punkt
   - [x] **3a** MVP-3 paczka (create/publish, walidacja sezonu, generowanie ClientPackage). ✅ 2026-06-27 — 45/45 testów, headless OK.
   - [x] **3b** MVP-4 zamiana z deadlinem + 3 warianty UI (A/B/C) + symulacja czasu + podsumowanie zamian admina. ✅ 2026-06-27 — 58/58 testów, headless 3 wariantów OK.
 - [x] **ETAP 4 — Domknięcie cyklu:** MVP-5 brak odbioru; MVP-7 status+licznik; MVP-13 checkbox odbioru. ✅ 2026-06-27 — 70/70 testów, headless OK.
-- [ ] **ETAP 5 — Eksport XLSX:** MVP-9 SheetJS, 4 arkusze wg spec §19.
-- [ ] **ETAP 6 — Deploy dla Magdy:** static export → host na enklava.co; zebranie feedbacku.
+- [x] **ETAP 5 — Eksport XLSX:** MVP-9 SheetJS, 4 arkusze (Zbiory/Pakowanie/Zmiany/Kurczaki). ✅ 2026-06-27 — 74/74 testów, pobranie pliku zweryfikowane headless.
+- [x] **ETAP 6 — Deploy dla Magdy:** static export → https://enklava.co/files/glcrm/ (deploy ciągły po każdym etapie). ✅ Gotowe do feedbacku.
 
 ## Zasady pracy
 
@@ -69,3 +69,4 @@ ODKŁADAMY: MVP-1 auth (fake login), MVP-8 płatności, MVP-6 konfiguracja punkt
 - 2026-06-27: ETAP 3a ZIELONY — moduł „Paczka tygodnia" (lib/packages.ts czyste funkcje + PackageBuilder): walidacja sezonu (pomidor odrzucony w czerwcu), publikacja generuje 4 ClientPackage z 4 aktywnych subskrypcji. 45/45 testów, tsc czysty, headless live OK. Następny: ETAP 3b (zamiany + 3 warianty UI).
 - 2026-06-27: ETAP 3b ZIELONY — moduł ZAMIAN (lib/swaps.ts + SwapPanel): 3 warianty UI (A lista+przycisk / B formularz X→Y / C checkboxy), deadline śr 20:00 z symulacją „przed/po terminie", podsumowanie zamian dla admina. 58/58 testów, tsc czysty, headless 3 wariantów + blokada po terminie OK, zero błędów JS. RDZEŃ TYGODNIA KOMPLETNY. Następny: ETAP 4 (brak odbioru + status/licznik + checkbox odbioru).
 - 2026-06-27: ETAP 4 ZIELONY — domknięcie cyklu (lib/pickups.ts + PackageStatus/SubscriptionPanel/PickupList): MVP-5 zgłoszenie braku (deadline śr 10:00, cofanie, symulacja czasu), MVP-7 status paczki + licznik X/24, MVP-13 checkbox odbioru (idempotentny, zmniejsza licznik) + flaga „nie zgłosił". 70/70 testów, tsc czysty, headless OK. UWAGA: zrobione w main loop (agent zablokowany bramką Telegram). Następny: ETAP 5 (eksport XLSX — TOP priorytet Magdy).
+- 2026-06-27: ETAP 5 ZIELONY — eksport XLSX (lib/export.ts + ExportPanel, SheetJS): 4 arkusze Zbiory/Pakowanie/Zmiany/Kurczaki, czyste funkcje agregujące (po zamianach). 74/74 testów, tsc czysty. Headless: pobrano greenleaf-tydzien-4.xlsx (21KB, 4 arkusze poprawne, Zbiory 11 wierszy, Pakowanie 4). **LEAN-MVP (7/14) KOMPLETNY — symulator gotowy do feedbacku Magdy.**

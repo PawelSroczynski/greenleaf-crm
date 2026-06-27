@@ -69,6 +69,18 @@
       "markPicked": "Oznacz jako odebrane",
       "absence": "Zgłosił brak",
       "notReported": "Nie zgłosił"
+    },
+    "export": {
+      "noPackage": "Brak opublikowanej paczki — najpierw opublikuj paczkę tygodnia.",
+      "intro": "Pobierz arkusz XLSX z danymi tygodnia (4 zakładki).",
+      "download": "Pobierz XLSX",
+      "rows": "{{n}} wierszy",
+      "sheet": {
+        "harvest": "Zbiory",
+        "packing": "Pakowanie",
+        "swaps": "Zmiany",
+        "chickens": "Kurczaki"
+      }
     }
   },
   "client": {
