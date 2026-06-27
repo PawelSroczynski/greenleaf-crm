@@ -55,6 +55,13 @@
       "published": "Paczka opublikowana",
       "publishedInfo": "Wygenerowano paczki dla {{count}} aktywnych subskrypcji.",
       "preview": "Podgląd opublikowanej zawartości"
+    },
+    "swaps": {
+      "title": "Podsumowanie zamian",
+      "product": "Produkt",
+      "out": "Wychodzi",
+      "in": "Wchodzi",
+      "empty": "Brak zamian dla tej paczki."
     }
   },
   "client": {
@@ -67,6 +74,27 @@
       "myPackage": "Tu zobaczysz zawartość swojej paczki tygodnia i zamiany.",
       "subscription": "Tu zobaczysz szczegóły swojej subskrypcji i płatności.",
       "profile": "Tu zobaczysz swój profil i punkt odbioru."
+    },
+    "swap": {
+      "title": "Moja paczka — zamiany",
+      "weekLine": "Tydzień {{week}} · odbiór {{date}}",
+      "contents": "Zawartość paczki",
+      "variantLabel": "Wariant UI zamian",
+      "variantA": "Wariant A",
+      "variantB": "Wariant B",
+      "variantC": "Wariant C",
+      "simulateAfter": "Symuluj: po terminie",
+      "open": "Zamiany otwarte (termin: środa 20:00)",
+      "closed": "Zamiany zamknięte (termin: środa 20:00)",
+      "swap": "Zamień",
+      "swapTo": "na",
+      "original": "Produkt z paczki",
+      "replacement": "Zamiennik",
+      "selectReplacement": "— wybierz zamiennik —",
+      "swappedTo": "⤷ zamieniono na {{name}}",
+      "confirm": "Zatwierdź zamiany",
+      "done": "Wykonane zamiany",
+      "noSwaps": "Brak zamian."
     }
   },
   "supplier": {

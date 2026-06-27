@@ -55,6 +55,13 @@
       "published": "Box published",
       "publishedInfo": "Generated boxes for {{count}} active subscriptions.",
       "preview": "Published content preview"
+    },
+    "swaps": {
+      "title": "Swap summary",
+      "product": "Product",
+      "out": "Out",
+      "in": "In",
+      "empty": "No swaps for this box."
     }
   },
   "client": {
@@ -67,6 +74,27 @@
       "myPackage": "Here you will see your weekly box content and swaps.",
       "subscription": "Here you will see your subscription details and payments.",
       "profile": "Here you will see your profile and pickup point."
+    },
+    "swap": {
+      "title": "My box — swaps",
+      "weekLine": "Week {{week}} · pickup {{date}}",
+      "contents": "Box contents",
+      "variantLabel": "Swap UI variant",
+      "variantA": "Variant A",
+      "variantB": "Variant B",
+      "variantC": "Variant C",
+      "simulateAfter": "Simulate: past deadline",
+      "open": "Swaps open (deadline: Wednesday 20:00)",
+      "closed": "Swaps closed (deadline: Wednesday 20:00)",
+      "swap": "Swap",
+      "swapTo": "for",
+      "original": "Product from box",
+      "replacement": "Replacement",
+      "selectReplacement": "— choose a replacement —",
+      "swappedTo": "⤷ swapped for {{name}}",
+      "confirm": "Confirm swaps",
+      "done": "Completed swaps",
+      "noSwaps": "No swaps yet."
     }
   },
   "supplier": {
