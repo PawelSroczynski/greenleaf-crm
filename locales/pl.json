@@ -81,6 +81,17 @@
         "swaps": "Zmiany",
         "chickens": "Kurczaki"
       }
+    },
+    "clients": {
+      "email": "E-mail",
+      "phone": "Telefon",
+      "point": "Punkt odbioru",
+      "delivery": "Sposób dostawy",
+      "subscriptions": "Subskrypcje",
+      "noSub": "Brak subskrypcji.",
+      "pause": "Wstrzymaj",
+      "resume": "Wznów",
+      "external": "zewnętrzny"
     }
   },
   "client": {
@@ -131,6 +142,14 @@
       "counter": "Odebrane paczki",
       "remaining": "Pozostało: {{n}}",
       "payment": "Model płatności"
+    },
+    "profile": {
+      "none": "Brak profilu.",
+      "point": "Punkt odbioru",
+      "delivery": "Sposób dostawy",
+      "notes": "Uwagi",
+      "save": "Zapisz",
+      "saved": "Zapisano ✓"
     }
   },
   "supplier": {
@@ -165,5 +184,9 @@
   "paymentModel": {
     "upfront": "Płatność z góry",
     "installments_3": "3 raty"
+  },
+  "deliveryOption": {
+    "pickup": "Odbiór w punkcie",
+    "home_delivery": "Dostawa do domu"
   }
 }

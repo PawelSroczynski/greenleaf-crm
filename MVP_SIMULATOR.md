@@ -47,6 +47,7 @@ ODKŁADAMY: MVP-1 auth (fake login), MVP-8 płatności, MVP-6 konfiguracja punkt
 - [x] **ETAP 4 — Domknięcie cyklu:** MVP-5 brak odbioru; MVP-7 status+licznik; MVP-13 checkbox odbioru. ✅ 2026-06-27 — 70/70 testów, headless OK.
 - [x] **ETAP 5 — Eksport XLSX:** MVP-9 SheetJS, 4 arkusze (Zbiory/Pakowanie/Zmiany/Kurczaki). ✅ 2026-06-27 — 74/74 testów, pobranie pliku zweryfikowane headless.
 - [x] **ETAP 6 — Deploy dla Magdy:** static export → https://enklava.co/files/glcrm/ (deploy ciągły po każdym etapie). ✅ Gotowe do feedbacku.
+- [x] **ETAP 7 — Klikalne wypełnienie:** Klienci (admin: lista→szczegół→pauza/wznowienie subskrypcji, MVP-12) + Profil (klient: edycja punktu odbioru/dostawy/notatek). ✅ 2026-06-27 — 81/81 testów. Admin i Klient RWS bez martwych zakładek (Dostawca/Klient zewn. poza zakresem decyzją Pawła).
 
 ## Zasady pracy
 

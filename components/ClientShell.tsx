@@ -8,6 +8,7 @@ import { TopBar } from '@/components/TopBar';
 import { SwapPanel } from '@/components/client/SwapPanel';
 import { PackageStatus } from '@/components/client/PackageStatus';
 import { SubscriptionPanel } from '@/components/client/SubscriptionPanel';
+import { ProfilePanel } from '@/components/client/ProfilePanel';
 
 type Tab = 'myPackage' | 'subscription' | 'profile';
 
@@ -33,15 +34,7 @@ export function ClientShell() {
           </>
         )}
         {active === 'subscription' && <SubscriptionPanel />}
-        {active === 'profile' && (
-          <>
-            <h2 className="mb-2 text-xl font-semibold">{t(`client.tabs.${active}`)}</h2>
-            <p className="text-gray-600">{t(`client.placeholders.${active}`)}</p>
-            <p className="mt-2 inline-block rounded bg-leaf-50 px-2 py-1 text-xs font-semibold text-leaf-700">
-              {t('common.soon')}
-            </p>
-          </>
-        )}
+        {active === 'profile' && <ProfilePanel />}
       </main>
 
       <nav

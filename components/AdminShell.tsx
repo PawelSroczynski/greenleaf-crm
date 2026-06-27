@@ -10,6 +10,7 @@ import { PackageBuilder } from '@/components/admin/PackageBuilder';
 import { SwapSummary } from '@/components/admin/SwapSummary';
 import { PickupList } from '@/components/admin/PickupList';
 import { ExportPanel } from '@/components/admin/ExportPanel';
+import { ClientsList } from '@/components/admin/ClientsList';
 import { loadStore } from '@/lib/store';
 
 type Section = 'dashboard' | 'weeklyPackage' | 'clients' | 'pickups' | 'export';
@@ -63,19 +64,6 @@ function Dashboard() {
   );
 }
 
-function Placeholder({ section }: { section: Exclude<Section, 'dashboard'> }) {
-  const { t } = useTranslation();
-  return (
-    <section>
-      <h2 className="mb-2 text-xl font-semibold">{t(`admin.nav.${section}`)}</h2>
-      <p className="text-gray-600">{t(`admin.placeholders.${section}`)}</p>
-      <p className="mt-2 inline-block rounded bg-leaf-50 px-2 py-1 text-xs font-semibold text-leaf-700">
-        {t('common.soon')}
-      </p>
-    </section>
-  );
-}
-
 export function AdminShell() {
   const { t } = useTranslation();
   const [active, setActive] = useState<Section>('dashboard');
@@ -111,12 +99,9 @@ export function AdminShell() {
             <SwapSummary />
           </>
         )}
+        {active === 'clients' && <ClientsList />}
         {active === 'pickups' && <PickupList />}
         {active === 'export' && <ExportPanel />}
-        {active !== 'dashboard' &&
-          active !== 'weeklyPackage' &&
-          active !== 'pickups' &&
-          active !== 'export' && <Placeholder section={active} />}
       </main>
     </div>
   );
