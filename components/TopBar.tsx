@@ -1,0 +1,28 @@
+'use client';
+
+// components/TopBar.tsx — wspólny górny pasek: logo + LanguageSwitcher + „Zmień rolę".
+
+import { useTranslation } from 'react-i18next';
+import { useRole } from '@/lib/role-context';
+import { LanguageSwitcher } from '@/components/LanguageSwitcher';
+
+export function TopBar() {
+  const { t } = useTranslation();
+  const { setRole } = useRole();
+
+  return (
+    <header className="sticky top-0 z-10 flex items-center justify-between border-b border-leaf-100 bg-white px-4 py-3">
+      <h1 className="text-lg font-bold text-leaf-600">{t('brand')}</h1>
+      <div className="flex items-center gap-2">
+        <LanguageSwitcher />
+        <button
+          type="button"
+          onClick={() => setRole(null)}
+          className="rounded bg-leaf-50 px-2 py-1 text-xs font-semibold text-leaf-700"
+        >
+          {t('common.changeRole')}
+        </button>
+      </div>
+    </header>
+  );
+}

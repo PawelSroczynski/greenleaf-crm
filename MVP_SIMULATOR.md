@@ -40,7 +40,7 @@ ODKŁADAMY: MVP-1 auth (fake login), MVP-8 płatności, MVP-6 konfiguracja punkt
 
 - [x] **ETAP 0 — Fundament:** scaffold Next.js+TS+Tailwind+Vitest+RTL+i18next; pierwszy zielony test; build zielony. ✅ 2026-06-27
 - [x] **ETAP 1 — Domena & dane:** typy TS (16 encji), seed (4 punkty, produkty z sezonowością, userzy testowi), persystencja localStorage. ✅ 2026-06-27 — 21/21 testów, tsc czysty.
-- [ ] **ETAP 2 — Role & nawigacja:** fake login / przełącznik roli; shell panelu admina + bottom-tab klienta; przełącznik języka.
+- [x] **ETAP 2 — Role & nawigacja:** fake login / przełącznik roli; shell panelu admina + bottom-tab klienta; przełącznik języka. ✅ 2026-06-27 — 31/31 testów, headless mobil OK.
 - [ ] **ETAP 3 — Rdzeń tygodnia:** MVP-3 paczka (create/publish, walidacja sezonu); MVP-4 zamiana z deadlinem + 3 warianty UI.
 - [ ] **ETAP 4 — Domknięcie cyklu:** MVP-5 brak odbioru; MVP-7 status+licznik; MVP-13 checkbox odbioru.
 - [ ] **ETAP 5 — Eksport XLSX:** MVP-9 SheetJS, 4 arkusze wg spec §19.
@@ -63,3 +63,4 @@ ODKŁADAMY: MVP-1 auth (fake login), MVP-8 płatności, MVP-6 konfiguracja punkt
 - 2026-06-27: audyt mapy przygotowania ukończony; plan zatwierdzony (defaulty); start ETAP 0.
 - 2026-06-27: ETAP 0 ZIELONY — Next.js 15.5 + TS + Tailwind + Vitest + RTL + happy-dom; smoke test 2/2; `next build` + static export OK. Następny: ETAP 1 (domena + seed + localStorage).
 - 2026-06-27: ETAP 1 ZIELONY — 16 typów, config (deadliny/ceny), seed (56 produktów / 30 dostępnych w czerwcu, 7 userów, 6 subskrypcji, 1 WeeklyPackage + 4 ClientPackage), store localStorage. 21/21 testów, tsc czysty. Deploy pipeline + favicon. Live: enklava.co/files/glcrm/. Następny: ETAP 2 (role + nawigacja + i18n switch).
+- 2026-06-27: ETAP 2 ZIELONY — i18n PL/EN (react-i18next, parzystość kluczy), RolePicker (4 role + persystencja), AdminShell/ClientShell/SimpleShell, dowód danych (Aktywnych klientów: 5). 31/31 testów, tsc czysty, headless mobil bez błędów JS. Następny: ETAP 3 (rdzeń: paczka + zamiany 3 warianty UI).
