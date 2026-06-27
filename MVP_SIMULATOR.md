@@ -39,7 +39,7 @@ ODKŁADAMY: MVP-1 auth (fake login), MVP-8 płatności, MVP-6 konfiguracja punkt
 ## Plan etapów (każdy = commit + push + raport)
 
 - [x] **ETAP 0 — Fundament:** scaffold Next.js+TS+Tailwind+Vitest+RTL+i18next; pierwszy zielony test; build zielony. ✅ 2026-06-27
-- [ ] **ETAP 1 — Domena & dane:** typy TS (16 encji), seed (4 punkty, produkty z sezonowością, userzy testowi), persystencja localStorage.
+- [x] **ETAP 1 — Domena & dane:** typy TS (16 encji), seed (4 punkty, produkty z sezonowością, userzy testowi), persystencja localStorage. ✅ 2026-06-27 — 21/21 testów, tsc czysty.
 - [ ] **ETAP 2 — Role & nawigacja:** fake login / przełącznik roli; shell panelu admina + bottom-tab klienta; przełącznik języka.
 - [ ] **ETAP 3 — Rdzeń tygodnia:** MVP-3 paczka (create/publish, walidacja sezonu); MVP-4 zamiana z deadlinem + 3 warianty UI.
 - [ ] **ETAP 4 — Domknięcie cyklu:** MVP-5 brak odbioru; MVP-7 status+licznik; MVP-13 checkbox odbioru.
@@ -53,7 +53,13 @@ ODKŁADAMY: MVP-1 auth (fake login), MVP-8 płatności, MVP-6 konfiguracja punkt
 - Po każdym etapie: `git push` (trwałość) + raport do Pawła.
 - Branch: `feat/mvp-simulator`.
 
+## Hosting (link na żywo, nadpisywany po każdym etapie)
+
+- **Live:** https://enklava.co/files/glcrm/
+- Deploy: `bash scripts/deploy-sim.sh` (build z `NEXT_PUBLIC_BASE_PATH=/files/glcrm` → kopia do `/var/www/enklava/files/glcrm/`, noaidi-writable, bez `basic`).
+
 ## Postęp (aktualizowany na bieżąco)
 
 - 2026-06-27: audyt mapy przygotowania ukończony; plan zatwierdzony (defaulty); start ETAP 0.
 - 2026-06-27: ETAP 0 ZIELONY — Next.js 15.5 + TS + Tailwind + Vitest + RTL + happy-dom; smoke test 2/2; `next build` + static export OK. Następny: ETAP 1 (domena + seed + localStorage).
+- 2026-06-27: ETAP 1 ZIELONY — 16 typów, config (deadliny/ceny), seed (56 produktów / 30 dostępnych w czerwcu, 7 userów, 6 subskrypcji, 1 WeeklyPackage + 4 ClientPackage), store localStorage. 21/21 testów, tsc czysty. Deploy pipeline + favicon. Live: enklava.co/files/glcrm/. Następny: ETAP 2 (role + nawigacja + i18n switch).
