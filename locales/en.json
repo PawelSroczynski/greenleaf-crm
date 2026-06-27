@@ -5,7 +5,9 @@
     "soonEtap": "Coming soon (STAGE {{etap}})",
     "changeRole": "Change role",
     "language": "Language",
-    "back": "Back"
+    "back": "Back",
+    "reset": "Reset simulator data",
+    "resetConfirm": "Reset simulator data to the initial state?"
   },
   "roles": {
     "title": "Choose your role",

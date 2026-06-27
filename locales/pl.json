@@ -5,7 +5,9 @@
     "soonEtap": "Wkrótce (ETAP {{etap}})",
     "changeRole": "Zmień rolę",
     "language": "Język",
-    "back": "Wstecz"
+    "back": "Wstecz",
+    "reset": "Resetuj dane symulatora",
+    "resetConfirm": "Zresetować dane symulatora do stanu początkowego?"
   },
   "roles": {
     "title": "Wybierz rolę",
