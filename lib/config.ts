@@ -41,6 +41,9 @@ export const PACKAGE_COUNT = {
   paczka_12: 12,
 } as const;
 
+/** Docelowa liczba pozycji w paczce tygodnia (PRD §9 — 10–12 warzyw). */
+export const PACKAGE_ITEM_TARGET = { min: 10, max: 12 } as const;
+
 /** Kurczaki — DATA_MODEL.md §8 (ChickenReservation). */
 export const CHICKEN = {
   pricePerKg: 38,

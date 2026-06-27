@@ -6,6 +6,7 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { TopBar } from '@/components/TopBar';
+import { PackageBuilder } from '@/components/admin/PackageBuilder';
 import { loadStore } from '@/lib/store';
 
 type Section = 'dashboard' | 'weeklyPackage' | 'clients' | 'pickups' | 'export';
@@ -100,7 +101,11 @@ export function AdminShell() {
       </nav>
 
       <main className="p-4">
-        {active === 'dashboard' ? <Dashboard /> : <Placeholder section={active} />}
+        {active === 'dashboard' && <Dashboard />}
+        {active === 'weeklyPackage' && <PackageBuilder />}
+        {active !== 'dashboard' && active !== 'weeklyPackage' && (
+          <Placeholder section={active} />
+        )}
       </main>
     </div>
   );

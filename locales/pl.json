@@ -39,6 +39,22 @@
       "clients": "Tu powstanie lista klientów i subskrypcji.",
       "pickups": "Tu powstanie obsługa punktów odbioru i potwierdzeń.",
       "export": "Tu powstanie eksport danych do arkusza."
+    },
+    "package": {
+      "title": "Paczka tygodnia",
+      "weekLine": "Tydzień {{week}} · odbiór {{date}}",
+      "product": "Produkt",
+      "selectProduct": "— wybierz produkt sezonowy —",
+      "quantity": "Ilość",
+      "unit": "Jednostka",
+      "add": "Dodaj",
+      "remove": "Usuń",
+      "empty": "Brak pozycji w paczce.",
+      "itemCount": "Pozycje: {{count}} (cel {{min}}–{{max}})",
+      "publish": "Publikuj paczkę",
+      "published": "Paczka opublikowana",
+      "publishedInfo": "Wygenerowano paczki dla {{count}} aktywnych subskrypcji.",
+      "preview": "Podgląd opublikowanej zawartości"
     }
   },
   "client": {

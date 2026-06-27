@@ -39,6 +39,22 @@
       "clients": "The client and subscription list will live here.",
       "pickups": "Pickup points and confirmations will live here.",
       "export": "Spreadsheet data export will live here."
+    },
+    "package": {
+      "title": "Weekly box",
+      "weekLine": "Week {{week}} · pickup {{date}}",
+      "product": "Product",
+      "selectProduct": "— select a seasonal product —",
+      "quantity": "Quantity",
+      "unit": "Unit",
+      "add": "Add",
+      "remove": "Remove",
+      "empty": "No items in the box yet.",
+      "itemCount": "Items: {{count}} (target {{min}}–{{max}})",
+      "publish": "Publish box",
+      "published": "Box published",
+      "publishedInfo": "Generated boxes for {{count}} active subscriptions.",
+      "preview": "Published content preview"
     }
   },
   "client": {
