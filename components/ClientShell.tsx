@@ -38,7 +38,7 @@ export function ClientShell() {
             <h2 className="mb-2 text-xl font-semibold">{t(`client.tabs.${active}`)}</h2>
             <p className="text-gray-600">{t(`client.placeholders.${active}`)}</p>
             <p className="mt-2 inline-block rounded bg-leaf-50 px-2 py-1 text-xs font-semibold text-leaf-700">
-              {t('common.soonEtap', { etap: 5 })}
+              {t('common.soon')}
             </p>
           </>
         )}

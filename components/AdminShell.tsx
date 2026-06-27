@@ -70,7 +70,7 @@ function Placeholder({ section }: { section: Exclude<Section, 'dashboard'> }) {
       <h2 className="mb-2 text-xl font-semibold">{t(`admin.nav.${section}`)}</h2>
       <p className="text-gray-600">{t(`admin.placeholders.${section}`)}</p>
       <p className="mt-2 inline-block rounded bg-leaf-50 px-2 py-1 text-xs font-semibold text-leaf-700">
-        {t('common.soonEtap', { etap: 3 })}
+        {t('common.soon')}
       </p>
     </section>
   );
