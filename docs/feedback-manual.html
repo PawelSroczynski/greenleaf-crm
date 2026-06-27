@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GreenLeaf CRM — Twoja opinia krok po kroku</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%231c6647'/><path d='M16 7c5 2 8 5 8 10 0 4-3 7-8 8-5-1-8-4-8-8 0-5 3-8 8-10z' fill='%232d9e6b'/><path d='M16 9v15M16 14l4-3M16 18l-4-3' stroke='%23dcecdc' stroke-width='1.4' fill='none' stroke-linecap='round'/></svg>">
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{--leaf:#2d9e6b;--leaf-d:#1c6647;--leaf-l:#eaf3ee;--ink:#1f2a24;--muted:#5f6b64}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;background:#f2f1ed;color:var(--ink);line-height:1.6;-webkit-text-size-adjust:100%}
+  .wrap{max-width:720px;margin:0 auto;padding:0 18px 80px}
+  header{background:#fff;border-bottom:1px solid #e3e7e4;padding:16px 0;position:sticky;top:0;z-index:5}
+  header .wrap{display:flex;align-items:center;gap:10px;padding-top:0;padding-bottom:0}
+  .logo{font-size:18px;font-weight:800;color:var(--leaf)}
+  h1{font-size:26px;line-height:1.25;margin:26px 0 6px}
+  .lead{color:var(--muted);font-size:16px;margin-bottom:22px}
+  h2{font-size:15px;text-transform:uppercase;letter-spacing:.06em;color:var(--leaf-d);margin:30px 0 12px}
+  .card{background:#fff;border:1px solid #e3e7e4;border-radius:14px;padding:18px 18px;margin:12px 0;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+  .step{display:flex;gap:14px}
+  .num{flex:0 0 34px;height:34px;border-radius:50%;background:var(--leaf);color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center;font-size:15px}
+  .step h3{font-size:17px;margin:4px 0 8px}
+  .do{background:var(--leaf-l);border-radius:8px;padding:8px 12px;margin:8px 0;font-size:15px}
+  .do b{color:var(--leaf-d)}
+  .ask{font-size:14px;color:var(--muted);margin-top:8px}
+  .ask li{margin-left:18px}
+  .decision{border:2px dashed var(--leaf);border-radius:10px;padding:10px 12px;margin-top:10px;font-size:15px;background:#fff}
+  .decision b{color:var(--leaf-d)}
+  .pill{display:inline-block;background:var(--leaf-l);color:var(--leaf-d);font-weight:700;border-radius:6px;padding:1px 8px;font-size:13px}
+  .btn{display:inline-block;background:var(--leaf);color:#fff;text-decoration:none;font-weight:700;border-radius:10px;padding:13px 20px;font-size:16px;border:none;cursor:pointer}
+  .btn.big{display:block;text-align:center;margin:14px 0}
+  .note{font-size:14px;color:var(--muted)}
+  .fmt-ex{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;background:#f6f7f6;border:1px solid #e3e7e4;border-radius:8px;padding:10px 12px;margin:8px 0;white-space:pre-wrap;color:#33413a}
+  .tag{font-family:ui-monospace,monospace;font-weight:700;background:#fff;border:1px solid var(--leaf);color:var(--leaf-d);border-radius:5px;padding:0 6px}
+  pre.tpl{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;background:#1f2a24;color:#e7efe9;border-radius:12px;padding:16px;overflow-x:auto;white-space:pre-wrap;line-height:1.55}
+  .copied{color:var(--leaf);font-weight:700;font-size:14px;margin-left:10px}
+  ul.plain{margin:6px 0 0 18px}
+  ul.plain li{margin:3px 0}
+  footer{text-align:center;color:var(--muted);font-size:13px;margin-top:40px}
+</style>
+</head>
+<body>
+<header><div class="wrap"><span class="logo">🌿 GreenLeaf CRM</span></div></header>
+<div class="wrap">
+
+  <h1>Twoja opinia — krok po kroku</h1>
+  <p class="lead">Cześć Magda! Przygotowaliśmy klikalną makietę systemu. Nie jest jeszcze prawdziwa — to „próbna wersja", żebyś mogła ją przeklikać i powiedzieć nam, co pasuje, a co zmienić. Twoje uwagi ustawią to, co zbudujemy naprawdę.</p>
+
+  <div class="card">
+    <b>Zanim zaczniesz — trzy rzeczy:</b>
+    <ul class="plain">
+      <li>To tylko makieta — <b>nic nie zepsujesz</b>, klikaj śmiało.</li>
+      <li>Zajmie około <b>20–25 minut</b>. Najwygodniej na telefonie.</li>
+      <li>Gdybyś chciała zacząć od nowa — w prawym górnym rogu jest mała ikonka <b>⟳</b> (reset).</li>
+    </ul>
+    <a class="btn big" href="https://enklava.co/files/glcrm/" target="_blank" rel="noopener">▶ Otwórz makietę</a>
+    <p class="note">Najlepiej otwórz makietę w drugiej karcie, a tę instrukcję miej obok.</p>
+  </div>
+
+  <h2>Jak zapisywać uwagi</h2>
+  <div class="card">
+    <p>Miej pod ręką notatnik w telefonie albo okno wiadomości do Pawła. Przy każdym punkcie zapisuj uwagi <b>tak samo</b>, żeby było prosto:</p>
+    <p style="margin:10px 0">Zacznij linijkę od <b>numeru punktu</b> i jednego słowa:</p>
+    <p>
+      <span class="tag">OK</span> — jest dobrze &nbsp;
+      <span class="tag">ZMIANA</span> — zmieniłabym &nbsp;
+      <span class="tag">BRAK</span> — czegoś brakuje &nbsp;
+      <span class="tag">PYTANIE</span> — nie rozumiem
+    </p>
+    <p style="margin-top:10px">a potem jedno–dwa zdania zwykłym językiem. Na przykład:</p>
+    <div class="fmt-ex">2. OK — produkty się zgadzają, tak właśnie wygląda mój czerwiec
+3. ZMIANA — wolę sposób z Wariantu B, jest najczytelniejszy
+6. BRAK — w arkuszu brakuje kolumny z telefonem klienta</div>
+    <p class="note">👉 Jeszcze prościej: zamiast pisać, możesz <b>nagrać się głosem</b> — mów numer punktu i swoją uwagę. Na dole strony jest też gotowy szablon do skopiowania.</p>
+  </div>
+
+  <h2>Przejdź przez te punkty</h2>
+
+  <div class="card"><div class="step"><div class="num">1</div><div>
+    <h3>Pierwsze wrażenie i wybór roli</h3>
+    <div class="do"><b>Zrób to:</b> Otwórz makietę. Zobaczysz wybór roli. Kliknij <b>„Rolnik / Admin (Magda)"</b> — to Twój widok.</div>
+    <div class="ask">Zapisz:<ul><li>Czy od razu wiadomo, gdzie kliknąć?</li><li>Czego brakuje? Co jest źle? Co zbędne?</li></ul></div>
+  </div></div></div>
+
+  <div class="card"><div class="step"><div class="num">2</div><div>
+    <h3>Paczka tygodnia <span class="pill">widok admina</span></h3>
+    <div class="do"><b>Zrób to:</b> Wejdź w zakładkę <b>„Paczka tygodnia"</b>. Dodaj kilka warzyw do paczki i kliknij <b>„Publikuj"</b>.</div>
+    <div class="ask">Zapisz:<ul><li>Czy lista warzyw i to, co dostępne w czerwcu, zgadza się z rzeczywistością?</li><li>Jak składasz paczkę dzisiaj — i czego tu brakuje względem tego?</li></ul></div>
+  </div></div></div>
+
+  <div class="card"><div class="step"><div class="num">3</div><div>
+    <h3>Zamiany warzyw <span class="pill">widok klienta</span></h3>
+    <div class="do"><b>Zrób to:</b> Kliknij u góry „Zmień rolę" → <b>„Klient RWS"</b> → zakładka <b>„Moja paczka"</b>. Wymień jedno warzywo na inne. U góry są trzy sposoby: <b>Wariant A, B, C</b> — wypróbuj każdy.</div>
+    <div class="decision"><b>⭐ Najważniejsza decyzja:</b> który sposób zamiany jest dla klienta najprostszy?<br><b>Wariant: A &nbsp;/&nbsp; B &nbsp;/&nbsp; C</b> (wybierz jeden)</div>
+    <div class="ask">Zapisz też:<ul><li>Czy zamiennik ma być z całej listy sezonowej, czy z węższego zestawu?</li><li>Czego brakuje? Co myli?</li></ul></div>
+  </div></div></div>
+
+  <div class="card"><div class="step"><div class="num">4</div><div>
+    <h3>Status paczki i „nie odbiorę" <span class="pill">widok klienta</span></h3>
+    <div class="do"><b>Zrób to:</b> Na górze „Mojej paczki" jest pasek statusu (Oczekuje → Skompletowana → Gotowa → Odebrana) oraz przycisk <b>„Nie odbiorę w tym tygodniu"</b>. Kliknij go.</div>
+    <div class="decision"><b>Pytanie:</b> Czy paczka u Ciebie naprawdę przechodzi przez etapy „skompletowana" i „gotowa do odbioru"?<br><b>TAK / NIE</b> — a jeśli tak, to kto i kiedy je zaznacza?</div>
+    <div class="ask">Zapisz: czy zgłaszanie braku odbioru (i termin środa 10:00) pasuje do Twojej praktyki?</div>
+  </div></div></div>
+
+  <div class="card"><div class="step"><div class="num">5</div><div>
+    <h3>Odbiory w sobotę <span class="pill">widok admina</span></h3>
+    <div class="do"><b>Zrób to:</b> Wróć do roli <b>Admin</b> → zakładka <b>„Odbiory"</b>. Odhacz kogoś, kto odebrał paczkę.</div>
+    <div class="ask">Zapisz:<ul><li>Czy tak wygląda Twój moment przy punkcie odbioru w sobotę?</li><li>Czego brakuje na tej liście (np. dane, kolejność, podział na punkty)?</li></ul></div>
+  </div></div></div>
+
+  <div class="card"><div class="step"><div class="num">6</div><div>
+    <h3>Eksport do Excela <span class="pill">widok admina</span></h3>
+    <div class="do"><b>Zrób to:</b> Zakładka <b>„Eksport"</b> → <b>„Pobierz XLSX"</b>. Otwórz plik — ma cztery zakładki: Zbiory, Pakowanie, Zmiany, Kurczaki.</div>
+    <div class="decision"><b>To dla Ciebie najważniejsze.</b> Przejdź <b>kolumna po kolumnie</b>: czy ten plik mógłby zastąpić Twój obecny Excel? Czego w kolumnach brakuje?</div>
+  </div></div></div>
+
+  <div class="card"><div class="step"><div class="num">7</div><div>
+    <h3>Abonament i Profil <span class="pill">widok klienta</span></h3>
+    <div class="do"><b>Zrób to:</b> W roli Klient zajrzyj w <b>„Abonament"</b> (licznik paczek) i <b>„Profil"</b> (punkt odbioru, sposób dostawy). Zmień coś w Profilu i zapisz.</div>
+    <div class="ask">Zapisz: czy te dane są te, które trzymasz o kliencie? Czegoś brakuje?</div>
+  </div></div></div>
+
+  <div class="card"><div class="step"><div class="num">8</div><div>
+    <h3>Czego jeszcze brakuje — co zbudować najpierw?</h3>
+    <p style="margin-bottom:8px">Tych rzeczy celowo jeszcze nie ma w makiecie. Przy każdej napisz: <span class="tag">musi być</span> od startu, <span class="tag">przyda się</span>, albo <span class="tag">później</span>:</p>
+    <ul class="plain">
+      <li>płatności i raty</li>
+      <li>rezerwacje kurczaków</li>
+      <li>ogłoszenia / powiadomienia do klientów</li>
+      <li>logowanie klientów na konto</li>
+      <li>zamówienia dodatkowe (poza abonamentem)</li>
+    </ul>
+  </div></div></div>
+
+  <h2>Gotowy szablon — skopiuj, wypełnij, odeślij</h2>
+  <div class="card">
+    <p class="note" style="margin-bottom:10px">Kliknij „Kopiuj", wklej do wiadomości do Pawła i dopisz odpowiedzi przy punktach. Puste pola możesz zostawić.</p>
+    <button class="btn" onclick="copyTpl()">📋 Kopiuj szablon</button><span id="copied" class="copied" style="display:none">skopiowano ✓</span>
+    <pre class="tpl" id="tpl">GreenLeaf CRM — moja opinia (Magda)
+
+1. Pierwsze wrażenie:
+2. Paczka tygodnia:
+3. Zamiany — wybieram WARIANT: A / B / C
+   zamienniki / uwagi:
+4. Status paczki — etapy "skompletowana/gotowa" u mnie realne? TAK / NIE
+   uwagi:
+5. Odbiory (sobota):
+6. Eksport XLSX — czego brakuje w kolumnach:
+7. Abonament / Profil:
+8. Co zbudować najpierw (musi być / przyda się / później):
+   - płatności:
+   - kurczaki:
+   - ogłoszenia:
+   - logowanie:
+   - zamówienia dodatkowe:
+
+Cokolwiek jeszcze (cokolwiek Ci przyszło do głowy):
+</pre>
+    <p class="note">Nie musisz pisać dużo — krótkie hasła w zupełności wystarczą. Dziękujemy! 🌿</p>
+  </div>
+
+  <footer>GreenLeaf CRM · makieta do opinii · enklava</footer>
+</div>
+<script>
+function copyTpl(){
+  var t=document.getElementById('tpl').innerText;
+  navigator.clipboard.writeText(t).then(function(){
+    var c=document.getElementById('copied');c.style.display='inline';setTimeout(function(){c.style.display='none'},2500);
+  });
+}
+</script>
+</body>
+</html>
