@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { TopBar } from '@/components/TopBar';
 import { PackageBuilder } from '@/components/admin/PackageBuilder';
 import { SwapSummary } from '@/components/admin/SwapSummary';
+import { PickupList } from '@/components/admin/PickupList';
 import { loadStore } from '@/lib/store';
 
 type Section = 'dashboard' | 'weeklyPackage' | 'clients' | 'pickups' | 'export';
@@ -109,7 +110,8 @@ export function AdminShell() {
             <SwapSummary />
           </>
         )}
-        {active !== 'dashboard' && active !== 'weeklyPackage' && (
+        {active === 'pickups' && <PickupList />}
+        {active !== 'dashboard' && active !== 'weeklyPackage' && active !== 'pickups' && (
           <Placeholder section={active} />
         )}
       </main>

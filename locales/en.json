@@ -62,6 +62,13 @@
       "out": "Out",
       "in": "In",
       "empty": "No swaps for this box."
+    },
+    "pickups": {
+      "homeOrUnknown": "Home delivery / no point",
+      "noPackage": "No published package.",
+      "markPicked": "Mark as picked up",
+      "absence": "Reported absence",
+      "notReported": "Not reported"
     }
   },
   "client": {
@@ -95,6 +102,23 @@
       "confirm": "Confirm swaps",
       "done": "Completed swaps",
       "noSwaps": "No swaps yet."
+    },
+    "status": {
+      "title": "Your package status"
+    },
+    "absence": {
+      "simulateAfter": "Simulate: after deadline (Wed 10:00)",
+      "reported": "Absence reported for this week.",
+      "cancel": "Undo",
+      "report": "I won't pick up this week",
+      "closed": "Absence reporting deadline passed (Wed 10:00)."
+    },
+    "subscription": {
+      "none": "No active subscription.",
+      "type": "Subscription type",
+      "counter": "Packages received",
+      "remaining": "Remaining: {{n}}",
+      "payment": "Payment model"
     }
   },
   "supplier": {
@@ -108,6 +132,26 @@
   "status": {
     "draft": "draft",
     "published": "published",
-    "completed": "completed"
+    "completed": "completed",
+    "pending": "Pending",
+    "assembled": "Assembled",
+    "ready": "Ready for pickup",
+    "picked_up": "Picked up",
+    "not_picked_up": "Not picked up"
+  },
+  "subscriptionType": {
+    "paczka_24": "Box 24 (full season)",
+    "paczka_12": "Box 12 (biweekly)",
+    "jajka_A": "Eggs A",
+    "jajka_B": "Eggs B",
+    "jajka_C": "Eggs C",
+    "jajka_D": "Eggs D",
+    "jajka_E": "Eggs E",
+    "jajka_F": "Eggs F",
+    "jajka_G": "Eggs G"
+  },
+  "paymentModel": {
+    "upfront": "Upfront",
+    "installments_3": "3 installments"
   }
 }
