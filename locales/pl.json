@@ -1,0 +1,69 @@
+{
+  "brand": "🌿 GreenLeaf CRM",
+  "common": {
+    "soon": "Wkrótce",
+    "soonEtap": "Wkrótce (ETAP {{etap}})",
+    "changeRole": "Zmień rolę",
+    "language": "Język",
+    "back": "Wstecz"
+  },
+  "roles": {
+    "title": "Wybierz rolę",
+    "subtitle": "To symulator — wybierz rolę, aby zobaczyć jej widok. Rolę zmienisz w każdej chwili.",
+    "admin": "Rolnik / Admin (Magda)",
+    "adminDesc": "Zarządzanie gospodarstwem, paczką tygodnia i klientami.",
+    "klient_rws": "Klient RWS",
+    "klient_rwsDesc": "Subskrypcja paczki, odbiory i zamiany produktów.",
+    "klient_zewnetrzny": "Klient zewnętrzny",
+    "klient_zewnetrznyDesc": "Zamówienia dodatkowe bez abonamentu RWS.",
+    "dostawca": "Dostawca",
+    "dostawcaDesc": "Trasy dostaw i potwierdzanie odbiorów."
+  },
+  "admin": {
+    "nav": {
+      "dashboard": "Pulpit",
+      "weeklyPackage": "Paczka tygodnia",
+      "clients": "Klienci",
+      "pickups": "Odbiory",
+      "export": "Eksport"
+    },
+    "dashboard": {
+      "title": "Pulpit",
+      "activeClients": "Aktywnych klientów",
+      "weeklyPackage": "Paczka tygodnia",
+      "weekLabel": "tydzień {{week}}",
+      "statusLabel": "status"
+    },
+    "placeholders": {
+      "weeklyPackage": "Tu powstanie zarządzanie zawartością paczki tygodnia.",
+      "clients": "Tu powstanie lista klientów i subskrypcji.",
+      "pickups": "Tu powstanie obsługa punktów odbioru i potwierdzeń.",
+      "export": "Tu powstanie eksport danych do arkusza."
+    }
+  },
+  "client": {
+    "tabs": {
+      "myPackage": "Moja paczka",
+      "subscription": "Abonament",
+      "profile": "Profil"
+    },
+    "placeholders": {
+      "myPackage": "Tu zobaczysz zawartość swojej paczki tygodnia i zamiany.",
+      "subscription": "Tu zobaczysz szczegóły swojej subskrypcji i płatności.",
+      "profile": "Tu zobaczysz swój profil i punkt odbioru."
+    }
+  },
+  "supplier": {
+    "title": "Panel dostawcy",
+    "placeholder": "Tu powstanie panel dostawcy: trasy i potwierdzenia odbiorów."
+  },
+  "external": {
+    "title": "Panel klienta zewnętrznego",
+    "placeholder": "Tu powstaną zamówienia dodatkowe poza abonamentem RWS."
+  },
+  "status": {
+    "draft": "szkic",
+    "published": "opublikowana",
+    "completed": "zakończona"
+  }
+}

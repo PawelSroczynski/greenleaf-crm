@@ -1,0 +1,69 @@
+{
+  "brand": "🌿 GreenLeaf CRM",
+  "common": {
+    "soon": "Coming soon",
+    "soonEtap": "Coming soon (STAGE {{etap}})",
+    "changeRole": "Change role",
+    "language": "Language",
+    "back": "Back"
+  },
+  "roles": {
+    "title": "Choose your role",
+    "subtitle": "This is a simulator — pick a role to see its view. You can switch roles anytime.",
+    "admin": "Farmer / Admin (Magda)",
+    "adminDesc": "Manage the farm, the weekly box and clients.",
+    "klient_rws": "CSA member",
+    "klient_rwsDesc": "Box subscription, pickups and product swaps.",
+    "klient_zewnetrzny": "External client",
+    "klient_zewnetrznyDesc": "Extra orders without a CSA subscription.",
+    "dostawca": "Supplier",
+    "dostawcaDesc": "Delivery routes and pickup confirmations."
+  },
+  "admin": {
+    "nav": {
+      "dashboard": "Dashboard",
+      "weeklyPackage": "Weekly box",
+      "clients": "Clients",
+      "pickups": "Pickups",
+      "export": "Export"
+    },
+    "dashboard": {
+      "title": "Dashboard",
+      "activeClients": "Active clients",
+      "weeklyPackage": "Weekly box",
+      "weekLabel": "week {{week}}",
+      "statusLabel": "status"
+    },
+    "placeholders": {
+      "weeklyPackage": "Weekly box content management will live here.",
+      "clients": "The client and subscription list will live here.",
+      "pickups": "Pickup points and confirmations will live here.",
+      "export": "Spreadsheet data export will live here."
+    }
+  },
+  "client": {
+    "tabs": {
+      "myPackage": "My box",
+      "subscription": "Subscription",
+      "profile": "Profile"
+    },
+    "placeholders": {
+      "myPackage": "Here you will see your weekly box content and swaps.",
+      "subscription": "Here you will see your subscription details and payments.",
+      "profile": "Here you will see your profile and pickup point."
+    }
+  },
+  "supplier": {
+    "title": "Supplier panel",
+    "placeholder": "The supplier panel will live here: routes and pickup confirmations."
+  },
+  "external": {
+    "title": "External client panel",
+    "placeholder": "Extra orders outside the CSA subscription will live here."
+  },
+  "status": {
+    "draft": "draft",
+    "published": "published",
+    "completed": "completed"
+  }
+}
