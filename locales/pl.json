@@ -109,7 +109,8 @@
       "from": "Od",
       "to": "Do",
       "add": "Dodaj punkt",
-      "removeConfirm": "Usunąć punkt „{{name}}\"? Tego nie da się cofnąć."
+      "removeConfirm": "Usunąć punkt „{{name}}\"? Tego nie da się cofnąć.",
+      "toggleLabel": "Przełącznik aktywności punktu {{name}}"
     }
   },
   "client": {

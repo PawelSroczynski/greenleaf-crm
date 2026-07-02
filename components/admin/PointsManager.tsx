@@ -76,17 +76,32 @@ export function PointsManager() {
                   {t('admin.points.clients', { n: clients })}
                 </p>
               </div>
-              <button
-                type="button"
-                onClick={() => mutate(() => setPickupPointActive(store, p.id, !p.isActive))}
-                className={`rounded px-2 py-1 text-xs font-semibold ${
-                  p.isActive
-                    ? 'bg-leaf-50 text-leaf-700'
-                    : 'bg-gray-100 text-gray-500'
-                }`}
-              >
-                {p.isActive ? t('admin.points.active') : t('admin.points.inactive')}
-              </button>
+              {/* Jawny przełącznik aktywny/nieaktywny (suwak + podpis stanu) */}
+              <div className="flex flex-col items-center gap-0.5">
+                <button
+                  type="button"
+                  role="switch"
+                  aria-checked={p.isActive}
+                  aria-label={t('admin.points.toggleLabel', { name: p.name })}
+                  onClick={() => mutate(() => setPickupPointActive(store, p.id, !p.isActive))}
+                  className={`relative h-6 w-11 rounded-full transition-colors ${
+                    p.isActive ? 'bg-leaf-500' : 'bg-gray-300'
+                  }`}
+                >
+                  <span
+                    className={`absolute top-0.5 h-5 w-5 rounded-full bg-white shadow transition-all ${
+                      p.isActive ? 'left-[22px]' : 'left-0.5'
+                    }`}
+                  />
+                </button>
+                <span
+                  className={`text-[10px] font-semibold ${
+                    p.isActive ? 'text-leaf-700' : 'text-gray-400'
+                  }`}
+                >
+                  {p.isActive ? t('admin.points.active') : t('admin.points.inactive')}
+                </span>
+              </div>
               {clients === 0 && !pointHasHistory(store, p.id) && (
                 <button
                   type="button"

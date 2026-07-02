@@ -109,7 +109,8 @@
       "from": "From",
       "to": "To",
       "add": "Add point",
-      "removeConfirm": "Remove point \"{{name}}\"? This cannot be undone."
+      "removeConfirm": "Remove point \"{{name}}\"? This cannot be undone.",
+      "toggleLabel": "Toggle point {{name}} active"
     }
   },
   "client": {

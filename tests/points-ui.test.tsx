@@ -28,12 +28,13 @@ describe('PointsManager — pula punktów na Pulpicie', () => {
     const user = userEvent.setup();
     render(<PointsManager />);
 
-    // wyłącz Komorniki (ma klienta — brak przycisku usuń, jest toggle)
+    // wyłącz Komorniki jawnym przełącznikiem (role=switch, celowanie po nazwie punktu)
     const komorniki = loadStore().pickupPoints.find((p) => p.name === 'Komorniki')!;
-    const toggles = screen.getAllByRole('button', { name: 'Aktywny' });
-    // znajdź toggle w wierszu Komornik: kliknij po kolei aż komorniki nieaktywne — prościej: drugi wiersz
-    await user.click(toggles[1]);
+    const toggle = screen.getByRole('switch', { name: 'Przełącznik aktywności punktu Komorniki' });
+    expect(toggle).toHaveAttribute('aria-checked', 'true');
+    await user.click(toggle);
     expect(loadStore().pickupPoints.find((p) => p.id === komorniki.id)!.isActive).toBe(false);
+    expect(toggle).toHaveAttribute('aria-checked', 'false');
 
     // dodaj świeży punkt i usuń go (potwierdzając bezpiecznik)
     const { vi } = await import('vitest');
