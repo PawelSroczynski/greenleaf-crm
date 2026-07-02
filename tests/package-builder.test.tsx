@@ -15,7 +15,7 @@ async function openWeeklyPackage() {
       <AdminShell />
     </RoleProvider>,
   );
-  await user.click(screen.getByRole('button', { name: 'Paczka tygodnia' }));
+  await user.click(screen.getByRole('button', { name: 'Paczka' }));
   return user;
 }
 

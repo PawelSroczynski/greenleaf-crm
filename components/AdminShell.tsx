@@ -74,7 +74,7 @@ export function AdminShell() {
 
       <nav
         aria-label={t('admin.dashboard.title')}
-        className="flex gap-1 overflow-x-auto border-b border-leaf-100 bg-white px-2 py-2"
+        className="flex border-b border-leaf-100 bg-white px-1 py-2"
       >
         {SECTIONS.map((s) => (
           <button
@@ -82,7 +82,7 @@ export function AdminShell() {
             type="button"
             onClick={() => setActive(s)}
             aria-current={active === s ? 'page' : undefined}
-            className={`whitespace-nowrap rounded px-3 py-1.5 text-sm font-medium ${
+            className={`min-w-0 flex-1 whitespace-nowrap rounded px-1 py-1.5 text-center text-sm font-medium ${
               active === s ? 'bg-leaf-600 text-white' : 'text-leaf-700 hover:bg-leaf-50'
             }`}
           >

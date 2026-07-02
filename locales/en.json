@@ -23,7 +23,7 @@
   "admin": {
     "nav": {
       "dashboard": "Dashboard",
-      "weeklyPackage": "Weekly box",
+      "weeklyPackage": "Box",
       "clients": "Clients",
       "pickups": "Pickups",
       "export": "Export"

@@ -23,7 +23,7 @@
   "admin": {
     "nav": {
       "dashboard": "Pulpit",
-      "weeklyPackage": "Paczka tygodnia",
+      "weeklyPackage": "Paczka",
       "clients": "Klienci",
       "pickups": "Odbiory",
       "export": "Eksport"
