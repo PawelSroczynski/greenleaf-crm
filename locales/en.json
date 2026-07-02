@@ -138,7 +138,9 @@
       "swappedTo": "⤷ swapped for {{name}}",
       "confirm": "Confirm swaps",
       "done": "Completed swaps",
-      "noSwaps": "No swaps yet."
+      "noSwaps": "No swaps yet.",
+      "change": "Change",
+      "cancel": "Undo"
     },
     "status": {
       "title": "Your package status"

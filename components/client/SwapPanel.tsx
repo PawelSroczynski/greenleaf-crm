@@ -11,6 +11,7 @@ import { loadStore, saveStore } from '@/lib/store';
 import { itemsForPackage } from '@/lib/packages';
 import {
   applySwap,
+  cancelSwap,
   getSwapDeadline,
   isSwapOpen,
   replacementOptions,
@@ -90,6 +91,18 @@ export function SwapPanel() {
     }
   }
 
+  /** Rozmyślenie się: cofa zamianę (powrót do oryginału). Możliwe do terminu. */
+  function cancel(originalProductId: string) {
+    const now = simulatedNow(wp!, afterDeadline);
+    try {
+      cancelSwap(store!, cp!.id, originalProductId, now);
+      saveStore(store!);
+      setSwaps([...swapsForClientPackage(store!, cp!.id)]);
+    } catch {
+      // Po terminie — kontrolki i tak zablokowane.
+    }
+  }
+
   return (
     <section>
       <h2 className="mb-1 text-xl font-semibold">{t('client.swap.title')}</h2>
@@ -149,6 +162,7 @@ export function SwapPanel() {
             commit([{ original, replacement }]);
             setOpenItemId(null);
           }}
+          onCancel={cancel}
           t={t}
         />
       )}
@@ -169,6 +183,7 @@ export function SwapPanel() {
             setBOriginal('');
             setBReplacement('');
           }}
+          onCancel={cancel}
           t={t}
         />
       )}
@@ -190,6 +205,7 @@ export function SwapPanel() {
             commit(pairs);
             setCSelected({});
           }}
+          onCancel={cancel}
           t={t}
         />
       )}
@@ -215,10 +231,21 @@ function VariantA(props: {
   swapForItem: (productId: string) => Swap | null;
   productName: (id: string) => string;
   onSwap: (original: string, replacement: string) => void;
+  onCancel: (original: string) => void;
   t: TFn;
 }) {
-  const { items, options, open, openItemId, setOpenItemId, swapForItem, productName, onSwap, t } =
-    props;
+  const {
+    items,
+    options,
+    open,
+    openItemId,
+    setOpenItemId,
+    swapForItem,
+    productName,
+    onSwap,
+    onCancel,
+    t,
+  } = props;
   return (
     <ul className="divide-y divide-leaf-100 rounded-xl border border-leaf-100 bg-white">
       {items.map((i) => {
@@ -227,23 +254,37 @@ function VariantA(props: {
           <li key={i.id} className="px-3 py-2 text-sm">
             <div className="flex items-center justify-between gap-2">
               <span>{productName(i.productId)}</span>
-              {swap ? (
-                <span className="text-leaf-700">
-                  {t('client.swap.swappedTo', { name: productName(swap.replacementProductId) })}
-                </span>
-              ) : (
-                open && (
+              <span className="flex items-center gap-2">
+                {swap && (
+                  <span className="text-leaf-700">
+                    {t('client.swap.swappedTo', { name: productName(swap.replacementProductId) })}
+                  </span>
+                )}
+                {open && (
                   <button
                     type="button"
                     onClick={() => setOpenItemId(openItemId === i.id ? null : i.id)}
-                    className="rounded bg-leaf-600 px-2 py-1 text-xs font-medium text-white"
+                    className={`rounded px-2 py-1 text-xs font-medium ${
+                      swap
+                        ? 'border border-leaf-300 text-leaf-700 hover:bg-leaf-50'
+                        : 'bg-leaf-600 text-white'
+                    }`}
                   >
-                    {t('client.swap.swap')}
+                    {swap ? t('client.swap.change') : t('client.swap.swap')}
                   </button>
-                )
-              )}
+                )}
+                {open && swap && (
+                  <button
+                    type="button"
+                    onClick={() => onCancel(i.productId)}
+                    className="rounded px-2 py-1 text-xs font-medium text-red-600 hover:bg-red-50"
+                  >
+                    {t('client.swap.cancel')}
+                  </button>
+                )}
+              </span>
             </div>
-            {open && !swap && openItemId === i.id && (
+            {open && openItemId === i.id && (
               <select
                 aria-label={`${t('client.swap.replacement')}: ${productName(i.productId)}`}
                 defaultValue=""
@@ -277,6 +318,7 @@ function VariantB(props: {
   swaps: Swap[];
   productName: (id: string) => string;
   onSwap: () => void;
+  onCancel: (original: string) => void;
   t: TFn;
 }) {
   const {
@@ -290,6 +332,7 @@ function VariantB(props: {
     swaps,
     productName,
     onSwap,
+    onCancel,
     t,
   } = props;
   return (
@@ -349,6 +392,15 @@ function VariantB(props: {
             <li key={s.id}>
               {productName(s.originalProductId)} {t('client.swap.swapTo')}{' '}
               {productName(s.replacementProductId)}
+              {open && (
+                <button
+                  type="button"
+                  onClick={() => onCancel(s.originalProductId)}
+                  className="ml-2 rounded px-1.5 py-0.5 text-xs font-medium text-red-600 hover:bg-red-50"
+                >
+                  {t('client.swap.cancel')}
+                </button>
+              )}
             </li>
           ))}
         </ul>
@@ -367,14 +419,26 @@ function VariantC(props: {
   swapForItem: (productId: string) => Swap | null;
   productName: (id: string) => string;
   onConfirm: () => void;
+  onCancel: (original: string) => void;
   t: TFn;
 }) {
-  const { items, options, open, cSelected, setCSelected, swapForItem, productName, onConfirm, t } =
-    props;
+  const {
+    items,
+    options,
+    open,
+    cSelected,
+    setCSelected,
+    swapForItem,
+    productName,
+    onConfirm,
+    onCancel,
+    t,
+  } = props;
 
   function toggle(productId: string, checked: boolean) {
     const next = { ...cSelected };
-    if (checked) next[productId] = '';
+    // zaznaczenie zamienionej pozycji podpowiada obecny zamiennik (zmiana wyboru)
+    if (checked) next[productId] = swapForItem(productId)?.replacementProductId ?? '';
     else delete next[productId];
     setCSelected(next);
   }
@@ -387,20 +451,32 @@ function VariantC(props: {
           const checked = i.productId in cSelected;
           return (
             <li key={i.id} className="px-3 py-2 text-sm">
-              <label className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  checked={checked}
-                  disabled={!open || !!swap}
-                  onChange={(e) => toggle(i.productId, e.target.checked)}
-                />
-                <span>{productName(i.productId)}</span>
-                {swap && (
-                  <span className="text-leaf-700">
-                    {t('client.swap.swappedTo', { name: productName(swap.replacementProductId) })}
-                  </span>
+              <div className="flex items-center gap-2">
+                <label className="flex min-w-0 flex-1 items-center gap-2">
+                  <input
+                    type="checkbox"
+                    checked={checked}
+                    disabled={!open}
+                    onChange={(e) => toggle(i.productId, e.target.checked)}
+                  />
+                  <span>{productName(i.productId)}</span>
+                  {swap && (
+                    <span className="text-leaf-700">
+                      {t('client.swap.swappedTo', { name: productName(swap.replacementProductId) })}
+                    </span>
+                  )}
+                </label>
+                {/* Cofnij POZA label — inaczej klik przełączałby też checkbox */}
+                {open && swap && (
+                  <button
+                    type="button"
+                    onClick={() => onCancel(i.productId)}
+                    className="rounded px-1.5 py-0.5 text-xs font-medium text-red-600 hover:bg-red-50"
+                  >
+                    {t('client.swap.cancel')}
+                  </button>
                 )}
-              </label>
+              </div>
               {open && checked && (
                 <select
                   aria-label={`${t('client.swap.replacement')}: ${productName(i.productId)}`}

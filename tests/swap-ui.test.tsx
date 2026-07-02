@@ -107,3 +107,74 @@ describe('SwapPanel — moduł zamian (MVP-4)', () => {
     expect(screen.queryByRole('button', { name: 'Zatwierdź zamiany' })).not.toBeInTheDocument();
   });
 });
+
+describe('SwapPanel — rozmyślenie się (zmiana i cofnięcie)', () => {
+  it('Wariant A: po zamianie można ZMIENIĆ wybór (upsert) i COFNĄĆ do oryginału', async () => {
+    const user = userEvent.setup();
+    render(<SwapPanel />);
+
+    // pierwsza zamiana → Ogórek gruntowy
+    await user.click(screen.getAllByRole('button', { name: 'Zamień' })[0]);
+    await user.selectOptions(
+      screen.getByRole('combobox'),
+      screen.getByRole('option', { name: 'Ogórek gruntowy' }),
+    );
+    expect(storedSwaps()).toHaveLength(1);
+
+    // ZMIANA wyboru → Cukinia (upsert, wciąż 1 swap)
+    await user.click(screen.getByRole('button', { name: 'Zmień' }));
+    await user.selectOptions(
+      screen.getByRole('combobox'),
+      screen.getByRole('option', { name: 'Cukinia' }),
+    );
+    const cukinia = loadStore().products.find((p) => p.name === 'Cukinia')!;
+    expect(storedSwaps()).toHaveLength(1);
+    expect(storedSwaps()[0].replacementProductId).toBe(cukinia.id);
+
+    // COFNIĘCIE → zero swapów, wraca przycisk „Zamień"
+    await user.click(screen.getByRole('button', { name: 'Cofnij' }));
+    expect(storedSwaps()).toHaveLength(0);
+  });
+
+  it('Wariant B: lista wykonanych zamian ma przycisk Cofnij', async () => {
+    const user = userEvent.setup();
+    render(<SwapPanel />);
+    await user.click(screen.getByRole('button', { name: 'Wariant B' }));
+
+    await user.selectOptions(
+      screen.getByLabelText('Produkt z paczki'),
+      screen.getByRole('option', { name: 'Sałata masłowa' }),
+    );
+    await user.selectOptions(
+      screen.getByLabelText('Zamiennik'),
+      screen.getByRole('option', { name: 'Ogórek gruntowy' }),
+    );
+    await user.click(screen.getByRole('button', { name: 'Zamień' }));
+    expect(storedSwaps()).toHaveLength(1);
+
+    await user.click(screen.getByRole('button', { name: 'Cofnij' }));
+    expect(storedSwaps()).toHaveLength(0);
+  });
+
+  it('Wariant C: checkbox zamienionej pozycji NIE jest zablokowany (można zmienić)', async () => {
+    const user = userEvent.setup();
+    render(<SwapPanel />);
+    await user.click(screen.getByRole('button', { name: 'Wariant C' }));
+
+    // zamień pierwszą pozycję
+    const firstBox = screen.getAllByRole('checkbox')[1]; // [0] to symulacja czasu
+    await user.click(firstBox);
+    await user.selectOptions(
+      screen.getByRole('combobox'),
+      screen.getByRole('option', { name: 'Ogórek gruntowy' }),
+    );
+    await user.click(screen.getByRole('button', { name: 'Zatwierdź zamiany' }));
+    expect(storedSwaps()).toHaveLength(1);
+
+    // checkbox pozycji nadal aktywny (nie disabled)
+    expect(firstBox).not.toBeDisabled();
+    // cofnięcie działa
+    await user.click(screen.getByRole('button', { name: 'Cofnij' }));
+    expect(storedSwaps()).toHaveLength(0);
+  });
+});

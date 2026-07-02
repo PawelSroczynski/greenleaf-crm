@@ -8,6 +8,7 @@ import {
   swapSummary,
   swapsForClientPackage,
 } from '@/lib/swaps';
+import { itemsForPackage } from '@/lib/packages';
 import type { Store } from '@/lib/types';
 
 // Seed: WeeklyPackage tydzień 4, pickupDate 2026-06-13 (sobota), miesiąc 6 (czerwiec).
@@ -139,5 +140,46 @@ describe('swaps — swapSummary', () => {
     expect(out?.in).toBe(0);
     expect(inn?.in).toBe(1);
     expect(inn?.out).toBe(0);
+  });
+});
+
+describe('swaps — rozmyślenie się (zmiana i cofnięcie do terminu)', () => {
+  function setup() {
+    const store = createSeedData();
+    const wp = store.weeklyPackages.find((w) => w.status === 'published')!;
+    const cp = store.clientPackages.find((c) => c.weeklyPackageId === wp.id)!;
+    const before = new Date(getSwapDeadline(wp).getTime() - 60_000);
+    const after = new Date(getSwapDeadline(wp).getTime() + 60_000);
+    const original = itemsForPackage(store, wp.id)[0].productId;
+    return { store, wp, cp, before, after, original };
+  }
+
+  it('cancelSwap przed terminem usuwa zamianę (powrót do oryginału)', async () => {
+    const { cancelSwap } = await import('@/lib/swaps');
+    const { store, cp, before, original } = setup();
+    const repl = replacementOptions(store, cp.id)[0];
+    applySwap(store, cp.id, original, repl.id, before);
+    expect(store.swaps).toHaveLength(1);
+
+    cancelSwap(store, cp.id, original, before);
+    expect(store.swaps).toHaveLength(0);
+  });
+
+  it('cancelSwap po terminie odrzuca', async () => {
+    const { cancelSwap } = await import('@/lib/swaps');
+    const { store, cp, before, after, original } = setup();
+    applySwap(store, cp.id, original, replacementOptions(store, cp.id)[0].id, before);
+    expect(() => cancelSwap(store, cp.id, original, after)).toThrow();
+  });
+
+  it('po cofnięciu można zamienić ponownie (na coś innego)', async () => {
+    const { cancelSwap } = await import('@/lib/swaps');
+    const { store, cp, before, original } = setup();
+    const opts = replacementOptions(store, cp.id);
+    applySwap(store, cp.id, original, opts[0].id, before);
+    cancelSwap(store, cp.id, original, before);
+    applySwap(store, cp.id, original, opts[1].id, before);
+    expect(store.swaps).toHaveLength(1);
+    expect(store.swaps[0].replacementProductId).toBe(opts[1].id);
   });
 });

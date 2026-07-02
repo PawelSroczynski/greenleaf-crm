@@ -138,7 +138,9 @@
       "swappedTo": "⤷ zamieniono na {{name}}",
       "confirm": "Zatwierdź zamiany",
       "done": "Wykonane zamiany",
-      "noSwaps": "Brak zamian."
+      "noSwaps": "Brak zamian.",
+      "change": "Zmień",
+      "cancel": "Cofnij"
     },
     "status": {
       "title": "Status Twojej paczki"

@@ -94,6 +94,26 @@ export function applySwap(
   return store;
 }
 
+/**
+ * Cofa zamianę (powrót do oryginalnego produktu). Możliwe tylko przed terminem —
+ * klient może się rozmyślić do środy 20:00, tak samo jak przy zmianie wyboru.
+ */
+export function cancelSwap(
+  store: Store,
+  clientPackageId: string,
+  originalProductId: string,
+  now: Date,
+): Store {
+  const wp = resolvePackage(store, clientPackageId);
+  if (!isSwapOpen(wp, now)) {
+    throw new Error('Po terminie nie można cofnąć zamiany — okno zamian jest zamknięte.');
+  }
+  store.swaps = store.swaps.filter(
+    (s) => !(s.clientPackageId === clientPackageId && s.originalProductId === originalProductId),
+  );
+  return store;
+}
+
 /** Zamiany przypięte do danego ClientPackage. */
 export function swapsForClientPackage(store: Store, clientPackageId: string): Swap[] {
   return store.swaps.filter((s) => s.clientPackageId === clientPackageId);
