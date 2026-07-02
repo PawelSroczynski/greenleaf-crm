@@ -12,6 +12,7 @@ import { PickupList } from '@/components/admin/PickupList';
 import { ExportPanel } from '@/components/admin/ExportPanel';
 import { ClientsList } from '@/components/admin/ClientsList';
 import { loadStore } from '@/lib/store';
+import { currentPickupWeek } from '@/lib/pickups';
 
 type Section = 'dashboard' | 'weeklyPackage' | 'clients' | 'pickups' | 'export';
 
@@ -32,7 +33,7 @@ function Dashboard() {
     const activeClients = store.users.filter(
       (u) => (u.role === 'klient_rws' || u.role === 'klient_zewnetrzny') && u.isActive,
     ).length;
-    const wp = store.weeklyPackages[0];
+    const wp = currentPickupWeek(store); // najnowszy opublikowany, nie [0]
     setStats({
       activeClients,
       week: wp?.weekNumber ?? 0,
