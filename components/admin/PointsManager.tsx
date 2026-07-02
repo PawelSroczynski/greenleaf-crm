@@ -76,6 +76,17 @@ export function PointsManager() {
                   {t('admin.points.clients', { n: clients })}
                 </p>
               </div>
+              {/* ✕ (usuwalne tylko punkty bez klientów i historii) — po lewej od przełącznika */}
+              {clients === 0 && !pointHasHistory(store, p.id) && (
+                <button
+                  type="button"
+                  onClick={() => onRemove(p.id, p.name)}
+                  aria-label={t('admin.points.remove', { name: p.name })}
+                  className="rounded px-2 py-1 text-xs font-medium text-red-600 hover:bg-red-50"
+                >
+                  ✕
+                </button>
+              )}
               {/* Jawny przełącznik aktywny/nieaktywny (suwak + podpis stanu) */}
               <div className="flex flex-col items-center gap-0.5">
                 <button
@@ -102,16 +113,6 @@ export function PointsManager() {
                   {p.isActive ? t('admin.points.active') : t('admin.points.inactive')}
                 </span>
               </div>
-              {clients === 0 && !pointHasHistory(store, p.id) && (
-                <button
-                  type="button"
-                  onClick={() => onRemove(p.id, p.name)}
-                  aria-label={t('admin.points.remove', { name: p.name })}
-                  className="rounded px-2 py-1 text-xs font-medium text-red-600 hover:bg-red-50"
-                >
-                  ✕
-                </button>
-              )}
             </li>
           );
         })}
