@@ -7,7 +7,6 @@ import {
   DELIVERY_COST,
   PACKAGE_PRICE,
   PACKAGE_COUNT,
-  INSTALLMENT_DATES,
 } from './config';
 import type {
   Product,
@@ -345,8 +344,6 @@ export function createSeedData(): Store {
       updatedAt: NOW,
     };
   });
-
-  void INSTALLMENT_DATES; // raty wykorzystywane w kolejnych etapach (moduł płatności)
 
   return {
     users,
