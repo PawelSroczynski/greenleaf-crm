@@ -108,7 +108,8 @@
       "cost": "Cost (zł)",
       "from": "From",
       "to": "To",
-      "add": "Add point"
+      "add": "Add point",
+      "removeConfirm": "Remove point \"{{name}}\"? This cannot be undone."
     }
   },
   "client": {

@@ -53,6 +53,11 @@ export function PointsManager() {
       setName('');
     });
 
+  const onRemove = (pointId: string, pointName: string) => {
+    if (!window.confirm(t('admin.points.removeConfirm', { name: pointName }))) return;
+    mutate(() => removePickupPoint(store, pointId));
+  };
+
   return (
     <section className="mt-6">
       <h3 className="mb-2 text-sm font-semibold text-gray-700">{t('admin.points.title')}</h3>
@@ -85,7 +90,7 @@ export function PointsManager() {
               {clients === 0 && !pointHasHistory(store, p.id) && (
                 <button
                   type="button"
-                  onClick={() => mutate(() => removePickupPoint(store, p.id))}
+                  onClick={() => onRemove(p.id, p.name)}
                   aria-label={t('admin.points.remove', { name: p.name })}
                   className="rounded px-2 py-1 text-xs font-medium text-red-600 hover:bg-red-50"
                 >

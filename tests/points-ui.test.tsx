@@ -35,10 +35,33 @@ describe('PointsManager — pula punktów na Pulpicie', () => {
     await user.click(toggles[1]);
     expect(loadStore().pickupPoints.find((p) => p.id === komorniki.id)!.isActive).toBe(false);
 
-    // dodaj świeży punkt i usuń go
+    // dodaj świeży punkt i usuń go (potwierdzając bezpiecznik)
+    const { vi } = await import('vitest');
+    vi.spyOn(window, 'confirm').mockReturnValue(true);
     await user.type(screen.getByLabelText('Nazwa'), 'Chwilowy');
     await user.click(screen.getByRole('button', { name: 'Dodaj punkt' }));
     await user.click(screen.getByLabelText('Usuń punkt Chwilowy'));
     expect(loadStore().pickupPoints.some((p) => p.name === 'Chwilowy')).toBe(false);
+  });
+});
+
+describe('PointsManager — bezpiecznik usuwania', () => {
+  it('anulowanie potwierdzenia nie usuwa punktu; potwierdzenie usuwa', async () => {
+    const { vi } = await import('vitest');
+    const user = userEvent.setup();
+    render(<PointsManager />);
+
+    // Oborniki (demo) ma przycisk usuń
+    const removeBtn = screen.getByLabelText('Usuń punkt Oborniki');
+
+    // 1) anuluj → punkt zostaje
+    vi.spyOn(window, 'confirm').mockReturnValueOnce(false);
+    await user.click(removeBtn);
+    expect(loadStore().pickupPoints.some((p) => p.name === 'Oborniki')).toBe(true);
+
+    // 2) potwierdź → punkt znika
+    vi.spyOn(window, 'confirm').mockReturnValueOnce(true);
+    await user.click(removeBtn);
+    expect(loadStore().pickupPoints.some((p) => p.name === 'Oborniki')).toBe(false);
   });
 });

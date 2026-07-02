@@ -108,7 +108,8 @@
       "cost": "Koszt (zł)",
       "from": "Od",
       "to": "Do",
-      "add": "Dodaj punkt"
+      "add": "Dodaj punkt",
+      "removeConfirm": "Usunąć punkt „{{name}}\"? Tego nie da się cofnąć."
     }
   },
   "client": {
