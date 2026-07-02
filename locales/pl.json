@@ -2,7 +2,6 @@
   "brand": "🌿 GreenLeaf CRM",
   "common": {
     "soon": "Wkrótce",
-    "soonEtap": "Wkrótce (ETAP {{etap}})",
     "changeRole": "Zmień rolę",
     "language": "Język",
     "back": "Wstecz",
@@ -35,12 +34,6 @@
       "weeklyPackage": "Paczka tygodnia",
       "weekLabel": "tydzień {{week}}",
       "statusLabel": "status"
-    },
-    "placeholders": {
-      "weeklyPackage": "Tu powstanie zarządzanie zawartością paczki tygodnia.",
-      "clients": "Tu powstanie lista klientów i subskrypcji.",
-      "pickups": "Tu powstanie obsługa punktów odbioru i potwierdzeń.",
-      "export": "Tu powstanie eksport danych do arkusza."
     },
     "package": {
       "title": "Paczka tygodnia",
@@ -101,11 +94,6 @@
       "myPackage": "Moja paczka",
       "subscription": "Abonament",
       "profile": "Profil"
-    },
-    "placeholders": {
-      "myPackage": "Tu zobaczysz zawartość swojej paczki tygodnia i zamiany.",
-      "subscription": "Tu zobaczysz szczegóły swojej subskrypcji i płatności.",
-      "profile": "Tu zobaczysz swój profil i punkt odbioru."
     },
     "swap": {
       "title": "Moja paczka — zamiany",
