@@ -11,7 +11,7 @@ describe('points — zarządzanie pulą punktów odbioru (admin)', () => {
   it('addPickupPoint dodaje aktywny punkt z kosztem i godzinami', () => {
     const store = createSeedData();
     const before = store.pickupPoints.length;
-    const p = addPickupPoint(store, { name: 'Oborniki', extraCost: 10, hoursFrom: '09:00', hoursTo: '10:30' });
+    const p = addPickupPoint(store, { name: 'Wągrowiec', extraCost: 10, hoursFrom: '09:00', hoursTo: '10:30' });
     expect(store.pickupPoints.length).toBe(before + 1);
     expect(p.isActive).toBe(true);
     expect(p.pickupDay).toBe('saturday');

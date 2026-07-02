@@ -170,8 +170,36 @@ export function createSeedData(): Store {
       extraCost: DELIVERY_COST.inne_punkty,
       isActive: true,
     },
+    // Punkty demo reguł zarządzania pulą (Pulpit):
+    // Oborniki — świeży, bez klientów i historii → jedyny USUWALNY (✕).
+    {
+      id: id('pp'),
+      name: 'Oborniki',
+      address: 'Oborniki',
+      gpsLat: null,
+      gpsLon: null,
+      pickupDay: PICKUP_DAY,
+      hoursFrom: '09:00',
+      hoursTo: '10:00',
+      extraCost: DELIVERY_COST.inne_punkty,
+      isActive: true,
+    },
+    // Rogoźno — WYŁĄCZONY, bez obecnych klientów, ale z odbiorem w archiwum
+    // (tydzień 1) → nieusuwalny, tylko toggle.
+    {
+      id: id('pp'),
+      name: 'Rogoźno',
+      address: 'Rogoźno',
+      gpsLat: null,
+      gpsLon: null,
+      pickupDay: PICKUP_DAY,
+      hoursFrom: '09:30',
+      hoursTo: '10:30',
+      extraCost: DELIVERY_COST.inne_punkty,
+      isActive: false,
+    },
   ];
-  const [ppKakolewice, ppKomorniki, ppPuszczykowo, ppBaranowo] = pickupPoints;
+  const [ppKakolewice, ppKomorniki, ppPuszczykowo, ppBaranowo, , ppRogozno] = pickupPoints;
 
   // ---------- Strefy dostawy (DATA_MODEL.md §13) ----------
   const deliveryZones: DeliveryZone[] = [
@@ -409,6 +437,16 @@ export function createSeedData(): Store {
         updatedAt: pickupDayIso,
       });
     });
+  }
+
+  // Demo: odbiór Piotra w tygodniu 1 odbył się w Rogoźnie (punkt dziś wyłączony) —
+  // dzięki temu archiwum pokazuje punkt spoza aktywnej puli, a Rogoźno jest nieusuwalne.
+  {
+    const week1 = weeklyPackages.find((w) => w.weekNumber === 1)!;
+    const cpPiotr = clientPackages.find(
+      (c) => c.weeklyPackageId === week1.id && c.userId === piotr.id,
+    )!;
+    cpPiotr.pickupPointId = ppRogozno.id;
   }
 
   // Licznik: packagesRemaining = totalPackages − faktycznie odebrane (spójność z archiwum).

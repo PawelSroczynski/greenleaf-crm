@@ -4,8 +4,10 @@ import { createSeedData } from '@/lib/seed';
 describe('seed danych', () => {
   const store = createSeedData();
 
-  it('ma dokładnie 4 punkty odbioru', () => {
-    expect(store.pickupPoints).toHaveLength(4);
+  it('ma 4 punkty bazowe + 2 demo (Oborniki, Rogoźno)', () => {
+    expect(store.pickupPoints).toHaveLength(6);
+    expect(store.pickupPoints.some((p) => p.name === 'Oborniki')).toBe(true);
+    expect(store.pickupPoints.some((p) => p.name === 'Rogoźno')).toBe(true);
   });
 
   it('punkt Kąkolewice ma extraCost 0, pozostałe 10', () => {
@@ -13,6 +15,26 @@ describe('seed danych', () => {
     expect(kakolewice?.extraCost).toBe(0);
     const inne = store.pickupPoints.filter((p) => !p.name.includes('Kąkolewice'));
     expect(inne.every((p) => p.extraCost === 10)).toBe(true);
+  });
+
+  it('demo reguł usuwania: Oborniki usuwalne; Rogoźno wyłączone z historią (nieusuwalne)', () => {
+    const oborniki = store.pickupPoints.find((p) => p.name === 'Oborniki')!;
+    const rogozno = store.pickupPoints.find((p) => p.name === 'Rogoźno')!;
+
+    // Oborniki: aktywny, zero klientów, zero historii → jedyny z przyciskiem usuń
+    expect(oborniki.isActive).toBe(true);
+    expect(store.users.some((u) => u.defaultPickupPointId === oborniki.id)).toBe(false);
+    expect(store.clientPackages.some((c) => c.pickupPointId === oborniki.id)).toBe(false);
+
+    // Rogoźno: wyłączony, zero obecnych klientów, ale odbiór w archiwum (tydzień 1)
+    expect(rogozno.isActive).toBe(false);
+    expect(store.users.some((u) => u.defaultPickupPointId === rogozno.id)).toBe(false);
+    const week1 = store.weeklyPackages.find((w) => w.weekNumber === 1)!;
+    expect(
+      store.clientPackages.some(
+        (c) => c.weeklyPackageId === week1.id && c.pickupPointId === rogozno.id,
+      ),
+    ).toBe(true);
   });
 
   it('ma 2 strefy dostawy', () => {

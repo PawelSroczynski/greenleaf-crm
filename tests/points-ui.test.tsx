@@ -11,17 +11,17 @@ describe('PointsManager — pula punktów na Pulpicie', () => {
     await i18n.changeLanguage('pl');
   });
 
-  it('pokazuje 4 punkty z seedu; dodanie nowego zapisuje do store', async () => {
+  it('pokazuje 6 punktów z seedu (4 bazowe + 2 demo); dodanie nowego zapisuje do store', async () => {
     const user = userEvent.setup();
     render(<PointsManager />);
     expect(screen.getByText('Kąkolewice 17a')).toBeInTheDocument();
-    expect(loadStore().pickupPoints).toHaveLength(4);
+    expect(loadStore().pickupPoints).toHaveLength(6);
 
-    await user.type(screen.getByLabelText('Nazwa'), 'Oborniki');
+    await user.type(screen.getByLabelText('Nazwa'), 'Wągrowiec');
     await user.click(screen.getByRole('button', { name: 'Dodaj punkt' }));
 
-    expect(screen.getByText('Oborniki')).toBeInTheDocument();
-    expect(loadStore().pickupPoints).toHaveLength(5);
+    expect(screen.getByText('Wągrowiec')).toBeInTheDocument();
+    expect(loadStore().pickupPoints).toHaveLength(7);
   });
 
   it('wyłączenie punktu ustawia isActive=false; punkt bez klientów da się usunąć', async () => {
