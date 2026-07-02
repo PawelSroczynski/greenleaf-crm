@@ -45,3 +45,22 @@ describe('points — zarządzanie pulą punktów odbioru (admin)', () => {
     expect(store.pickupPoints.some((x) => x.id === fresh.id)).toBe(false);
   });
 });
+
+describe('points — guard archiwum (luka wykryta przez Pawła)', () => {
+  it('punkt bez obecnych klientów, ale z historią odbiorów, NIE daje się usunąć', () => {
+    const store = createSeedData();
+    const puszczykowo = store.pickupPoints.find((p) => p.name === 'Puszczykowo')!;
+
+    // przepisz wszystkich klientów Puszczykowa do Kąkolewic → 0 obecnych klientów
+    const kakolewice = store.pickupPoints[0];
+    for (const u of clientsAtPoint(store, puszczykowo.id)) {
+      u.defaultPickupPointId = kakolewice.id;
+    }
+    expect(clientsAtPoint(store, puszczykowo.id)).toHaveLength(0);
+
+    // ale archiwum ma odbiory z tego punktu → usunięcie odrzucone
+    const historical = store.clientPackages.some((c) => c.pickupPointId === puszczykowo.id);
+    expect(historical).toBe(true);
+    expect(() => removePickupPoint(store, puszczykowo.id)).toThrow();
+  });
+});

@@ -9,6 +9,7 @@ import { loadStore, saveStore } from '@/lib/store';
 import {
   addPickupPoint,
   clientsAtPoint,
+  pointHasHistory,
   removePickupPoint,
   setPickupPointActive,
 } from '@/lib/points';
@@ -81,7 +82,7 @@ export function PointsManager() {
               >
                 {p.isActive ? t('admin.points.active') : t('admin.points.inactive')}
               </button>
-              {clients === 0 && (
+              {clients === 0 && !pointHasHistory(store, p.id) && (
                 <button
                   type="button"
                   onClick={() => mutate(() => removePickupPoint(store, p.id))}

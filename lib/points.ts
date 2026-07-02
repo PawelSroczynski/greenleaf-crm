@@ -59,7 +59,15 @@ export function setPickupPointActive(store: Store, pointId: string, active: bool
   point.isActive = active;
 }
 
-/** Twarde usunięcie — tylko punkt bez przypisanych klientów (inaczej wyłącz). */
+/** Czy punkt występuje w danych historycznych (odbiory jakiegokolwiek tygodnia). */
+export function pointHasHistory(store: Store, pointId: string): boolean {
+  return store.clientPackages.some((c) => c.pickupPointId === pointId);
+}
+
+/**
+ * Twarde usunięcie — tylko punkt bez przypisanych klientów I bez historii odbiorów
+ * (archiwum tygodni odwołuje się do punktu; usunięcie osierociłoby te dane — wyłącz zamiast usuwać).
+ */
 export function removePickupPoint(store: Store, pointId: string): void {
   const point = store.pickupPoints.find((p) => p.id === pointId);
   if (!point) throw new Error(`Brak punktu o id ${pointId}.`);
@@ -67,6 +75,11 @@ export function removePickupPoint(store: Store, pointId: string): void {
   if (clients.length > 0) {
     throw new Error(
       `Punkt "${point.name}" ma ${clients.length} przypisanych klientów — wyłącz go zamiast usuwać.`,
+    );
+  }
+  if (pointHasHistory(store, pointId)) {
+    throw new Error(
+      `Punkt "${point.name}" występuje w historii odbiorów (archiwum tygodni) — wyłącz go zamiast usuwać.`,
     );
   }
   store.pickupPoints = store.pickupPoints.filter((p) => p.id !== pointId);
