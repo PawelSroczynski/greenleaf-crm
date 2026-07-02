@@ -207,3 +207,28 @@ describe('pickups — przegląd tygodni (nawigator + archiwum)', () => {
     }
   });
 });
+
+describe('pickups — cofnięcie odbioru zależne od tygodnia', () => {
+  it('undo w tygodniu ARCHIWALNYM daje not_picked_up (tydzień minął), nie pending', async () => {
+    const { undoPickedUp } = await import('@/lib/pickups');
+    const store = createSeedData();
+    const archival = store.weeklyPackages.find((w) => w.status === 'completed')!;
+    const cp = store.clientPackages.find(
+      (c) => c.weeklyPackageId === archival.id && c.status === 'picked_up',
+    )!;
+
+    undoPickedUp(store, cp.id);
+    expect(cp.status).toBe('not_picked_up');
+  });
+
+  it('undo w tygodniu BIEŻĄCYM (published) daje pending', async () => {
+    const { undoPickedUp } = await import('@/lib/pickups');
+    const store = createSeedData();
+    const current = store.weeklyPackages.find((w) => w.status === 'published')!;
+    const cp = store.clientPackages.find((c) => c.weeklyPackageId === current.id)!;
+
+    markPickedUp(store, cp.id, 'admin');
+    undoPickedUp(store, cp.id);
+    expect(cp.status).toBe('pending');
+  });
+});

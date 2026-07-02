@@ -75,16 +75,17 @@ export function markPickedUp(store: Store, clientPackageId: string, by: string):
 
 /**
  * Cofnięcie potwierdzenia odbioru (misklik checkboxa w widoku Odbiory).
- * Przywraca status 'pending', czyści potwierdzenie farmy i ODDAJE
- * Subscription.packagesRemaining (+1, nie ponad totalPackages).
- * Idempotentne: na nieodebranej paczce nic nie zmienia.
+ * Status po cofnięciu zależy od tygodnia: bieżący → 'pending' (czeka na odbiór),
+ * archiwalny (completed) → 'not_picked_up' (tydzień minął, faktu odbioru nie było).
+ * Czyści potwierdzenie farmy i ODDAJE Subscription.packagesRemaining
+ * (+1, nie ponad totalPackages). Idempotentne: na nieodebranej paczce nic nie zmienia.
  */
 export function undoPickedUp(store: Store, clientPackageId: string): Store {
-  const { cp } = resolvePackage(store, clientPackageId);
+  const { cp, wp } = resolvePackage(store, clientPackageId);
   if (cp.status !== 'picked_up') return store; // idempotencja
 
   const now = new Date().toISOString();
-  cp.status = 'pending';
+  cp.status = wp.status === 'completed' ? 'not_picked_up' : 'pending';
   cp.pickupConfirmedFarm = false;
   cp.pickupConfirmedFarmAt = null;
   cp.pickupConfirmedFarmBy = null;
