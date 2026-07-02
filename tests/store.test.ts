@@ -39,4 +39,38 @@ describe('store + localStorage', () => {
     expect(fresh.products[0].name).not.toBe('BRUDNE_DANE');
     expect(fresh.products.length).toBeGreaterThanOrEqual(45);
   });
+
+  // Regresja: dwa komponenty (np. PackageStatus + SwapPanel) montowane równolegle
+  // NIE mogą trzymać osobnych kopii — późniejszy zapis przestarzałej kopii cofałby
+  // wcześniejsze zmiany (np. zamiana kasowała zgłoszenie "Nie odbiorę").
+  it('loadStore zwraca tę samą instancję (singleton) — brak utraty równoległych zapisów', () => {
+    const a = loadStore(); // komponent 1
+    const b = loadStore(); // komponent 2 (montowany równolegle)
+    expect(b).toBe(a); // ta sama referencja
+
+    // scenariusz z buga: komponent 1 zapisuje flagę, komponent 2 potem zapisuje swapy
+    a.clientPackages[0].absenceReported = true;
+    saveStore(a);
+    b.swaps.push({
+      id: 'swap_test',
+      clientPackageId: b.clientPackages[0].id,
+      originalProductId: b.products[0].id,
+      replacementProductId: b.products[1].id,
+      createdAt: new Date().toISOString(),
+    });
+    saveStore(b);
+
+    const reloaded = loadStore();
+    expect(reloaded.clientPackages[0].absenceReported).toBe(true); // NIE zgubione
+    expect(reloaded.swaps).toHaveLength(1);
+  });
+
+  it('singleton unieważnia się po wyczyszczeniu localStorage (świeży seed)', () => {
+    const a = loadStore();
+    a.products[0].name = 'BRUDNE';
+    saveStore(a);
+    localStorage.clear(); // np. reset przeglądarki / testy
+    const b = loadStore();
+    expect(b.products[0].name).not.toBe('BRUDNE');
+  });
 });
