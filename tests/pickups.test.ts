@@ -105,3 +105,50 @@ describe('pickups — listy dla admina', () => {
     expect(ids).toContain(cps[2].id);
   });
 });
+
+describe('pickups — cofnięcie odbioru (misklik checkboxa)', () => {
+  it('undoPickedUp przywraca status pending i oddaje packagesRemaining', async () => {
+    const { undoPickedUp } = await import('@/lib/pickups');
+    const store = createSeedData();
+    const wp = store.weeklyPackages.find((w) => w.status === 'published')!;
+    const cp = store.clientPackages.find((c) => c.weeklyPackageId === wp.id)!;
+    const sub = store.subscriptions.find((s) => s.id === cp.subscriptionId)!;
+    const before = sub.packagesRemaining;
+
+    markPickedUp(store, cp.id, 'admin');
+    expect(sub.packagesRemaining).toBe(before - 1);
+
+    undoPickedUp(store, cp.id);
+    expect(cp.status).toBe('pending');
+    expect(cp.pickupConfirmedFarm).toBe(false);
+    expect(cp.pickupConfirmedFarmAt).toBeNull();
+    expect(sub.packagesRemaining).toBe(before); // licznik oddany
+  });
+
+  it('undoPickedUp jest idempotentne — na nieodebranej paczce nic nie zmienia', async () => {
+    const { undoPickedUp } = await import('@/lib/pickups');
+    const store = createSeedData();
+    const wp = store.weeklyPackages.find((w) => w.status === 'published')!;
+    const cp = store.clientPackages.find((c) => c.weeklyPackageId === wp.id)!;
+    const sub = store.subscriptions.find((s) => s.id === cp.subscriptionId)!;
+    const before = sub.packagesRemaining;
+
+    undoPickedUp(store, cp.id); // nic nie odebrano
+    expect(sub.packagesRemaining).toBe(before); // licznik NIE rośnie ponad stan
+    expect(cp.status).toBe('pending');
+  });
+
+  it('mark → undo → mark: licznik spójny (bez podwójnego odejmowania)', async () => {
+    const { undoPickedUp } = await import('@/lib/pickups');
+    const store = createSeedData();
+    const wp = store.weeklyPackages.find((w) => w.status === 'published')!;
+    const cp = store.clientPackages.find((c) => c.weeklyPackageId === wp.id)!;
+    const sub = store.subscriptions.find((s) => s.id === cp.subscriptionId)!;
+    const before = sub.packagesRemaining;
+
+    markPickedUp(store, cp.id, 'admin');
+    undoPickedUp(store, cp.id);
+    markPickedUp(store, cp.id, 'admin');
+    expect(sub.packagesRemaining).toBe(before - 1);
+  });
+});
