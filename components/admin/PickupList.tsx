@@ -121,34 +121,6 @@ export function PickupList() {
         </button>
       </div>
 
-      {/* Legenda: co oznaczają statusy + reguła braku zgłoszenia */}
-      <div className="mb-4 rounded-xl border border-leaf-100 bg-white p-3 text-xs text-gray-600">
-        <p className="mb-1">
-          <span className="mr-1 rounded bg-leaf-50 px-2 py-0.5 font-medium text-leaf-700">
-            {t('admin.pickups.statusPicked')}
-          </span>
-          — {t('admin.pickups.legendPicked')}
-        </p>
-        <p className="mb-1">
-          <span className="mr-1 rounded bg-amber-100 px-2 py-0.5 font-medium text-amber-800">
-            {t('admin.pickups.statusAbsence')}
-          </span>
-          — {t('admin.pickups.legendAbsence')}
-        </p>
-        <p className="mb-1">
-          <span className="mr-1 rounded bg-gray-100 px-2 py-0.5 font-medium text-gray-600">
-            {t('admin.pickups.statusWaiting')}
-          </span>
-          — {t('admin.pickups.legendWaiting')}
-        </p>
-        <p>
-          <span className="mr-1 rounded bg-red-100 px-2 py-0.5 font-medium text-red-700">
-            {t('admin.pickups.statusNoShow')}
-          </span>
-          — {t('admin.pickups.legendNoShow')}
-        </p>
-      </div>
-
       <div className="space-y-5">
         {groups.map((g) => (
           <div key={g.pointId}>

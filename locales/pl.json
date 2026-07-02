@@ -65,16 +65,12 @@
       "statusPicked": "✓ Odebrana",
       "statusAbsence": "Nie odbierze — zgłoszone",
       "statusWaiting": "Czeka na odbiór",
-      "legendPicked": "klient odebrał paczkę (odhaczone przy wydaniu)",
-      "legendAbsence": "klient zgłosił do środy 10:00, że nie odbierze w tym tygodniu",
-      "legendWaiting": "paczka czeka; kto nie odbierze do końca soboty i wcześniej nie zgłosił — traci paczkę (brak zgłoszenia = brak zwrotu)",
       "prevWeek": "Poprzedni tydzień",
       "nextWeek": "Następny tydzień",
       "weekLine": "Tydzień {{week}} · odbiór {{date}}",
       "weekCurrent": "bieżący tydzień",
       "weekArchival": "archiwum sezonu",
-      "statusNoShow": "Nie odebrał — bez zgłoszenia",
-      "legendNoShow": "tydzień minął: klient nie odebrał i nie zgłosił wcześniej — paczka przepadła"
+      "statusNoShow": "Nie odebrał — bez zgłoszenia"
     },
     "export": {
       "noPackage": "Brak opublikowanej paczki — najpierw opublikuj paczkę tygodnia.",
