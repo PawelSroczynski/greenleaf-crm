@@ -152,3 +152,58 @@ describe('pickups — cofnięcie odbioru (misklik checkboxa)', () => {
     expect(sub.packagesRemaining).toBe(before - 1);
   });
 });
+
+describe('pickups — przegląd tygodni (nawigator + archiwum)', () => {
+  it('pickupWeeks zwraca tygodnie bez szkiców, posortowane rosnąco', async () => {
+    const { pickupWeeks } = await import('@/lib/pickups');
+    const store = createSeedData();
+    const weeks = pickupWeeks(store);
+    expect(weeks.length).toBeGreaterThanOrEqual(4); // 3 archiwalne + bieżący
+    expect(weeks.every((w) => w.status !== 'draft')).toBe(true);
+    const nums = weeks.map((w) => w.weekNumber);
+    expect(nums).toEqual([...nums].sort((a, b) => a - b));
+  });
+
+  it('currentPickupWeek = najnowszy opublikowany (tydzień 4)', async () => {
+    const { currentPickupWeek } = await import('@/lib/pickups');
+    const store = createSeedData();
+    expect(currentPickupWeek(store)?.weekNumber).toBe(4);
+  });
+
+  it('archiwalne tygodnie mają ClientPackage z mieszanymi stanami', () => {
+    const store = createSeedData();
+    const archival = store.weeklyPackages.filter((w) => w.status === 'completed');
+    expect(archival.length).toBeGreaterThanOrEqual(3);
+    for (const wp of archival) {
+      const cps = store.clientPackages.filter((c) => c.weeklyPackageId === wp.id);
+      expect(cps.length).toBeGreaterThan(0);
+    }
+    // w archiwum istnieje i odebrana, i zgłoszona nieobecność
+    const archIds = new Set(archival.map((w) => w.id));
+    const archCps = store.clientPackages.filter((c) => archIds.has(c.weeklyPackageId));
+    expect(archCps.some((c) => c.status === 'picked_up')).toBe(true);
+    expect(archCps.some((c) => c.absenceReported)).toBe(true);
+  });
+
+  it('licznik packagesRemaining odzwierciedla odebrane archiwalne paczki', () => {
+    const store = createSeedData();
+    for (const sub of store.subscriptions.filter((s) => s.type.startsWith('paczka'))) {
+      const picked = store.clientPackages.filter(
+        (c) => c.subscriptionId === sub.id && c.status === 'picked_up',
+      ).length;
+      expect(sub.packagesRemaining).toBe(sub.totalPackages - picked);
+    }
+  });
+
+  it('edycja archiwalnego tygodnia działa (markPickedUp na starej paczce)', () => {
+    const store = createSeedData();
+    const archival = store.weeklyPackages.find((w) => w.status === 'completed')!;
+    const cp = store.clientPackages.find(
+      (c) => c.weeklyPackageId === archival.id && c.status !== 'picked_up',
+    );
+    if (cp) {
+      markPickedUp(store, cp.id, 'admin');
+      expect(cp.status).toBe('picked_up');
+    }
+  });
+});

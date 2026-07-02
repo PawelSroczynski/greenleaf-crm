@@ -67,7 +67,14 @@
       "statusWaiting": "Awaiting pickup",
       "legendPicked": "client picked up the box (checked at handout)",
       "legendAbsence": "client reported by Wed 10:00 they won't pick up this week",
-      "legendWaiting": "box is waiting; no pickup by Saturday's end without prior notice — box is forfeited (no notice = no refund)"
+      "legendWaiting": "box is waiting; no pickup by Saturday's end without prior notice — box is forfeited (no notice = no refund)",
+      "prevWeek": "Previous week",
+      "nextWeek": "Next week",
+      "weekLine": "Week {{week}} · pickup {{date}}",
+      "weekCurrent": "current week",
+      "weekArchival": "season archive",
+      "statusNoShow": "No pickup — not reported",
+      "legendNoShow": "week is over: client neither picked up nor reported — box forfeited"
     },
     "export": {
       "noPackage": "No published package — publish the weekly package first.",

@@ -7,7 +7,10 @@ import {
   DELIVERY_COST,
   PACKAGE_PRICE,
   PACKAGE_COUNT,
+  SWAP_DEADLINE,
+  ABSENCE_DEADLINE,
 } from './config';
+import { weeklyDeadline } from './deadlines';
 import type {
   Product,
   Store,
@@ -344,6 +347,75 @@ export function createSeedData(): Store {
       updatedAt: NOW,
     };
   });
+
+  // ---------- Archiwum: tygodnie 1–3 (zakończone) — do przeglądu historii w Odbiorach ----------
+  // Stany per klient: 'picked' (odebrana), 'absence' (zgłosił brak), 'noshow' (nie odebrał, nie zgłosił).
+  type ArchState = 'picked' | 'absence' | 'noshow';
+  const ARCHIVAL_WEEKS: { weekNumber: number; pickupDate: string; states: ArchState[] }[] = [
+    { weekNumber: 1, pickupDate: `${SEASON}-05-23`, states: ['picked', 'picked', 'picked', 'picked'] },
+    { weekNumber: 2, pickupDate: `${SEASON}-05-30`, states: ['picked', 'picked', 'picked', 'absence'] },
+    { weekNumber: 3, pickupDate: `${SEASON}-06-06`, states: ['picked', 'picked', 'absence', 'noshow'] },
+  ];
+
+  for (const spec of ARCHIVAL_WEEKS) {
+    const month = Number(spec.pickupDate.slice(5, 7));
+    const wp: WeeklyPackage = {
+      id: id('wp'),
+      weekNumber: spec.weekNumber,
+      pickupDate: spec.pickupDate,
+      publishedAt: weeklyDeadline(spec.pickupDate, { dayOfWeek: 2, hour: 10, minute: 0 }).toISOString(),
+      swapDeadline: weeklyDeadline(spec.pickupDate, SWAP_DEADLINE).toISOString(),
+      absenceDeadline: weeklyDeadline(spec.pickupDate, ABSENCE_DEADLINE).toISOString(),
+      status: 'completed',
+      season: seasonStr,
+      createdAt: NOW,
+    };
+    weeklyPackages.push(wp);
+
+    for (const prod of productsAvailableInMonth(products, month).slice(0, 10)) {
+      packageItems.push({
+        id: id('pi'),
+        weeklyPackageId: wp.id,
+        productId: prod.id,
+        quantity: 1,
+        unit: prod.unit,
+      });
+    }
+
+    const pickupDayIso = `${spec.pickupDate}T10:00:00.000Z`;
+    activePackageSubs.forEach((sub, i) => {
+      const owner = users.find((u) => u.id === sub.userId)!;
+      const state = spec.states[i] ?? 'picked';
+      clientPackages.push({
+        id: id('cp'),
+        weeklyPackageId: wp.id,
+        userId: sub.userId,
+        subscriptionId: sub.id,
+        status: state === 'picked' ? 'picked_up' : 'not_picked_up',
+        pickupPointId: owner.defaultPickupPointId,
+        isHomeDelivery: false,
+        absenceReported: state === 'absence',
+        absenceReportedAt: state === 'absence' ? wp.absenceDeadline : null,
+        pickupConfirmedFarm: state === 'picked',
+        pickupConfirmedFarmAt: state === 'picked' ? pickupDayIso : null,
+        pickupConfirmedFarmBy: state === 'picked' ? magda.id : null,
+        pickupConfirmedDriver: false,
+        pickupConfirmedDriverAt: null,
+        pickupConfirmedDriverBy: null,
+        note: null,
+        createdAt: NOW,
+        updatedAt: pickupDayIso,
+      });
+    });
+  }
+
+  // Licznik: packagesRemaining = totalPackages − faktycznie odebrane (spójność z archiwum).
+  for (const sub of activePackageSubs) {
+    const picked = clientPackages.filter(
+      (c) => c.subscriptionId === sub.id && c.status === 'picked_up',
+    ).length;
+    sub.packagesRemaining = sub.totalPackages - picked;
+  }
 
   return {
     users,

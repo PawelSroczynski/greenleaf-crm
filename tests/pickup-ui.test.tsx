@@ -24,13 +24,19 @@ describe('ETAP 4 — domknięcie cyklu (UI)', () => {
     const user = userEvent.setup();
     render(<PickupList />);
 
-    const before = loadStore().clientPackages.filter((c) => c.status === 'picked_up').length;
+    // liczymy tylko w tygodniu opublikowanym (bieżącym) — archiwum ma swoje odbiory
+    const publishedId = loadStore().weeklyPackages.find((w) => w.status === 'published')!.id;
+    const pickedNow = () =>
+      loadStore().clientPackages.filter(
+        (c) => c.weeklyPackageId === publishedId && c.status === 'picked_up',
+      ).length;
+    const before = pickedNow();
     expect(before).toBe(0);
 
     const checkboxes = screen.getAllByRole('checkbox');
     await user.click(checkboxes[0]);
 
-    const after = loadStore().clientPackages.filter((c) => c.status === 'picked_up').length;
+    const after = pickedNow();
     expect(after).toBe(1);
   });
 
@@ -52,5 +58,42 @@ describe('ETAP 4 — domknięcie cyklu (UI)', () => {
     expect(
       screen.queryByRole('button', { name: 'Nie odbiorę w tym tygodniu' }),
     ).not.toBeInTheDocument();
+  });
+});
+
+describe('Odbiory — nawigator tygodni', () => {
+  it('default = bieżący tydzień (4); strzałka wstecz pokazuje archiwum z no-show', async () => {
+    const user = userEvent.setup();
+    render(<PickupList />);
+
+    // default: bieżący tydzień
+    expect(screen.getByText(/Tydzień 4/)).toBeInTheDocument();
+    expect(screen.getByText('bieżący tydzień')).toBeInTheDocument();
+    // strzałka naprzód zablokowana (jesteśmy na najnowszym)
+    expect(screen.getByLabelText('Następny tydzień')).toBeDisabled();
+
+    // wstecz → tydzień 3 (archiwum: Ewa zgłosiła, Piotr no-show)
+    await user.click(screen.getByLabelText('Poprzedni tydzień'));
+    expect(screen.getByText(/Tydzień 3/)).toBeInTheDocument();
+    expect(screen.getByText('archiwum sezonu')).toBeInTheDocument();
+    expect(screen.getAllByText('Nie odebrał — bez zgłoszenia').length).toBeGreaterThanOrEqual(1);
+  });
+
+  it('edycja archiwum: odhaczenie no-show w tygodniu 3 zapisuje picked_up', async () => {
+    const user = userEvent.setup();
+    render(<PickupList />);
+    await user.click(screen.getByLabelText('Poprzedni tydzień')); // tydzień 3
+
+    const week3 = loadStore().weeklyPackages.find((w) => w.weekNumber === 3)!;
+    const pickedIn3 = () =>
+      loadStore().clientPackages.filter(
+        (c) => c.weeklyPackageId === week3.id && c.status === 'picked_up',
+      ).length;
+    const before = pickedIn3();
+
+    // odhacz pierwszego nieodebranego (checkbox niezaznaczony)
+    const boxes = screen.getAllByRole('checkbox').filter((b) => !(b as HTMLInputElement).checked);
+    await user.click(boxes[0]);
+    expect(pickedIn3()).toBe(before + 1);
   });
 });

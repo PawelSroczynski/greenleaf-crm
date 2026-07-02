@@ -53,11 +53,15 @@ describe('seed danych', () => {
     expect(items.length).toBeLessThanOrEqual(12);
   });
 
-  it('wygenerowano ClientPackage dla aktywnych subskrypcji paczek', () => {
+  it('wygenerowano ClientPackage dla aktywnych subskrypcji paczek (per tydzień)', () => {
     const activePackageSubs = store.subscriptions.filter(
       (s) => s.status === 'active' && (s.type === 'paczka_24' || s.type === 'paczka_12'),
     );
-    expect(store.clientPackages.length).toBe(activePackageSubs.length);
+    // każdy tydzień (bieżący + archiwalne) ma komplet paczek klientów
+    for (const wp of store.weeklyPackages) {
+      const cps = store.clientPackages.filter((c) => c.weeklyPackageId === wp.id);
+      expect(cps.length).toBe(activePackageSubs.length);
+    }
     for (const cp of store.clientPackages) {
       expect(activePackageSubs.some((s) => s.id === cp.subscriptionId)).toBe(true);
     }

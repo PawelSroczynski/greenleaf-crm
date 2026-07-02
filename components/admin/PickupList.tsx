@@ -7,19 +7,30 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { loadStore, saveStore } from '@/lib/store';
-import { markPickedUp, undoPickedUp, pickupStatusList } from '@/lib/pickups';
+import {
+  markPickedUp,
+  undoPickedUp,
+  pickupStatusList,
+  pickupWeeks,
+  currentPickupWeek,
+} from '@/lib/pickups';
 import type { Store } from '@/lib/types';
 
 export function PickupList() {
   const { t } = useTranslation();
   const [store, setStore] = useState<Store | null>(null);
   const [tick, setTick] = useState(0); // wymusza re-render po mutacji
+  const [weekId, setWeekId] = useState<string | null>(null);
 
   useEffect(() => {
-    setStore(loadStore());
+    const s = loadStore();
+    setStore(s);
+    setWeekId(currentPickupWeek(s)?.id ?? null); // default: bieżący tydzień
   }, []);
 
-  const wp = store?.weeklyPackages.find((w) => w.status === 'published') ?? null;
+  const weeks = useMemo(() => (store ? pickupWeeks(store) : []), [store]);
+  const weekIdx = weeks.findIndex((w) => w.id === weekId);
+  const wp = weekIdx >= 0 ? weeks[weekIdx] : null;
 
   const groups = useMemo(() => {
     if (!store || !wp) return [];
@@ -61,12 +72,54 @@ export function PickupList() {
     if (row.clientPackage.absenceReported) {
       return { key: 'admin.pickups.statusAbsence', cls: 'bg-amber-100 text-amber-800' };
     }
+    if (row.clientPackage.status === 'not_picked_up') {
+      // archiwum: tydzień minął, klient nie odebrał i nie zgłosił
+      return { key: 'admin.pickups.statusNoShow', cls: 'bg-red-100 text-red-700' };
+    }
     return { key: 'admin.pickups.statusWaiting', cls: 'bg-gray-100 text-gray-600' };
   };
 
   return (
     <section>
       <h2 className="mb-3 text-xl font-semibold">{t('admin.nav.pickups')}</h2>
+
+      {/* Nawigator tygodni: default bieżący, strzałki do archiwum sezonu */}
+      <div className="mb-3 flex items-center justify-between rounded-xl border border-leaf-100 bg-white px-2 py-2">
+        <button
+          type="button"
+          onClick={() => setWeekId(weeks[weekIdx - 1].id)}
+          disabled={weekIdx <= 0}
+          aria-label={t('admin.pickups.prevWeek')}
+          className="rounded px-3 py-1 text-lg font-bold text-leaf-700 disabled:opacity-25"
+        >
+          ‹
+        </button>
+        <div className="text-center">
+          <p className="text-sm font-semibold">
+            {t('admin.pickups.weekLine', { week: wp.weekNumber, date: wp.pickupDate })}
+          </p>
+          <p className="text-xs">
+            <span
+              className={`rounded px-2 py-0.5 font-medium ${
+                wp.status === 'published' ? 'bg-leaf-50 text-leaf-700' : 'bg-gray-100 text-gray-600'
+              }`}
+            >
+              {wp.status === 'published'
+                ? t('admin.pickups.weekCurrent')
+                : t('admin.pickups.weekArchival')}
+            </span>
+          </p>
+        </div>
+        <button
+          type="button"
+          onClick={() => setWeekId(weeks[weekIdx + 1].id)}
+          disabled={weekIdx >= weeks.length - 1}
+          aria-label={t('admin.pickups.nextWeek')}
+          className="rounded px-3 py-1 text-lg font-bold text-leaf-700 disabled:opacity-25"
+        >
+          ›
+        </button>
+      </div>
 
       {/* Legenda: co oznaczają statusy + reguła braku zgłoszenia */}
       <div className="mb-4 rounded-xl border border-leaf-100 bg-white p-3 text-xs text-gray-600">
@@ -82,11 +135,17 @@ export function PickupList() {
           </span>
           — {t('admin.pickups.legendAbsence')}
         </p>
-        <p>
+        <p className="mb-1">
           <span className="mr-1 rounded bg-gray-100 px-2 py-0.5 font-medium text-gray-600">
             {t('admin.pickups.statusWaiting')}
           </span>
           — {t('admin.pickups.legendWaiting')}
+        </p>
+        <p>
+          <span className="mr-1 rounded bg-red-100 px-2 py-0.5 font-medium text-red-700">
+            {t('admin.pickups.statusNoShow')}
+          </span>
+          — {t('admin.pickups.legendNoShow')}
         </p>
       </div>
 

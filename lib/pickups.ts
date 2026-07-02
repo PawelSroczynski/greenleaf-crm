@@ -127,6 +127,21 @@ export function notPickedNotReported(store: Store, weeklyPackageId: string): Cli
   );
 }
 
+/** Tygodnie do przeglądu w Odbiorach: bez szkiców, rosnąco po numerze tygodnia. */
+export function pickupWeeks(store: Store): WeeklyPackage[] {
+  return store.weeklyPackages
+    .filter((w) => w.status !== 'draft')
+    .sort((a, b) => a.weekNumber - b.weekNumber);
+}
+
+/** Bieżący tydzień = najnowszy opublikowany (default nawigatora). */
+export function currentPickupWeek(store: Store): WeeklyPackage | null {
+  const published = store.weeklyPackages
+    .filter((w) => w.status === 'published')
+    .sort((a, b) => b.weekNumber - a.weekNumber);
+  return published[0] ?? pickupWeeks(store).at(-1) ?? null;
+}
+
 /** Bieżący klient RWS = pierwszy aktywny z ClientPackage opublikowanej paczki (Anna). */
 export function findCurrentClient(store: Store) {
   const wp = store.weeklyPackages.find((w) => w.status === 'published');
