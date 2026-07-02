@@ -3,6 +3,7 @@
 // Czyste funkcje na obiekcie Store (mutacja in-place). UI tylko je wywołuje + persystuje (saveStore).
 
 import { ABSENCE_DEADLINE } from './config';
+import { weeklyDeadline } from './deadlines';
 import type { ClientPackage, Store, User, WeeklyPackage } from './types';
 
 /** WeeklyPackage dla danego ClientPackage. Rzuca, gdy brak. */
@@ -16,12 +17,7 @@ function resolvePackage(store: Store, clientPackageId: string): { cp: ClientPack
 
 /** Termin zgłoszenia braku odbioru = środa 10:00 (ABSENCE_DEADLINE) tygodnia paczki. */
 export function getAbsenceDeadline(pkg: Pick<WeeklyPackage, 'pickupDate'>): Date {
-  const pickup = new Date(`${pkg.pickupDate}T00:00:00.000Z`);
-  const back = (pickup.getUTCDay() - ABSENCE_DEADLINE.dayOfWeek + 7) % 7;
-  const deadline = new Date(pickup);
-  deadline.setUTCDate(deadline.getUTCDate() - back);
-  deadline.setUTCHours(ABSENCE_DEADLINE.hour, ABSENCE_DEADLINE.minute, 0, 0);
-  return deadline;
+  return weeklyDeadline(pkg.pickupDate, ABSENCE_DEADLINE);
 }
 
 /** Czy zgłoszenie braku jest jeszcze możliwe: now ściśle przed terminem. */

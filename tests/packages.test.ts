@@ -84,6 +84,7 @@ describe('packages — publikacja generuje ClientPackage', () => {
   it('publishPackage ustawia status=published i publishedAt', () => {
     const store = createSeedData();
     const draft = createDraftPackage(store, 5, '2026-06-20');
+    addItemToPackage(store, draft.id, findProduct(store, 'Ogórek gruntowy').id, 1, 'kg', 6);
     const { package: pkg } = publishPackage(store, draft.id, '2026-06-16T10:00:00.000Z');
     expect(pkg.status).toBe('published');
     expect(pkg.publishedAt).toBe('2026-06-16T10:00:00.000Z');
@@ -92,6 +93,7 @@ describe('packages — publikacja generuje ClientPackage', () => {
   it('publishPackage generuje 1 ClientPackage (status pending) na aktywną subskrypcję paczkową', () => {
     const store = createSeedData();
     const draft = createDraftPackage(store, 5, '2026-06-20');
+    addItemToPackage(store, draft.id, findProduct(store, 'Ogórek gruntowy').id, 1, 'kg', 6);
     const before = store.clientPackages.length;
 
     const { clientPackages } = publishPackage(store, draft.id);
@@ -110,6 +112,7 @@ describe('packages — publikacja generuje ClientPackage', () => {
     localStorage.clear();
     const store = loadStore();
     const draft = createDraftPackage(store, 9, '2026-06-27');
+    addItemToPackage(store, draft.id, findProduct(store, 'Ogórek gruntowy').id, 1, 'kg', 6);
     publishPackage(store, draft.id, '2026-06-23T10:00:00.000Z');
     saveStore(store);
 
@@ -117,5 +120,41 @@ describe('packages — publikacja generuje ClientPackage', () => {
     const reloadedPkg = reloaded.weeklyPackages.find((w) => w.id === draft.id);
     expect(reloadedPkg?.status).toBe('published');
     expect(reloaded.clientPackages.filter((cp) => cp.weeklyPackageId === draft.id)).toHaveLength(4);
+  });
+});
+
+describe('packages — poprawki skanu (guardy)', () => {
+  it('ponowna publikacja tej samej paczki jest odrzucona (brak duplikatów ClientPackage)', () => {
+    const store = createSeedData();
+    const draft = createDraftPackage(store, 5, '2026-06-20');
+    const cucumber = findProduct(store, 'Ogórek gruntowy');
+    addItemToPackage(store, draft.id, cucumber.id, 1, 'kg', 6);
+
+    publishPackage(store, draft.id);
+    const after = store.clientPackages.length;
+    expect(() => publishPackage(store, draft.id)).toThrow();
+    expect(store.clientPackages.length).toBe(after); // zero duplikatów
+  });
+
+  it('publikacja pustej paczki (bez pozycji) jest odrzucona', () => {
+    const store = createSeedData();
+    const draft = createDraftPackage(store, 5, '2026-06-20');
+    expect(() => publishPackage(store, draft.id)).toThrow();
+  });
+
+  it('createDraftPackage wylicza deadliny (środa 20:00 / 10:00), nie zostawia pustych', () => {
+    const store = createSeedData();
+    const draft = createDraftPackage(store, 5, '2026-06-20'); // sobota
+    expect(draft.swapDeadline).toBe('2026-06-17T20:00:00.000Z'); // środa 20:00
+    expect(draft.absenceDeadline).toBe('2026-06-17T10:00:00.000Z'); // środa 10:00
+  });
+
+  it('addItemToPackage odrzuca ilość NaN, zero i ujemną', () => {
+    const store = createSeedData();
+    const draft = createDraftPackage(store, 5, '2026-06-20');
+    const cucumber = findProduct(store, 'Ogórek gruntowy');
+    expect(() => addItemToPackage(store, draft.id, cucumber.id, NaN, 'kg', 6)).toThrow();
+    expect(() => addItemToPackage(store, draft.id, cucumber.id, 0, 'kg', 6)).toThrow();
+    expect(() => addItemToPackage(store, draft.id, cucumber.id, -2, 'kg', 6)).toThrow();
   });
 });

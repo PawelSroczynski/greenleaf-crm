@@ -3,6 +3,7 @@
 // i decyduje o persystencji (saveStore). Brak side-effectów poza przekazanym store.
 
 import { SWAP_DEADLINE } from './config';
+import { weeklyDeadline } from './deadlines';
 import { isProductAvailable } from './seed';
 import { getPackageMonth, itemsForPackage } from './packages';
 import type { Product, Store, Swap, WeeklyPackage } from './types';
@@ -19,12 +20,7 @@ function genId(prefix: string): string {
  * Wyprowadzony z pickupDate (sobota) — cofamy się do dnia tygodnia z config.
  */
 export function getSwapDeadline(pkg: Pick<WeeklyPackage, 'pickupDate'>): Date {
-  const pickup = new Date(`${pkg.pickupDate}T00:00:00.000Z`);
-  const back = (pickup.getUTCDay() - SWAP_DEADLINE.dayOfWeek + 7) % 7;
-  const deadline = new Date(pickup);
-  deadline.setUTCDate(deadline.getUTCDate() - back);
-  deadline.setUTCHours(SWAP_DEADLINE.hour, SWAP_DEADLINE.minute, 0, 0);
-  return deadline;
+  return weeklyDeadline(pkg.pickupDate, SWAP_DEADLINE);
 }
 
 /** Czy zamiany są otwarte: now ściśle przed terminem. */

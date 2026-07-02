@@ -69,6 +69,7 @@ export function PackageBuilder() {
 
   function handleAdd() {
     if (!productId || !canAddProduct(productId, month, store!)) return;
+    if (!Number.isFinite(quantity) || quantity <= 0) return; // NaN po wyczyszczeniu pola liczby
     const item = addItemToPackage(store!, draft!.id, productId, quantity, unit, month);
     setItems((prev) => [...prev, item]);
     setProductId('');

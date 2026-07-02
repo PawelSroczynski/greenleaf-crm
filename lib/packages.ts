@@ -3,6 +3,8 @@
 // i decyduje o persystencji (saveStore). Brak side-effectów poza przekazanym store.
 
 import { isProductAvailable } from './seed';
+import { SWAP_DEADLINE, ABSENCE_DEADLINE } from './config';
+import { weeklyDeadline } from './deadlines';
 import type { ClientPackage, PackageItem, Store, WeeklyPackage } from './types';
 
 // Lokalny generator ID (unikalny w obrębie procesu, bez zależności od crypto).
@@ -40,8 +42,8 @@ export function createDraftPackage(
     weekNumber,
     pickupDate,
     publishedAt: null,
-    swapDeadline: '',
-    absenceDeadline: '',
+    swapDeadline: weeklyDeadline(pickupDate, SWAP_DEADLINE).toISOString(),
+    absenceDeadline: weeklyDeadline(pickupDate, ABSENCE_DEADLINE).toISOString(),
     status: 'draft',
     season,
     createdAt: now,
@@ -64,6 +66,9 @@ export function addItemToPackage(
 ): PackageItem {
   if (!canAddProduct(productId, month, store)) {
     throw new Error(`Produkt ${productId} jest poza sezonem w miesiącu ${month}.`);
+  }
+  if (!Number.isFinite(quantity) || quantity <= 0) {
+    throw new Error(`Nieprawidłowa ilość: ${quantity}. Wymagana liczba większa od zera.`);
   }
   const item: PackageItem = {
     id: genId('pi'),
@@ -105,6 +110,12 @@ export function publishPackage(
   const pkg = store.weeklyPackages.find((w) => w.id === weeklyPackageId);
   if (!pkg) {
     throw new Error(`Brak paczki o id ${weeklyPackageId}.`);
+  }
+  if (pkg.status !== 'draft') {
+    throw new Error(`Paczka ${weeklyPackageId} jest już opublikowana — ponowna publikacja zduplikowałaby paczki klientów.`);
+  }
+  if (itemsForPackage(store, weeklyPackageId).length === 0) {
+    throw new Error('Nie można opublikować pustej paczki (brak pozycji).');
   }
 
   pkg.status = 'published';
