@@ -46,6 +46,7 @@ export function createDraftPackage(
     absenceDeadline: weeklyDeadline(pickupDate, ABSENCE_DEADLINE).toISOString(),
     status: 'draft',
     season,
+    pickupPointIds: null, // null = wszystkie punkty
     createdAt: now,
   };
   store.weeklyPackages.push(pkg);
@@ -91,6 +92,17 @@ export function itemsForPackage(store: Store, weeklyPackageId: string): PackageI
   return store.packageItems.filter((i) => i.weeklyPackageId === weeklyPackageId);
 }
 
+/** Ustawia punkty odbioru aktywne w danym tygodniu (null = wszystkie). */
+export function setPackagePickupPoints(
+  store: Store,
+  weeklyPackageId: string,
+  pickupPointIds: string[] | null,
+): void {
+  const pkg = store.weeklyPackages.find((w) => w.id === weeklyPackageId);
+  if (!pkg) throw new Error(`Brak paczki o id ${weeklyPackageId}.`);
+  pkg.pickupPointIds = pickupPointIds;
+}
+
 /** Aktywne subskrypcje paczkowe (paczka_24 / paczka_12, status 'active'). */
 export function activePackageSubscriptions(store: Store) {
   return store.subscriptions.filter(
@@ -117,11 +129,21 @@ export function publishPackage(
   if (itemsForPackage(store, weeklyPackageId).length === 0) {
     throw new Error('Nie można opublikować pustej paczki (brak pozycji).');
   }
+  const allowedPoints = pkg.pickupPointIds ?? null; // null = wszystkie punkty
+  if (allowedPoints !== null && allowedPoints.length === 0) {
+    throw new Error('Nie można opublikować paczki bez żadnego punktu odbioru.');
+  }
 
   pkg.status = 'published';
   pkg.publishedAt = now;
 
-  const subs = activePackageSubscriptions(store);
+  const subs = activePackageSubscriptions(store).filter((sub) => {
+    if (allowedPoints === null) return true;
+    const owner = store.users.find((u) => u.id === sub.userId);
+    if (!owner) return false;
+    if (owner.deliveryOption === 'home_delivery') return true; // dostawa do domu niezależna od punktów
+    return owner.defaultPickupPointId !== null && allowedPoints.includes(owner.defaultPickupPointId);
+  });
   const generated: ClientPackage[] = subs.map((sub) => {
     const owner = store.users.find((u) => u.id === sub.userId);
     return {

@@ -16,6 +16,7 @@ import {
   itemsForPackage,
   publishPackage,
   removeItemFromPackage,
+  setPackagePickupPoints,
 } from '@/lib/packages';
 import type { ClientPackage, PackageItem, Product, Store, WeeklyPackage } from '@/lib/types';
 
@@ -37,6 +38,8 @@ export function PackageBuilder() {
   const [unit, setUnit] = useState('');
   const [items, setItems] = useState<PackageItem[]>([]);
   const [published, setPublished] = useState<ClientPackage[] | null>(null);
+  // Punkty odbioru aktywne w tym tygodniu (default: wszystkie zaznaczone).
+  const [pointIds, setPointIds] = useState<Set<string>>(new Set());
 
   // Inicjalizacja: wczytaj store i utwórz świeży szkic kolejnego tygodnia.
   useEffect(() => {
@@ -46,6 +49,7 @@ export function PackageBuilder() {
     setStore(s);
     setDraft(d);
     setItems(itemsForPackage(s, d.id));
+    setPointIds(new Set(s.pickupPoints.filter((p) => p.isActive).map((p) => p.id)));
   }, []);
 
   const month = draft ? getPackageMonth(draft) : 6;
@@ -82,7 +86,23 @@ export function PackageBuilder() {
     setItems((prev) => prev.filter((i) => i.id !== itemId));
   }
 
+  function togglePoint(pointId: string) {
+    setPointIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(pointId)) next.delete(pointId);
+      else next.add(pointId);
+      return next;
+    });
+  }
+
   function handlePublish() {
+    const allActive = store!.pickupPoints.filter((p) => p.isActive);
+    // wszystkie zaznaczone = null (bez ograniczenia); podzbiór = jawna lista
+    setPackagePickupPoints(
+      store!,
+      draft!.id,
+      pointIds.size === allActive.length ? null : [...pointIds],
+    );
     const { clientPackages } = publishPackage(store!, draft!.id);
     saveStore(store!);
     setDraft({ ...draft!, status: 'published' });
@@ -197,10 +217,33 @@ export function PackageBuilder() {
             </ul>
           )}
 
+          <div className="mb-4">
+            <p className="mb-2 text-sm font-medium text-gray-700">
+              {t('admin.package.pointsTitle')}
+            </p>
+            <div className="flex flex-wrap gap-x-4 gap-y-2">
+              {store.pickupPoints
+                .filter((p) => p.isActive)
+                .map((p) => (
+                  <label key={p.id} className="flex items-center gap-1.5 text-sm text-gray-700">
+                    <input
+                      type="checkbox"
+                      checked={pointIds.has(p.id)}
+                      onChange={() => togglePoint(p.id)}
+                    />
+                    {p.name}
+                  </label>
+                ))}
+            </div>
+            {pointIds.size === 0 && (
+              <p className="mt-1 text-xs text-red-600">{t('admin.package.pointsNone')}</p>
+            )}
+          </div>
+
           <button
             type="button"
             onClick={handlePublish}
-            disabled={items.length === 0}
+            disabled={items.length === 0 || pointIds.size === 0}
             className="rounded bg-leaf-700 px-4 py-2 text-sm font-semibold text-white disabled:opacity-40"
           >
             {t('admin.package.publish')}

@@ -306,6 +306,7 @@ export function createSeedData(): Store {
     absenceDeadline: `${SEASON}-06-10T10:00:00.000Z`, // środa 10:00
     status: 'published',
     season: seasonStr,
+    pickupPointIds: null,
     createdAt: NOW,
   };
   const weeklyPackages: WeeklyPackage[] = [weeklyPackage];
@@ -368,6 +369,7 @@ export function createSeedData(): Store {
       absenceDeadline: weeklyDeadline(spec.pickupDate, ABSENCE_DEADLINE).toISOString(),
       status: 'completed',
       season: seasonStr,
+      pickupPointIds: null,
       createdAt: NOW,
     };
     weeklyPackages.push(wp);

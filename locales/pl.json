@@ -49,7 +49,9 @@
       "publish": "Publikuj paczkę",
       "published": "Paczka opublikowana",
       "publishedInfo": "Wygenerowano paczki dla {{count}} aktywnych subskrypcji.",
-      "preview": "Podgląd opublikowanej zawartości"
+      "preview": "Podgląd opublikowanej zawartości",
+      "pointsTitle": "Punkty odbioru w tym tygodniu",
+      "pointsNone": "Zaznacz co najmniej jeden punkt odbioru."
     },
     "swaps": {
       "title": "Podsumowanie zamian",

@@ -108,6 +108,8 @@ export interface WeeklyPackage {
   absenceDeadline: string;
   status: WeeklyPackageStatus;
   season: string;
+  /** Punkty odbioru aktywne w tym tygodniu; null = wszystkie punkty. */
+  pickupPointIds: string[] | null;
   createdAt: string;
 }
 

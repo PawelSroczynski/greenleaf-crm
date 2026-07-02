@@ -49,7 +49,9 @@
       "publish": "Publish box",
       "published": "Box published",
       "publishedInfo": "Generated boxes for {{count}} active subscriptions.",
-      "preview": "Published content preview"
+      "preview": "Published content preview",
+      "pointsTitle": "Pickup points this week",
+      "pointsNone": "Select at least one pickup point."
     },
     "swaps": {
       "title": "Swap summary",

@@ -158,3 +158,58 @@ describe('packages — poprawki skanu (guardy)', () => {
     expect(() => addItemToPackage(store, draft.id, cucumber.id, -2, 'kg', 6)).toThrow();
   });
 });
+
+describe('packages — punkty odbioru per tydzień', () => {
+  function draftWithItem(store: ReturnType<typeof createSeedData>) {
+    const draft = createDraftPackage(store, 5, '2026-06-20');
+    addItemToPackage(store, draft.id, findProduct(store, 'Ogórek gruntowy').id, 1, 'kg', 6);
+    return draft;
+  }
+
+  it('domyślnie (null) publikacja obejmuje wszystkich — 4 ClientPackage', () => {
+    const store = createSeedData();
+    const draft = draftWithItem(store);
+    expect(draft.pickupPointIds).toBeNull();
+    const { clientPackages } = publishPackage(store, draft.id);
+    expect(clientPackages).toHaveLength(4);
+  });
+
+  it('wybór podzbioru punktów ogranicza generowanie do klientów tych punktów', async () => {
+    const { setPackagePickupPoints } = await import('@/lib/packages');
+    const store = createSeedData();
+    const draft = draftWithItem(store);
+    // tylko Kąkolewice (Anna) i Komorniki (Tomasz)
+    const kak = store.pickupPoints.find((p) => p.name.includes('Kąkolewice'))!;
+    const kom = store.pickupPoints.find((p) => p.name === 'Komorniki')!;
+    setPackagePickupPoints(store, draft.id, [kak.id, kom.id]);
+
+    const { clientPackages } = publishPackage(store, draft.id);
+    expect(clientPackages).toHaveLength(2);
+    const points = clientPackages.map((cp) => cp.pickupPointId).sort();
+    expect(points).toEqual([kak.id, kom.id].sort());
+  });
+
+  it('klient z dostawą do domu wchodzi niezależnie od wybranych punktów', async () => {
+    const { setPackagePickupPoints } = await import('@/lib/packages');
+    const store = createSeedData();
+    // Anna przechodzi na dostawę do domu
+    const anna = store.users.find((u) => u.firstName === 'Anna')!;
+    anna.deliveryOption = 'home_delivery';
+    const draft = draftWithItem(store);
+    const kom = store.pickupPoints.find((p) => p.name === 'Komorniki')!;
+    setPackagePickupPoints(store, draft.id, [kom.id]); // tylko Komorniki
+
+    const { clientPackages } = publishPackage(store, draft.id);
+    // Tomasz (Komorniki) + Anna (dostawa do domu) = 2
+    expect(clientPackages).toHaveLength(2);
+    expect(clientPackages.some((cp) => cp.userId === anna.id && cp.isHomeDelivery)).toBe(true);
+  });
+
+  it('publikacja z pustą listą punktów jest odrzucona', async () => {
+    const { setPackagePickupPoints } = await import('@/lib/packages');
+    const store = createSeedData();
+    const draft = draftWithItem(store);
+    setPackagePickupPoints(store, draft.id, []);
+    expect(() => publishPackage(store, draft.id)).toThrow();
+  });
+});
