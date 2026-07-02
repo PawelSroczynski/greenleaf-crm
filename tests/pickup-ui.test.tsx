@@ -91,9 +91,31 @@ describe('Odbiory — nawigator tygodni', () => {
       ).length;
     const before = pickedIn3();
 
-    // odhacz pierwszego nieodebranego (checkbox niezaznaczony)
-    const boxes = screen.getAllByRole('checkbox').filter((b) => !(b as HTMLInputElement).checked);
+    // odhacz no-show: niezaznaczony i AKTYWNY (zgłoszona nieobecność jest zablokowana)
+    const boxes = (screen.getAllByRole('checkbox') as HTMLInputElement[]).filter(
+      (b) => !b.checked && !b.disabled,
+    );
     await user.click(boxes[0]);
     expect(pickedIn3()).toBe(before + 1);
+  });
+});
+
+describe('Odbiory — zgłoszona nieobecność blokuje checkbox', () => {
+  it('wiersz "Nie odbierze — zgłoszone" ma wyłączony checkbox', async () => {
+    const user = userEvent.setup();
+    render(<PickupList />);
+    // tydzień 3 w archiwum ma zgłoszoną nieobecność (Ewa)
+    await user.click(screen.getByLabelText('Poprzedni tydzień'));
+
+    const week3 = loadStore().weeklyPackages.find((w) => w.weekNumber === 3)!;
+    const absentCp = loadStore().clientPackages.find(
+      (c) => c.weeklyPackageId === week3.id && c.absenceReported,
+    )!;
+    expect(absentCp).toBeDefined();
+
+    const boxes = screen.getAllByRole('checkbox') as HTMLInputElement[];
+    const disabled = boxes.filter((b) => b.disabled);
+    expect(disabled).toHaveLength(1); // dokładnie jeden: zgłoszona nieobecność
+    expect(disabled[0].checked).toBe(false);
   });
 });

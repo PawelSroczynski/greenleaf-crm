@@ -128,14 +128,18 @@ export function PickupList() {
             <ul className="divide-y divide-gray-100 rounded-xl border border-leaf-100 bg-white">
               {g.items.map((row) => {
                 const picked = row.clientPackage.status === 'picked_up';
+                // zgłosił, że nie odbierze → nie da się oznaczyć jako odebrane
+                const blocked = row.clientPackage.absenceReported && !picked;
                 const status = rowStatus(row);
                 return (
                   <li key={row.clientPackage.id} className="flex items-center gap-3 p-3">
                     <input
                       type="checkbox"
                       checked={picked}
+                      disabled={blocked}
                       onChange={() => onToggle(row.clientPackage.id, picked)}
                       aria-label={t('admin.pickups.markPicked')}
+                      className="disabled:opacity-40"
                     />
                     <span className="flex-1 text-sm">
                       {row.user ? `${row.user.firstName} ${row.user.lastName}` : row.clientPackage.userId}
