@@ -96,6 +96,19 @@
       "pause": "Wstrzymaj",
       "resume": "Wznów",
       "external": "zewnętrzny"
+    },
+    "points": {
+      "title": "Punkty odbioru (pula)",
+      "clients": "{{n}} klientów",
+      "active": "Aktywny",
+      "inactive": "Wyłączony",
+      "remove": "Usuń punkt {{name}}",
+      "addTitle": "Dodaj nowy punkt",
+      "name": "Nazwa",
+      "cost": "Koszt (zł)",
+      "from": "Od",
+      "to": "Do",
+      "add": "Dodaj punkt"
     }
   },
   "client": {

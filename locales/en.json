@@ -96,6 +96,19 @@
       "pause": "Pause",
       "resume": "Resume",
       "external": "external"
+    },
+    "points": {
+      "title": "Pickup points (pool)",
+      "clients": "{{n}} clients",
+      "active": "Active",
+      "inactive": "Disabled",
+      "remove": "Remove point {{name}}",
+      "addTitle": "Add new point",
+      "name": "Name",
+      "cost": "Cost (zł)",
+      "from": "From",
+      "to": "To",
+      "add": "Add point"
     }
   },
   "client": {

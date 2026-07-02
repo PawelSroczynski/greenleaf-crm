@@ -11,6 +11,7 @@ import { SwapSummary } from '@/components/admin/SwapSummary';
 import { PickupList } from '@/components/admin/PickupList';
 import { ExportPanel } from '@/components/admin/ExportPanel';
 import { ClientsList } from '@/components/admin/ClientsList';
+import { PointsManager } from '@/components/admin/PointsManager';
 import { loadStore } from '@/lib/store';
 import { currentPickupWeek } from '@/lib/pickups';
 
@@ -61,6 +62,7 @@ function Dashboard() {
           </div>
         </div>
       )}
+      <PointsManager />
     </section>
   );
 }
