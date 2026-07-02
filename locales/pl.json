@@ -62,8 +62,12 @@
       "homeOrUnknown": "Dostawa do domu / bez punktu",
       "noPackage": "Brak opublikowanej paczki.",
       "markPicked": "Oznacz jako odebrane",
-      "absence": "Zgłosił brak",
-      "notReported": "Nie zgłosił"
+      "statusPicked": "✓ Odebrana",
+      "statusAbsence": "Nie odbierze — zgłoszone",
+      "statusWaiting": "Czeka na odbiór",
+      "legendPicked": "klient odebrał paczkę (odhaczone przy wydaniu)",
+      "legendAbsence": "klient zgłosił do środy 10:00, że nie odbierze w tym tygodniu",
+      "legendWaiting": "paczka czeka; kto nie odbierze do końca soboty i wcześniej nie zgłosił — traci paczkę (brak zgłoszenia = brak zwrotu)"
     },
     "export": {
       "noPackage": "Brak opublikowanej paczki — najpierw opublikuj paczkę tygodnia.",
