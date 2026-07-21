@@ -99,6 +99,36 @@ export function undoPickedUp(store: Store, clientPackageId: string): Store {
   return store;
 }
 
+/** Admin ustawia status kompletacji paczki (pending→assembled→ready). Nie rusza odebranych/nieobecnych. */
+export function setPackageStatus(
+  store: Store,
+  clientPackageId: string,
+  status: 'pending' | 'assembled' | 'ready',
+): Store {
+  const { cp } = resolvePackage(store, clientPackageId);
+  if (cp.status === 'picked_up' || cp.absenceReported) return store;
+  cp.status = status;
+  cp.updatedAt = new Date().toISOString();
+  return store;
+}
+
+/** Zbiorczo dla całego tygodnia (kompletacja czw–pt): tylko paczki nieodebrane i bez zgłoszenia. */
+export function bulkSetWeekStatus(
+  store: Store,
+  weeklyPackageId: string,
+  status: 'assembled' | 'ready',
+): number {
+  let n = 0;
+  for (const cp of store.clientPackages) {
+    if (cp.weeklyPackageId !== weeklyPackageId || cp.kind === 'eggs') continue;
+    if (cp.status === 'picked_up' || cp.absenceReported) continue;
+    cp.status = status;
+    cp.updatedAt = new Date().toISOString();
+    n++;
+  }
+  return n;
+}
+
 export interface PickupRow {
   clientPackage: ClientPackage;
   user: User | undefined;

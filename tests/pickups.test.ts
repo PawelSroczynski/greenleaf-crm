@@ -232,3 +232,30 @@ describe('pickups — cofnięcie odbioru zależne od tygodnia', () => {
     expect(cp.status).toBe('pending');
   });
 });
+
+describe('pickups — statusy kompletacji (F6)', () => {
+  it('setPackageStatus ustawia assembled/ready, pomija odebrane i zgłoszone', async () => {
+    const { setPackageStatus } = await import('@/lib/pickups');
+    const store = createSeedData();
+    const wp = store.weeklyPackages.find((w) => w.status === 'published')!;
+    const cp = store.clientPackages.find((c) => c.weeklyPackageId === wp.id && c.kind !== 'eggs')!;
+    setPackageStatus(store, cp.id, 'assembled');
+    expect(cp.status).toBe('assembled');
+    setPackageStatus(store, cp.id, 'ready');
+    expect(cp.status).toBe('ready');
+
+    markPickedUp(store, cp.id, 'admin');
+    setPackageStatus(store, cp.id, 'assembled'); // odebrana → bez zmian
+    expect(cp.status).toBe('picked_up');
+  });
+
+  it('bulkSetWeekStatus oznacza wszystkie nieodebrane paczki tygodnia', async () => {
+    const { bulkSetWeekStatus } = await import('@/lib/pickups');
+    const store = createSeedData();
+    const wp = store.weeklyPackages.find((w) => w.status === 'published')!;
+    const n = bulkSetWeekStatus(store, wp.id, 'ready');
+    expect(n).toBeGreaterThanOrEqual(4);
+    const pkgs = store.clientPackages.filter((c) => c.weeklyPackageId === wp.id && c.kind !== 'eggs');
+    expect(pkgs.every((c) => c.status === 'ready')).toBe(true);
+  });
+});

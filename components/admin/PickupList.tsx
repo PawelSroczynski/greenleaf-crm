@@ -13,6 +13,7 @@ import {
   pickupStatusList,
   pickupWeeks,
   currentPickupWeek,
+  bulkSetWeekStatus,
 } from '@/lib/pickups';
 import type { Store } from '@/lib/types';
 
@@ -76,7 +77,19 @@ export function PickupList() {
       // archiwum: tydzień minął, klient nie odebrał i nie zgłosił
       return { key: 'admin.pickups.statusNoShow', cls: 'bg-red-100 text-red-700' };
     }
+    if (row.clientPackage.status === 'ready') {
+      return { key: 'status.ready', cls: 'bg-leaf-100 text-leaf-700' };
+    }
+    if (row.clientPackage.status === 'assembled') {
+      return { key: 'status.assembled', cls: 'bg-blue-50 text-blue-700' };
+    }
     return { key: 'admin.pickups.statusWaiting', cls: 'bg-gray-100 text-gray-600' };
+  };
+
+  const onBulk = (status: 'assembled' | 'ready') => {
+    bulkSetWeekStatus(store, wp.id, status);
+    saveStore(store);
+    setTick((n) => n + 1);
   };
 
   return (
@@ -118,6 +131,25 @@ export function PickupList() {
           className="rounded px-3 py-1 text-lg font-bold text-leaf-700 disabled:opacity-25"
         >
           ›
+        </button>
+      </div>
+
+      {/* Kompletacja (czw–pt): zbiorcze oznaczanie statusu paczek tygodnia */}
+      <div className="mb-4 flex flex-wrap items-center gap-2 text-sm">
+        <span className="text-gray-600">{t('admin.pickups.markWeek')}:</span>
+        <button
+          type="button"
+          onClick={() => onBulk('assembled')}
+          className="rounded border border-blue-200 px-2 py-1 text-xs font-medium text-blue-700 hover:bg-blue-50"
+        >
+          {t('status.assembled')}
+        </button>
+        <button
+          type="button"
+          onClick={() => onBulk('ready')}
+          className="rounded border border-leaf-300 px-2 py-1 text-xs font-medium text-leaf-700 hover:bg-leaf-50"
+        >
+          {t('status.ready')}
         </button>
       </div>
 

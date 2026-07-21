@@ -82,7 +82,8 @@
       "weekArchival": "archiwum sezonu",
       "statusNoShow": "Nie odebrał — bez zgłoszenia",
       "kindPackage": "Paczka",
-      "kindEggs": "Jajka"
+      "kindEggs": "Jajka",
+      "markWeek": "Oznacz cały tydzień"
     },
     "export": {
       "noPackage": "Brak opublikowanej paczki — najpierw opublikuj paczkę tygodnia.",

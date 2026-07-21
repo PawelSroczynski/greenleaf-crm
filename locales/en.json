@@ -82,7 +82,8 @@
       "weekArchival": "season archive",
       "statusNoShow": "No pickup — not reported",
       "kindPackage": "Box",
-      "kindEggs": "Eggs"
+      "kindEggs": "Eggs",
+      "markWeek": "Mark whole week"
     },
     "export": {
       "noPackage": "No published package — publish the weekly package first.",
