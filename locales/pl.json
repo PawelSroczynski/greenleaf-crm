@@ -55,7 +55,10 @@
       "options": "Opcje",
       "substitutes": "Zamienniki (klient może zamienić na)",
       "alternatives": "Do wyboru zamiast (Cukinia LUB…)",
-      "orChoice": "do wyboru"
+      "orChoice": "do wyboru",
+      "eggsTitle": "Jajka w tym tygodniu",
+      "eggsNone": "Brak aktywnych subskrypcji jajek.",
+      "eggsUnit": "szt"
     },
     "swaps": {
       "title": "Podsumowanie zamian",
@@ -76,7 +79,9 @@
       "weekLine": "Tydzień {{week}} · odbiór {{date}}",
       "weekCurrent": "bieżący tydzień",
       "weekArchival": "archiwum sezonu",
-      "statusNoShow": "Nie odebrał — bez zgłoszenia"
+      "statusNoShow": "Nie odebrał — bez zgłoszenia",
+      "kindPackage": "Paczka",
+      "kindEggs": "Jajka"
     },
     "export": {
       "noPackage": "Brak opublikowanej paczki — najpierw opublikuj paczkę tygodnia.",

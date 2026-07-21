@@ -81,10 +81,10 @@ describe('seed danych', () => {
     );
     // każdy tydzień (bieżący + archiwalne) ma komplet paczek klientów
     for (const wp of store.weeklyPackages) {
-      const cps = store.clientPackages.filter((c) => c.weeklyPackageId === wp.id);
+      const cps = store.clientPackages.filter((c) => c.weeklyPackageId === wp.id && c.kind === 'package');
       expect(cps.length).toBe(activePackageSubs.length);
     }
-    for (const cp of store.clientPackages) {
+    for (const cp of store.clientPackages.filter((c) => c.kind === 'package')) {
       expect(activePackageSubs.some((s) => s.id === cp.subscriptionId)).toBe(true);
     }
   });

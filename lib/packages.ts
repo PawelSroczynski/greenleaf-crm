@@ -124,6 +124,11 @@ export function activePackageSubscriptions(store: Store) {
   );
 }
 
+/** Aktywne subskrypcje jajeczne (jajka_*, status 'active'). */
+export function activeEggSubscriptions(store: Store) {
+  return store.subscriptions.filter((s) => s.status === 'active' && s.type.startsWith('jajka'));
+}
+
 /**
  * Publikuje paczkę: status 'published' + publishedAt, oraz generuje ClientPackage
  * (status 'pending') dla każdej aktywnej subskrypcji paczkowej. Mutuje store.
@@ -151,17 +156,18 @@ export function publishPackage(
   pkg.status = 'published';
   pkg.publishedAt = now;
 
-  const subs = activePackageSubscriptions(store).filter((sub) => {
+  const inAllowedPoint = (sub: { userId: string }) => {
     if (allowedPoints === null) return true;
     const owner = store.users.find((u) => u.id === sub.userId);
     if (!owner) return false;
     if (owner.deliveryOption === 'home_delivery') return true; // dostawa do domu niezależna od punktów
     return owner.defaultPickupPointId !== null && allowedPoints.includes(owner.defaultPickupPointId);
-  });
-  const generated: ClientPackage[] = subs.map((sub) => {
+  };
+  const mkCp = (sub: { id: string; userId: string }, kind: 'package' | 'eggs'): ClientPackage => {
     const owner = store.users.find((u) => u.id === sub.userId);
     return {
       id: genId('cp'),
+      kind,
       weeklyPackageId,
       userId: sub.userId,
       subscriptionId: sub.id,
@@ -180,7 +186,12 @@ export function publishPackage(
       createdAt: now,
       updatedAt: now,
     };
-  });
+  };
+
+  const generated: ClientPackage[] = [
+    ...activePackageSubscriptions(store).filter(inAllowedPoint).map((s) => mkCp(s, 'package')),
+    ...activeEggSubscriptions(store).filter(inAllowedPoint).map((s) => mkCp(s, 'eggs')),
+  ];
 
   store.clientPackages.push(...generated);
   return { package: pkg, clientPackages: generated };

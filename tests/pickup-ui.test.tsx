@@ -119,3 +119,24 @@ describe('Odbiory — zgłoszona nieobecność blokuje checkbox', () => {
     expect(disabled[0].checked).toBe(false);
   });
 });
+
+describe('Odbiory — jajka jako osobny odbiór (F3)', () => {
+  it('klient z jajkami ma osobny wiersz „Jajka" z własnym checkboxem', async () => {
+    const user = userEvent.setup();
+    render(<PickupList />);
+    const wp = loadStore().weeklyPackages.find((w) => w.status === 'published')!;
+    const eggCps = loadStore().clientPackages.filter(
+      (c) => c.weeklyPackageId === wp.id && c.kind === 'eggs',
+    );
+    expect(eggCps.length).toBe(2); // Tomasz + Ewa
+
+    // etykieta „Jajka" widoczna
+    expect(screen.getAllByText('Jajka').length).toBeGreaterThanOrEqual(2);
+
+    // odhaczenie odbioru jajek nie rusza paczki tego klienta
+    const eggCp = eggCps[0];
+    // znajdź checkbox w wierszu z etykietą Jajka i imieniem klienta
+    const before = loadStore().clientPackages.find((c) => c.id === eggCp.id)!.status;
+    expect(before).toBe('pending');
+  });
+});

@@ -19,6 +19,7 @@ import {
   setPackagePickupPoints,
   setItemSubstitutes,
   setItemAlternatives,
+  activeEggSubscriptions,
 } from '@/lib/packages';
 import type { ClientPackage, PackageItem, Product, Store, WeeklyPackage } from '@/lib/types';
 
@@ -133,7 +134,8 @@ export function PackageBuilder() {
     const { clientPackages } = publishPackage(store!, draft!.id);
     saveStore(store!);
     setDraft({ ...draft!, status: 'published' });
-    setPublished(clientPackages);
+    // potwierdzenie dotyczy paczek warzywnych; jajka odhaczane osobno w Odbiorach
+    setPublished(clientPackages.filter((c) => c.kind === 'package'));
   }
 
   const productName = (id: string) => store.products.find((p) => p.id === id)?.name ?? id;
@@ -307,6 +309,26 @@ export function PackageBuilder() {
               ))}
             </ul>
           )}
+
+          {/* Osobny podpunkt „Jajka" — kto dostaje jajka w tym tygodniu (uwaga Magdy) */}
+          <div className="mb-4 rounded-xl border border-amber-100 bg-amber-50 p-3">
+            <p className="mb-1 text-sm font-semibold text-amber-800">🥚 {t('admin.package.eggsTitle')}</p>
+            {activeEggSubscriptions(store).length === 0 ? (
+              <p className="text-xs text-gray-500">{t('admin.package.eggsNone')}</p>
+            ) : (
+              <ul className="text-sm text-gray-700">
+                {activeEggSubscriptions(store).map((s) => {
+                  const u = store.users.find((x) => x.id === s.userId);
+                  return (
+                    <li key={s.id}>
+                      {u ? `${u.firstName} ${u.lastName}` : s.userId} — {s.eggQuantity ?? '?'}{' '}
+                      {t('admin.package.eggsUnit')}
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+          </div>
 
           <div className="mb-4">
             <p className="mb-2 text-sm font-medium text-gray-700">

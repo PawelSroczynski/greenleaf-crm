@@ -143,6 +143,17 @@ export function PickupList() {
                     />
                     <span className="flex-1 text-sm">
                       {row.user ? `${row.user.firstName} ${row.user.lastName}` : row.clientPackage.userId}
+                      <span
+                        className={`ml-2 rounded px-1.5 py-0.5 text-xs ${
+                          row.clientPackage.kind === 'eggs'
+                            ? 'bg-amber-50 text-amber-700'
+                            : 'bg-leaf-50 text-leaf-700'
+                        }`}
+                      >
+                        {row.clientPackage.kind === 'eggs'
+                          ? t('admin.pickups.kindEggs')
+                          : t('admin.pickups.kindPackage')}
+                      </span>
                     </span>
                     <span className={`rounded px-2 py-0.5 text-xs ${status.cls}`}>
                       {t(status.key)}

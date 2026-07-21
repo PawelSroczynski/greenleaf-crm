@@ -86,7 +86,7 @@ describe('PackageBuilder — punkty odbioru tygodnia', () => {
     // wygenerowano 3 paczki (bez Ewy z Puszczykowa)
     const store = loadStore();
     const newWp = store.weeklyPackages.find((w) => w.weekNumber === 5)!;
-    const cps = store.clientPackages.filter((c) => c.weeklyPackageId === newWp.id);
+    const cps = store.clientPackages.filter((c) => c.weeklyPackageId === newWp.id && c.kind === 'package');
     expect(cps).toHaveLength(3);
     const ewa = store.users.find((u) => u.firstName === 'Ewa')!;
     expect(cps.some((c) => c.userId === ewa.id)).toBe(false);

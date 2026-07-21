@@ -96,16 +96,19 @@ describe('packages — publikacja generuje ClientPackage', () => {
     addItemToPackage(store, draft.id, findProduct(store, 'Ogórek gruntowy').id, 1, 'kg', 6);
     const before = store.clientPackages.length;
 
-    const { clientPackages } = publishPackage(store, draft.id);
+    const all = publishPackage(store, draft.id).clientPackages;
+    const clientPackages = all.filter((cp) => cp.kind === 'package');
 
     expect(clientPackages).toHaveLength(4);
-    expect(clientPackages.every((cp) => cp.status === 'pending')).toBe(true);
-    expect(clientPackages.every((cp) => cp.weeklyPackageId === draft.id)).toBe(true);
+    expect(all.every((cp) => cp.status === 'pending')).toBe(true);
+    expect(all.every((cp) => cp.weeklyPackageId === draft.id)).toBe(true);
     // każda aktywna subskrypcja paczkowa ma dokładnie jeden ClientPackage dla tej paczki
     const subIds = activePackageSubscriptions(store).map((s) => s.id).sort();
     const cpSubIds = clientPackages.map((cp) => cp.subscriptionId).sort();
     expect(cpSubIds).toEqual(subIds);
-    expect(store.clientPackages.length).toBe(before + 4);
+    // 4 paczki + 2 jajka (Tomasz, Ewa)
+    expect(store.clientPackages.length).toBe(before + all.length);
+    expect(all.filter((c) => c.kind === 'eggs')).toHaveLength(2);
   });
 
   it('zmiany są utrwalone w store (saveStore → loadStore)', () => {
@@ -119,7 +122,7 @@ describe('packages — publikacja generuje ClientPackage', () => {
     const reloaded = loadStore();
     const reloadedPkg = reloaded.weeklyPackages.find((w) => w.id === draft.id);
     expect(reloadedPkg?.status).toBe('published');
-    expect(reloaded.clientPackages.filter((cp) => cp.weeklyPackageId === draft.id)).toHaveLength(4);
+    expect(reloaded.clientPackages.filter((cp) => cp.weeklyPackageId === draft.id && cp.kind === 'package')).toHaveLength(4);
   });
 });
 
@@ -171,7 +174,7 @@ describe('packages — punkty odbioru per tydzień', () => {
     const draft = draftWithItem(store);
     expect(draft.pickupPointIds).toBeNull();
     const { clientPackages } = publishPackage(store, draft.id);
-    expect(clientPackages).toHaveLength(4);
+    expect(clientPackages.filter((c) => c.kind === 'package')).toHaveLength(4);
   });
 
   it('wybór podzbioru punktów ogranicza generowanie do klientów tych punktów', async () => {
@@ -183,7 +186,7 @@ describe('packages — punkty odbioru per tydzień', () => {
     const kom = store.pickupPoints.find((p) => p.name === 'Komorniki')!;
     setPackagePickupPoints(store, draft.id, [kak.id, kom.id]);
 
-    const { clientPackages } = publishPackage(store, draft.id);
+    const clientPackages = publishPackage(store, draft.id).clientPackages.filter((c) => c.kind === 'package');
     expect(clientPackages).toHaveLength(2);
     const points = clientPackages.map((cp) => cp.pickupPointId).sort();
     expect(points).toEqual([kak.id, kom.id].sort());
@@ -199,7 +202,7 @@ describe('packages — punkty odbioru per tydzień', () => {
     const kom = store.pickupPoints.find((p) => p.name === 'Komorniki')!;
     setPackagePickupPoints(store, draft.id, [kom.id]); // tylko Komorniki
 
-    const { clientPackages } = publishPackage(store, draft.id);
+    const clientPackages = publishPackage(store, draft.id).clientPackages.filter((c) => c.kind === 'package');
     // Tomasz (Komorniki) + Anna (dostawa do domu) = 2
     expect(clientPackages).toHaveLength(2);
     expect(clientPackages.some((cp) => cp.userId === anna.id && cp.isHomeDelivery)).toBe(true);

@@ -381,6 +381,7 @@ export function createSeedData(): Store {
     const owner = users.find((u) => u.id === sub.userId)!;
     return {
       id: id('cp'),
+      kind: 'package' as const,
       weeklyPackageId: weeklyPackage.id,
       userId: sub.userId,
       subscriptionId: sub.id,
@@ -400,6 +401,33 @@ export function createSeedData(): Store {
       updatedAt: NOW,
     };
   });
+
+  // Jajka — osobny odbiór dla aktywnych subskrypcji jajecznych (uwaga Magdy F3).
+  const activeEggSubs = subscriptions.filter((s) => s.status === 'active' && s.type.startsWith('jajka'));
+  for (const sub of activeEggSubs) {
+    const owner = users.find((u) => u.id === sub.userId)!;
+    clientPackages.push({
+      id: id('cp'),
+      kind: 'eggs',
+      weeklyPackageId: weeklyPackage.id,
+      userId: sub.userId,
+      subscriptionId: sub.id,
+      status: 'pending',
+      pickupPointId: owner.defaultPickupPointId,
+      isHomeDelivery: false,
+      absenceReported: false,
+      absenceReportedAt: null,
+      pickupConfirmedFarm: false,
+      pickupConfirmedFarmAt: null,
+      pickupConfirmedFarmBy: null,
+      pickupConfirmedDriver: false,
+      pickupConfirmedDriverAt: null,
+      pickupConfirmedDriverBy: null,
+      note: null,
+      createdAt: NOW,
+      updatedAt: NOW,
+    });
+  }
 
   // ---------- Archiwum: tygodnie 1–3 (zakończone) — do przeglądu historii w Odbiorach ----------
   // Stany per klient: 'picked' (odebrana), 'absence' (zgłosił brak), 'noshow' (nie odebrał, nie zgłosił).
@@ -442,6 +470,7 @@ export function createSeedData(): Store {
       const state = spec.states[i] ?? 'picked';
       clientPackages.push({
         id: id('cp'),
+        kind: 'package' as const,
         weeklyPackageId: wp.id,
         userId: sub.userId,
         subscriptionId: sub.id,

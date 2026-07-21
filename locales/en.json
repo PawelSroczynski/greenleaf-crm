@@ -55,7 +55,10 @@
       "options": "Options",
       "substitutes": "Substitutes (client may swap to)",
       "alternatives": "Choose instead of (Zucchini OR…)",
-      "orChoice": "choose one"
+      "orChoice": "choose one",
+      "eggsTitle": "Eggs this week",
+      "eggsNone": "No active egg subscriptions.",
+      "eggsUnit": "pcs"
     },
     "swaps": {
       "title": "Swap summary",
@@ -76,7 +79,9 @@
       "weekLine": "Week {{week}} · pickup {{date}}",
       "weekCurrent": "current week",
       "weekArchival": "season archive",
-      "statusNoShow": "No pickup — not reported"
+      "statusNoShow": "No pickup — not reported",
+      "kindPackage": "Box",
+      "kindEggs": "Eggs"
     },
     "export": {
       "noPackage": "No published package — publish the weekly package first.",

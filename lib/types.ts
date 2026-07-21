@@ -140,6 +140,8 @@ export interface Product {
 // ---------- 6. ClientPackage ----------
 export interface ClientPackage {
   id: string;
+  /** Rodzaj odbioru: paczka warzywna czy jajka (osobne odhaczanie w Odbiorach). */
+  kind?: 'package' | 'eggs';
   weeklyPackageId: string;
   userId: string;
   subscriptionId: string;
