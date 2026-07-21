@@ -109,7 +109,10 @@
       "noSub": "Brak subskrypcji.",
       "pause": "Wstrzymaj",
       "resume": "Wznów",
-      "external": "zewnętrzny"
+      "external": "zewnętrzny",
+      "access": "Dostęp klienta (login + hasło)",
+      "saveAccess": "Nadaj dostęp",
+      "hasAccess": "ma dostęp"
     },
     "points": {
       "title": "Punkty odbioru (pula)",
@@ -235,6 +238,12 @@
       "qty": "ilość",
       "submit": "Złóż zamówienie",
       "mine": "Twoje zamówienia"
+    },
+    "message": {
+      "title": "Wiadomość do gospodarstwa",
+      "placeholder": "Napisz do Magdy…",
+      "send": "Wyślij",
+      "sent": "Wysłano ✓"
     }
   },
   "supplier": {
@@ -284,5 +293,13 @@
     "rejected": "odrzucone",
     "ready": "gotowe",
     "picked_up": "odebrane"
+  },
+  "login": {
+    "title": "Logowanie klienta",
+    "login": "Login",
+    "password": "Hasło",
+    "submit": "Zaloguj się",
+    "error": "Błędny login lub hasło.",
+    "note": "Symulacja: login nadaje gospodarstwo (demo: anna / anna123)."
   }
 }

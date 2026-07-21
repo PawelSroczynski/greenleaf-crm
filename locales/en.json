@@ -109,7 +109,10 @@
       "noSub": "No subscriptions.",
       "pause": "Pause",
       "resume": "Resume",
-      "external": "external"
+      "external": "external",
+      "access": "Client access (login + password)",
+      "saveAccess": "Grant access",
+      "hasAccess": "has access"
     },
     "points": {
       "title": "Pickup points (pool)",
@@ -235,6 +238,12 @@
       "qty": "qty",
       "submit": "Place order",
       "mine": "Your orders"
+    },
+    "message": {
+      "title": "Message to the farm",
+      "placeholder": "Write to Magda…",
+      "send": "Send",
+      "sent": "Sent ✓"
     }
   },
   "supplier": {
@@ -284,5 +293,13 @@
     "rejected": "rejected",
     "ready": "ready",
     "picked_up": "picked up"
+  },
+  "login": {
+    "title": "Client login",
+    "login": "Login",
+    "password": "Password",
+    "submit": "Log in",
+    "error": "Wrong login or password.",
+    "note": "Simulation: farm sets the login (demo: anna / anna123)."
   }
 }

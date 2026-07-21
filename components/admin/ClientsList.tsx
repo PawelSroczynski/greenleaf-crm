@@ -2,10 +2,11 @@
 
 // components/admin/ClientsList.tsx — moduł „Klienci" (admin). Lista → szczegół → pauza/wznowienie (MVP-12).
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { loadStore, saveStore } from '@/lib/store';
 import { listClients, setSubscriptionStatus } from '@/lib/clients';
+import { setCredentials } from '@/lib/auth';
 import type { Store } from '@/lib/types';
 
 export function ClientsList() {
@@ -13,10 +14,24 @@ export function ClientsList() {
   const [store, setStore] = useState<Store | null>(null);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [tick, setTick] = useState(0);
+  const [credError, setCredError] = useState('');
+  const loginRef = useRef('');
+  const pwdRef = useRef('');
 
   useEffect(() => {
     setStore(loadStore());
   }, []);
+
+  const saveCreds = (userId: string) => {
+    setCredError('');
+    try {
+      setCredentials(store!, userId, loginRef.current, pwdRef.current);
+      saveStore(store!);
+      setTick((n) => n + 1);
+    } catch (e) {
+      setCredError(e instanceof Error ? e.message : String(e));
+    }
+  };
 
   const rows = useMemo(() => (store ? listClients(store) : []), [store, tick]);
   const selected = rows.find((r) => r.user.id === selectedId) ?? null;
@@ -52,6 +67,38 @@ export function ClientsList() {
           <p><span className="text-gray-500">{t('admin.clients.phone')}:</span> {u.phone ?? '—'}</p>
           <p><span className="text-gray-500">{t('admin.clients.point')}:</span> {pointName(u.defaultPickupPointId)}</p>
           <p><span className="text-gray-500">{t('admin.clients.delivery')}:</span> {t(`deliveryOption.${u.deliveryOption}`)}</p>
+        </div>
+
+        {/* Dostęp klienta: login + hasło (symulacja, F12) */}
+        <div className="mt-3 rounded-xl border border-leaf-100 bg-white p-4">
+          <p className="mb-2 text-sm font-semibold text-gray-700">{t('admin.clients.access')}</p>
+          <div className="flex flex-wrap items-end gap-2 text-sm">
+            <input
+              defaultValue={u.login ?? ''}
+              onChange={(e) => (loginRef.current = e.target.value)}
+              aria-label={t('login.login')}
+              placeholder={t('login.login')}
+              className="w-32 rounded border border-gray-300 px-2 py-1"
+            />
+            <input
+              defaultValue={u.password ?? ''}
+              onChange={(e) => (pwdRef.current = e.target.value)}
+              aria-label={t('login.password')}
+              placeholder={t('login.password')}
+              className="w-32 rounded border border-gray-300 px-2 py-1"
+            />
+            <button
+              type="button"
+              onClick={() => saveCreds(u.id)}
+              className="rounded bg-leaf-600 px-3 py-1 text-xs font-medium text-white"
+            >
+              {t('admin.clients.saveAccess')}
+            </button>
+            {u.login && (
+              <span className="text-xs text-leaf-700">{t('admin.clients.hasAccess')}</span>
+            )}
+          </div>
+          {credError && <p className="mt-1 text-xs text-red-600">{credError}</p>}
         </div>
 
         <h3 className="mb-2 mt-5 text-sm font-semibold text-gray-700">{t('admin.clients.subscriptions')}</h3>

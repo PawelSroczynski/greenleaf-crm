@@ -265,6 +265,10 @@ export function createSeedData(): Store {
   const piotr = mkUser('Piotr', 'Zielinski', 'klient_rws', ppBaranowo.id);
   const katarzyna = mkUser('Katarzyna', 'Lewandowska', 'klient_zewnetrzny', ppKakolewice.id);
 
+  // Demo poświadczeń (symulacja logowania F12): Anna ma login/hasło.
+  anna.login = 'anna';
+  anna.password = 'anna123';
+
   const users: User[] = [magda, filip, anna, tomasz, ewa, piotr, katarzyna];
 
   // ---------- Subskrypcje ----------

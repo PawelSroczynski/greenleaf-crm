@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { loadStore, saveStore } from '@/lib/store';
 import { findCurrentClient } from '@/lib/pickups';
 import { updateProfile } from '@/lib/clients';
+import { sendMessage } from '@/lib/inbox';
 import type { DeliveryOption, PickupPoint, Store, User } from '@/lib/types';
 
 export function ProfilePanel() {
@@ -18,6 +19,8 @@ export function ProfilePanel() {
   const [delivery, setDelivery] = useState<DeliveryOption>('pickup');
   const [notes, setNotes] = useState<string>('');
   const [saved, setSaved] = useState(false);
+  const [msg, setMsg] = useState('');
+  const [msgSent, setMsgSent] = useState(false);
 
   useEffect(() => {
     const s = loadStore();
@@ -117,6 +120,34 @@ export function ProfilePanel() {
           {t('client.profile.save')}
         </button>
         {saved && <span className="ml-3 text-sm text-leaf-700">{t('client.profile.saved')}</span>}
+      </div>
+
+      {/* Wiadomość do gospodarstwa (F11) → skrzynka admina */}
+      <div className="rounded-xl border border-leaf-100 bg-white p-4">
+        <p className="mb-2 text-sm font-semibold text-gray-700">{t('client.message.title')}</p>
+        <textarea
+          value={msg}
+          onChange={(e) => { setMsg(e.target.value); setMsgSent(false); }}
+          rows={2}
+          aria-label={t('client.message.title')}
+          placeholder={t('client.message.placeholder')}
+          className="w-full rounded-lg border border-gray-300 p-2 text-sm"
+        />
+        <button
+          type="button"
+          onClick={() => {
+            if (!store || !user || !msg.trim()) return;
+            sendMessage(store, user.id, msg);
+            saveStore(store);
+            setMsg('');
+            setMsgSent(true);
+          }}
+          disabled={!msg.trim()}
+          className="mt-2 rounded-lg bg-leaf-600 px-4 py-2 text-sm font-semibold text-white disabled:opacity-40"
+        >
+          {t('client.message.send')}
+        </button>
+        {msgSent && <span className="ml-3 text-sm text-leaf-700">{t('client.message.sent')}</span>}
       </div>
     </section>
   );

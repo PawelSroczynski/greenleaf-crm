@@ -74,6 +74,9 @@ export interface User {
   notes: string | null;
   createdBy: CreatedBy;
   isActive: boolean;
+  /** Poświadczenia (SYMULACJA, mock): admin nadaje login+hasło; realny auth = backend. */
+  login?: string | null;
+  password?: string | null;
   privacyAcceptedAt: string | null;
   createdAt: string;
   updatedAt: string;
