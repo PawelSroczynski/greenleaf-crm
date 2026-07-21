@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { loadStore, saveStore } from '@/lib/store';
 import { itemsForPackage } from '@/lib/packages';
+import { findCurrentClient } from '@/lib/pickups';
 import {
   applySwap,
   cancelSwap,
@@ -17,17 +18,6 @@ import {
   swapsForClientPackage,
 } from '@/lib/swaps';
 import type { ClientPackage, PackageItem, Store, Swap, WeeklyPackage } from '@/lib/types';
-
-/** Bieżący klient = pierwszy aktywny klient_rws z ClientPackage opublikowanej paczki (Anna). */
-function findCurrent(store: Store): { cp: ClientPackage; wp: WeeklyPackage } | null {
-  const wp = store.weeklyPackages.find((w) => w.status === 'published');
-  if (!wp) return null;
-  const rwsIds = new Set(
-    store.users.filter((u) => u.role === 'klient_rws' && u.isActive).map((u) => u.id),
-  );
-  const cp = store.clientPackages.find((c) => c.weeklyPackageId === wp.id && rwsIds.has(c.userId));
-  return cp ? { cp, wp } : null;
-}
 
 /** `now` symulowany: minutę przed / po terminie zamian. */
 function simulatedNow(wp: Pick<WeeklyPackage, 'pickupDate'>, afterDeadline: boolean): Date {
@@ -47,7 +37,7 @@ export function SwapPanel() {
 
   useEffect(() => {
     const s = loadStore();
-    const cur = findCurrent(s);
+    const cur = findCurrentClient(s);
     setStore(s);
     if (cur) {
       setCp(cur.cp);

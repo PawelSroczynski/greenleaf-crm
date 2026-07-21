@@ -3,6 +3,20 @@
 
 import type { Store, User } from './types';
 
+/** Klucz localStorage z id zalogowanego użytkownika (którego dane widzi widok klienta). */
+export const LOGIN_USER_KEY = 'glcrm_user';
+
+export function setLoggedInUser(userId: string | null): void {
+  if (typeof window === 'undefined') return;
+  if (userId) window.localStorage.setItem(LOGIN_USER_KEY, userId);
+  else window.localStorage.removeItem(LOGIN_USER_KEY);
+}
+
+export function getLoggedInUserId(): string | null {
+  if (typeof window === 'undefined') return null;
+  return window.localStorage.getItem(LOGIN_USER_KEY);
+}
+
 /** Admin ustawia poświadczenia klienta. */
 export function setCredentials(store: Store, userId: string, login: string, password: string): void {
   const user = store.users.find((u) => u.id === userId);

@@ -4,6 +4,7 @@
 
 import { ABSENCE_DEADLINE } from './config';
 import { weeklyDeadline } from './deadlines';
+import { getLoggedInUserId } from './auth';
 import type { ClientPackage, Store, User, WeeklyPackage } from './types';
 
 /** WeeklyPackage dla danego ClientPackage. Rzuca, gdy brak. */
@@ -179,14 +180,24 @@ export function currentPickupWeek(store: Store): WeeklyPackage | null {
   return published[0] ?? pickupWeeks(store).at(-1) ?? null;
 }
 
-/** Bieżący klient RWS = pierwszy aktywny z ClientPackage opublikowanej paczki (Anna). */
+/**
+ * Bieżący klient RWS. Jeśli ktoś jest zalogowany (getLoggedInUserId) — jego dane;
+ * w przeciwnym razie (wejście przez przełącznik ról) pierwszy aktywny klient (Anna).
+ */
 export function findCurrentClient(store: Store) {
   const wp = store.weeklyPackages.find((w) => w.status === 'published');
   if (!wp) return null;
-  const rwsIds = new Set(
-    store.users.filter((u) => u.role === 'klient_rws' && u.isActive).map((u) => u.id),
-  );
-  const cp = store.clientPackages.find((c) => c.weeklyPackageId === wp.id && rwsIds.has(c.userId));
+  const isActiveRws = (id: string) =>
+    store.users.some((u) => u.id === id && u.role === 'klient_rws' && u.isActive);
+
+  const loggedId = getLoggedInUserId();
+  let cp =
+    loggedId && isActiveRws(loggedId)
+      ? store.clientPackages.find((c) => c.weeklyPackageId === wp.id && c.userId === loggedId)
+      : undefined;
+  if (!cp) {
+    cp = store.clientPackages.find((c) => c.weeklyPackageId === wp.id && isActiveRws(c.userId));
+  }
   if (!cp) return null;
   const user = store.users.find((u) => u.id === cp.userId);
   const subscription = store.subscriptions.find((s) => s.id === cp.subscriptionId);

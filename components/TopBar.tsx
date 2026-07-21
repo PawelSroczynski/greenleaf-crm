@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { useRole } from '@/lib/role-context';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { resetStore } from '@/lib/store';
+import { setLoggedInUser } from '@/lib/auth';
 
 export function TopBar() {
   const { t } = useTranslation();
@@ -33,7 +34,10 @@ export function TopBar() {
         <LanguageSwitcher />
         <button
           type="button"
-          onClick={() => setRole(null)}
+          onClick={() => {
+            setLoggedInUser(null);
+            setRole(null);
+          }}
           className="rounded bg-leaf-50 px-2 py-1 text-xs font-semibold text-leaf-700"
         >
           {t('common.changeRole')}

@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { useRole, type Role } from '@/lib/role-context';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { loadStore } from '@/lib/store';
-import { authenticate } from '@/lib/auth';
+import { authenticate, setLoggedInUser } from '@/lib/auth';
 
 const ROLE_TILES: { role: Exclude<Role, null>; emoji: string }[] = [
   { role: 'admin', emoji: '👩‍🌾' },
@@ -29,6 +29,7 @@ export function RolePicker() {
       setError(t('login.error'));
       return;
     }
+    setLoggedInUser(u.id); // widok pokaże dane TEGO klienta
     setRole(u.role === 'admin' ? 'admin' : (u.role as Role));
   };
 
@@ -47,7 +48,10 @@ export function RolePicker() {
           <button
             key={role}
             type="button"
-            onClick={() => setRole(role)}
+            onClick={() => {
+              setLoggedInUser(null); // wejście przez rolę → domyślny klient (Anna)
+              setRole(role);
+            }}
             className="flex items-start gap-3 rounded-xl border border-leaf-100 bg-white p-4 text-left shadow-sm active:bg-leaf-50"
           >
             <span className="text-2xl" aria-hidden="true">

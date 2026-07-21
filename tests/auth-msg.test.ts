@@ -29,3 +29,22 @@ describe('komunikacja (F11)', () => {
     expect(inbox(store).some((r) => r.kind === 'message' && r.body === 'Dzień dobry!')).toBe(true);
   });
 });
+
+describe('auth — zalogowany widzi SWÓJ profil (F12 fix)', () => {
+  it('findCurrentClient zwraca zalogowanego użytkownika, nie domyślnego', async () => {
+    const { setLoggedInUser } = await import('@/lib/auth');
+    const { findCurrentClient } = await import('@/lib/pickups');
+    localStorage.clear();
+    const store = createSeedData();
+
+    // bez logowania → domyślny (Anna)
+    setLoggedInUser(null);
+    expect(findCurrentClient(store)?.user?.firstName).toBe('Anna');
+
+    // zalogowany jako Tomasz → jego dane
+    const tomasz = store.users.find((u) => u.firstName === 'Tomasz')!;
+    setLoggedInUser(tomasz.id);
+    expect(findCurrentClient(store)?.user?.id).toBe(tomasz.id);
+    expect(findCurrentClient(store)?.user?.firstName).toBe('Tomasz');
+  });
+});
