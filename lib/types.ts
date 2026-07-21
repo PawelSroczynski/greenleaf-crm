@@ -94,6 +94,8 @@ export interface Subscription {
   deliveryCostPerPackage: number;
   totalAmount: number;
   editedBy: string | null;
+  /** Opłacone raty: [0] = płatność z góry (całość); [1,2,3] = kolejne raty. */
+  paidInstallments?: number[];
   createdAt: string;
   updatedAt: string;
 }

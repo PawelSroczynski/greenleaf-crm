@@ -27,7 +27,8 @@
       "clients": "Clients",
       "pickups": "Pickups",
       "export": "Export",
-      "inbox": "Inbox"
+      "inbox": "Inbox",
+      "payments": "Payments"
     },
     "dashboard": {
       "title": "Dashboard",
@@ -134,6 +135,9 @@
       "title": "Package history (past weeks)",
       "week": "Week {{week}}",
       "itemCount": "{{n}} items"
+    },
+    "payments": {
+      "paid": "paid"
     }
   },
   "client": {

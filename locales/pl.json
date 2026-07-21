@@ -27,7 +27,8 @@
       "clients": "Klienci",
       "pickups": "Odbiory",
       "export": "Eksport",
-      "inbox": "Skrzynka"
+      "inbox": "Skrzynka",
+      "payments": "Płatności"
     },
     "dashboard": {
       "title": "Pulpit",
@@ -134,6 +135,9 @@
       "title": "Historia paczek (co już było)",
       "week": "Tydzień {{week}}",
       "itemCount": "{{n}} pozycji"
+    },
+    "payments": {
+      "paid": "zapłacone"
     }
   },
   "client": {
