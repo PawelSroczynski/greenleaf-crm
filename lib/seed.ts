@@ -281,7 +281,7 @@ export function createSeedData(): Store {
       userId: user.id,
       type,
       season: seasonStr,
-      frequency: 'weekly',
+      frequency: type === 'paczka_12' ? 'biweekly' : 'weekly', // 12 paczek = co 2 tyg.
       eggQuantity: null,
       status: 'active',
       paymentModel,
@@ -527,5 +527,6 @@ export function createSeedData(): Store {
     announcements: [],
     notifications: [],
     auditLogs: [],
+    clientRequests: [],
   };
 }

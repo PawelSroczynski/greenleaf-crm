@@ -26,7 +26,8 @@
       "weeklyPackage": "Paczka",
       "clients": "Klienci",
       "pickups": "Odbiory",
-      "export": "Eksport"
+      "export": "Eksport",
+      "inbox": "Skrzynka"
     },
     "dashboard": {
       "title": "Pulpit",
@@ -120,6 +121,13 @@
       "add": "Dodaj punkt",
       "removeConfirm": "Usunąć punkt „{{name}}\"? Tego nie da się cofnąć.",
       "toggleLabel": "Przełącznik aktywności punktu {{name}}"
+    },
+    "inbox": {
+      "empty": "Brak nowych zgłoszeń.",
+      "dateChange": "prośba o zmianę daty",
+      "message": "wiadomość",
+      "dateChangeBody": "Prośba o zmianę odbioru z {{from}} na {{to}}",
+      "markRead": "Oznacz jako przeczytane"
     }
   },
   "client": {
@@ -175,6 +183,16 @@
       "address": "Adres",
       "hours": "Godziny odbioru",
       "saturday": "sobota"
+    },
+    "schedule": {
+      "title": "Harmonogram odbiorów",
+      "next": "najbliższa",
+      "change": "Zmień datę",
+      "newDate": "Nowa data",
+      "send": "Wyślij",
+      "requested": "Wysłano prośbę",
+      "note": "Zmiana daty wymaga potwierdzenia przez gospodarstwo.",
+      "requestedShort": "prośba wysłana"
     }
   },
   "supplier": {
@@ -213,5 +231,9 @@
   "deliveryOption": {
     "pickup": "Odbiór w punkcie",
     "home_delivery": "Dostawa do domu"
+  },
+  "frequency": {
+    "weekly": "co tydzień",
+    "biweekly": "co 2 tygodnie"
   }
 }

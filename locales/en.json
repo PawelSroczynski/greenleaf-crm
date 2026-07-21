@@ -26,7 +26,8 @@
       "weeklyPackage": "Box",
       "clients": "Clients",
       "pickups": "Pickups",
-      "export": "Export"
+      "export": "Export",
+      "inbox": "Inbox"
     },
     "dashboard": {
       "title": "Dashboard",
@@ -120,6 +121,13 @@
       "add": "Add point",
       "removeConfirm": "Remove point \"{{name}}\"? This cannot be undone.",
       "toggleLabel": "Toggle point {{name}} active"
+    },
+    "inbox": {
+      "empty": "No new requests.",
+      "dateChange": "date change request",
+      "message": "message",
+      "dateChangeBody": "Requests moving pickup from {{from}} to {{to}}",
+      "markRead": "Mark as read"
     }
   },
   "client": {
@@ -175,6 +183,16 @@
       "address": "Address",
       "hours": "Pickup hours",
       "saturday": "Saturday"
+    },
+    "schedule": {
+      "title": "Pickup schedule",
+      "next": "next",
+      "change": "Change date",
+      "newDate": "New date",
+      "send": "Send",
+      "requested": "Request sent",
+      "note": "Date change needs farm confirmation.",
+      "requestedShort": "request sent"
     }
   },
   "supplier": {
@@ -213,5 +231,9 @@
   "deliveryOption": {
     "pickup": "Pickup point",
     "home_delivery": "Home delivery"
+  },
+  "frequency": {
+    "weekly": "weekly",
+    "biweekly": "every 2 weeks"
   }
 }

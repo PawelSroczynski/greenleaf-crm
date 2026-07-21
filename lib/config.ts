@@ -20,6 +20,9 @@ export const ABSENCE_DEADLINE = { dayOfWeek: 3, hour: 20, minute: 0 } as const; 
 /** Dzień odbioru — soboty (PRD §12). */
 export const PICKUP_DAY = 'saturday' as const;
 
+/** Pierwsza sobota sezonu (tydzień 1) — baza harmonogramu odbiorów. */
+export const SEASON_START_SATURDAY = `${SEASON}-05-23`;
+
 /**
  * Koszt dostawy per paczka (zł). DATA_MODEL.md §12/§13, PRD §4.5.
  * Kąkolewice 0 zł, pozostałe punkty +10 zł, dostawa do domu +20 zł.

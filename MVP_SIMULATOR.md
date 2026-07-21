@@ -72,3 +72,20 @@ ODKŁADAMY: MVP-1 auth (fake login), MVP-8 płatności, MVP-6 konfiguracja punkt
 - 2026-06-27: ETAP 4 ZIELONY — domknięcie cyklu (lib/pickups.ts + PackageStatus/SubscriptionPanel/PickupList): MVP-5 zgłoszenie braku (deadline śr 10:00, cofanie, symulacja czasu), MVP-7 status paczki + licznik X/24, MVP-13 checkbox odbioru (idempotentny, zmniejsza licznik) + flaga „nie zgłosił". 70/70 testów, tsc czysty, headless OK. UWAGA: zrobione w main loop (agent zablokowany bramką Telegram). Następny: ETAP 5 (eksport XLSX — TOP priorytet Magdy).
 - 2026-06-27: ETAP 5 ZIELONY — eksport XLSX (lib/export.ts + ExportPanel, SheetJS): 4 arkusze Zbiory/Pakowanie/Zmiany/Kurczaki, czyste funkcje agregujące (po zamianach). 74/74 testów, tsc czysty. Headless: pobrano greenleaf-tydzien-4.xlsx (21KB, 4 arkusze poprawne, Zbiory 11 wierszy, Pakowanie 4). **LEAN-MVP (7/14) KOMPLETNY — symulator gotowy do feedbacku Magdy.**
 - 2026-07-02: SKAN CODEBASE + 6 napraw (4 atomic commity na main): (1) KRYTYCZNY — singleton store: komponenty trzymały osobne kopie, saveStore przestarzałej kopii cofał wcześniejsze zapisy (zamiana kasowała „Nie odbiorę"); (2) publishPackage: guard ponownej publikacji (duplikaty ClientPackages) + pustej paczki; (3) createDraftPackage: realne deadliny zamiast pustych stringów + wspólny lib/deadlines.ts; (4) walidacja ilości NaN/≤0; (5) osierocone klucze i18n usunięte; (6) czystka seed. 88/88 testów, regresja live buga #1 potwierdzona headless.
+
+## RUNDA 2 — wdrożenie feedbacku Magdy (2026-07-02)
+
+Decyzje: pełny przemiat wszystkich 18 uwag; zamienniki admin-definiowane + tryb „do wyboru"; logowanie = lekka symulacja + nota backend.
+
+- [x] F1 ✅ — Wariant A jako jedyny (B/C usunięte); deadline braku odbioru śr 20:00; Odbiory alfabetycznie; Profil: godziny+adres punktu
+- [x] F2 ✅ — Zamienniki definiowane przez admina (per pozycja) + „warzywa do wyboru" (Cukinia LUB Patison)
+- [x] F3 ✅ — Jajka jako osobny podpunkt; osobne odhaczenie paczka/jajka w Odbiorach
+- [ ] F4 — Kalendarz odbiorów (harmonogram, co-2-tyg) + prośba o zmianę daty → skrzynka admina
+- [ ] F5 — XLSX: nr paczki+data, podział per punkt + suma ogólna, 100g→kg; Pakowanie per punkt; Zmiany +punkt
+- [ ] F6 — Ręczne przełączanie statusu paczki przez admina (skompletowana/gotowa)
+- [ ] F7 — Pulpit: historia paczek + skład
+- [ ] F8 — Płatności: oznacz „zapłacone" (całość/rata)
+- [ ] F9 — Kurczaki: partie + zapisy
+- [ ] F10 — Zamówienia dodatkowe: admin dodaje produkty, klient zamawia
+- [ ] F11 — Komunikacja: klient → wiadomość do Magdy (skrzynka admina, wspólna z F4)
+- [ ] F12 — Logowanie (symulacja): admin tworzy konta login+hasło; ekran logowania; nota backend

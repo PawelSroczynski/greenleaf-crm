@@ -3,7 +3,7 @@
 // components/AdminShell.tsx — shell admina: TopBar + nawigacja sekcji (state-driven).
 // Pulpit pokazuje realne dane ze store (dowód przepływu seed → UI).
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { TopBar } from '@/components/TopBar';
 import { PackageBuilder } from '@/components/admin/PackageBuilder';
@@ -12,12 +12,14 @@ import { PickupList } from '@/components/admin/PickupList';
 import { ExportPanel } from '@/components/admin/ExportPanel';
 import { ClientsList } from '@/components/admin/ClientsList';
 import { PointsManager } from '@/components/admin/PointsManager';
+import { InboxPanel } from '@/components/admin/InboxPanel';
 import { loadStore } from '@/lib/store';
 import { currentPickupWeek } from '@/lib/pickups';
+import { unreadCount } from '@/lib/inbox';
 
-type Section = 'dashboard' | 'weeklyPackage' | 'clients' | 'pickups' | 'export';
+type Section = 'dashboard' | 'weeklyPackage' | 'clients' | 'pickups' | 'inbox' | 'export';
 
-const SECTIONS: Section[] = ['dashboard', 'weeklyPackage', 'clients', 'pickups', 'export'];
+const SECTIONS: Section[] = ['dashboard', 'weeklyPackage', 'clients', 'pickups', 'inbox', 'export'];
 
 interface DashboardStats {
   activeClients: number;
@@ -70,6 +72,7 @@ function Dashboard() {
 export function AdminShell() {
   const { t } = useTranslation();
   const [active, setActive] = useState<Section>('dashboard');
+  const unread = useMemo(() => unreadCount(loadStore()), [active]);
 
   return (
     <div className="min-h-screen pb-4">
@@ -77,7 +80,7 @@ export function AdminShell() {
 
       <nav
         aria-label={t('admin.dashboard.title')}
-        className="flex border-b border-leaf-100 bg-white px-1 py-2"
+        className="flex flex-wrap gap-1 border-b border-leaf-100 bg-white px-2 py-2"
       >
         {SECTIONS.map((s) => (
           <button
@@ -85,11 +88,14 @@ export function AdminShell() {
             type="button"
             onClick={() => setActive(s)}
             aria-current={active === s ? 'page' : undefined}
-            className={`min-w-0 flex-1 whitespace-nowrap rounded px-1 py-1.5 text-center text-sm font-medium ${
+            className={`whitespace-nowrap rounded px-2.5 py-1.5 text-sm font-medium ${
               active === s ? 'bg-leaf-600 text-white' : 'text-leaf-700 hover:bg-leaf-50'
             }`}
           >
             {t(`admin.nav.${s}`)}
+            {s === 'inbox' && unread > 0 && (
+              <span className="ml-1 rounded-full bg-red-500 px-1.5 text-xs text-white">{unread}</span>
+            )}
           </button>
         ))}
       </nav>
@@ -104,6 +110,7 @@ export function AdminShell() {
         )}
         {active === 'clients' && <ClientsList />}
         {active === 'pickups' && <PickupList />}
+        {active === 'inbox' && <InboxPanel />}
         {active === 'export' && <ExportPanel />}
       </main>
     </div>

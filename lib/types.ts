@@ -310,4 +310,20 @@ export interface Store {
   announcements: Announcement[];
   notifications: Notification[];
   auditLogs: AuditLog[];
+  /** Skrzynka: prośby o zmianę daty odbioru i wiadomości od klientów → do admina. */
+  clientRequests: ClientRequest[];
+}
+
+/** Zgłoszenie klienta do admina: prośba o zmianę daty odbioru lub wiadomość. */
+export interface ClientRequest {
+  id: string;
+  userId: string;
+  kind: 'date_change' | 'message';
+  /** date_change: data pierwotna → nowa (ISO). */
+  fromDate?: string;
+  toDate?: string;
+  /** message: treść wiadomości. */
+  body?: string;
+  createdAt: string;
+  isRead: boolean;
 }
