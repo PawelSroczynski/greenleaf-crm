@@ -80,12 +80,12 @@ Decyzje: pełny przemiat wszystkich 18 uwag; zamienniki admin-definiowane + tryb
 - [x] F1 ✅ — Wariant A jako jedyny (B/C usunięte); deadline braku odbioru śr 20:00; Odbiory alfabetycznie; Profil: godziny+adres punktu
 - [x] F2 ✅ — Zamienniki definiowane przez admina (per pozycja) + „warzywa do wyboru" (Cukinia LUB Patison)
 - [x] F3 ✅ — Jajka jako osobny podpunkt; osobne odhaczenie paczka/jajka w Odbiorach
-- [ ] F4 — Kalendarz odbiorów (harmonogram, co-2-tyg) + prośba o zmianę daty → skrzynka admina
-- [ ] F5 — XLSX: nr paczki+data, podział per punkt + suma ogólna, 100g→kg; Pakowanie per punkt; Zmiany +punkt
-- [ ] F6 — Ręczne przełączanie statusu paczki przez admina (skompletowana/gotowa)
-- [ ] F7 — Pulpit: historia paczek + skład
-- [ ] F8 — Płatności: oznacz „zapłacone" (całość/rata)
-- [ ] F9 — Kurczaki: partie + zapisy
-- [ ] F10 — Zamówienia dodatkowe: admin dodaje produkty, klient zamawia
-- [ ] F11 — Komunikacja: klient → wiadomość do Magdy (skrzynka admina, wspólna z F4)
-- [ ] F12 — Logowanie (symulacja): admin tworzy konta login+hasło; ekran logowania; nota backend
+- [x] F4 ✅ — Kalendarz odbiorów (harmonogram, co-2-tyg) + prośba o zmianę daty → skrzynka admina
+- [x] F5 ✅ — XLSX: nr paczki+data, podział per punkt + suma ogólna, 100g→kg; Pakowanie per punkt; Zmiany +punkt
+- [x] F6 ✅ — Ręczne przełączanie statusu paczki przez admina (skompletowana/gotowa)
+- [x] F7 ✅ — Pulpit: historia paczek + skład
+- [x] F8 ✅ — Płatności: oznacz „zapłacone" (całość/rata)
+- [x] F9 ✅ — Kurczaki: partie + zapisy
+- [x] F10 ✅ — Zamówienia dodatkowe: admin dodaje produkty, klient zamawia
+- [x] F11 ✅ — Komunikacja: klient → wiadomość do Magdy (skrzynka admina, wspólna z F4)
+- [x] F12 ✅ — Logowanie (symulacja): admin tworzy konta login+hasło; ekran logowania; nota backend
