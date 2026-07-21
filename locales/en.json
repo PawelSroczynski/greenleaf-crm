@@ -156,7 +156,9 @@
     "tabs": {
       "myPackage": "My box",
       "subscription": "Subscription",
-      "profile": "Profile"
+      "profile": "Profile",
+      "chickens": "Chickens",
+      "orders": "Orders"
     },
     "swap": {
       "title": "My box — swaps",
