@@ -22,20 +22,33 @@ describe('export XLSX (MVP-9)', () => {
     expect(wb.SheetNames).toEqual(['Zbiory', 'Pakowanie', 'Zmiany', 'Kurczaki']);
   });
 
-  it('Zbiory: agreguje ilość = ilość bazowa × liczba paczek klientów', () => {
+  it('Zbiory: wiersz RAZEM agreguje ilość = ilość bazowa × liczba paczek', () => {
     const { store, wp } = setup();
-    const cps = store.clientPackages.filter((c) => c.weeklyPackageId === wp.id);
+    const cps = store.clientPackages.filter((c) => c.weeklyPackageId === wp.id && c.kind !== 'eggs');
     const firstItem = itemsForPackage(store, wp.id).find((i) => !i.substituteIds && !(i.alternativeIds && i.alternativeIds.length))!;
     const rows = buildHarvestRows(store, wp.id);
     const productName = store.products.find((p) => p.id === firstItem.productId)!.name;
-    const row = rows.find((r) => r.Produkt === productName)!;
-    expect(row.Ilość).toBe(firstItem.quantity * cps.length);
+    const razem = rows.find((r) => String(r.Punkt).startsWith('RAZEM') && r.Produkt === productName)!;
+    expect(razem.Ilość).toBe(firstItem.quantity * cps.length);
   });
 
-  it('Pakowanie: po wierszu na każdego klienta', () => {
+  it('Zbiory: zawiera kolumny Tydzień, Data, Punkt oraz podział per punkt', () => {
     const { store, wp } = setup();
-    const cps = store.clientPackages.filter((c) => c.weeklyPackageId === wp.id);
-    expect(buildPackingRows(store, wp.id)).toHaveLength(cps.length);
+    const rows = buildHarvestRows(store, wp.id);
+    expect(rows[0]).toHaveProperty('Tydzień');
+    expect(rows[0]).toHaveProperty('Data');
+    expect(rows[0]).toHaveProperty('Punkt');
+    expect(rows.some((r) => String(r.Punkt).startsWith('RAZEM'))).toBe(true);
+    expect(rows.some((r) => r.Punkt === 'Kąkolewice 17a')).toBe(true);
+  });
+
+  it('Pakowanie: po wierszu na każdego klienta (paczki, bez jajek), z punktem i datą', () => {
+    const { store, wp } = setup();
+    const cps = store.clientPackages.filter((c) => c.weeklyPackageId === wp.id && c.kind !== 'eggs');
+    const rows = buildPackingRows(store, wp.id);
+    expect(rows).toHaveLength(cps.length);
+    expect(rows[0]).toHaveProperty('Punkt');
+    expect(rows[0]).toHaveProperty('Data');
   });
 
   it('Zmiany: odzwierciedla wykonaną zamianę', () => {
