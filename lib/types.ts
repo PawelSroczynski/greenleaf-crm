@@ -120,6 +120,10 @@ export interface PackageItem {
   productId: string;
   quantity: number;
   unit: string;
+  /** Dozwolone zamienniki definiowane przez admina; null/brak = pula sezonowa. */
+  substituteIds?: string[] | null;
+  /** „Warzywa do wyboru" — pozycja typu „Cukinia LUB Patison"; klient wybiera jedno. */
+  alternativeIds?: string[];
 }
 
 // ---------- 5. Product ----------

@@ -51,7 +51,11 @@
       "publishedInfo": "Generated boxes for {{count}} active subscriptions.",
       "preview": "Published content preview",
       "pointsTitle": "Pickup points this week",
-      "pointsNone": "Select at least one pickup point."
+      "pointsNone": "Select at least one pickup point.",
+      "options": "Options",
+      "substitutes": "Substitutes (client may swap to)",
+      "alternatives": "Choose instead of (Zucchini OR…)",
+      "orChoice": "choose one"
     },
     "swaps": {
       "title": "Swap summary",
@@ -136,7 +140,8 @@
       "done": "Completed swaps",
       "noSwaps": "No swaps yet.",
       "change": "Change",
-      "cancel": "Undo"
+      "cancel": "Undo",
+      "chooseOne": "choose one"
     },
     "status": {
       "title": "Your package status"

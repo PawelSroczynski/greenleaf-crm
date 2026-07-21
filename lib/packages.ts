@@ -87,6 +87,20 @@ export function removeItemFromPackage(store: Store, itemId: string): void {
   store.packageItems = store.packageItems.filter((i) => i.id !== itemId);
 }
 
+/** Ustawia dozwolone zamienniki pozycji (admin). Pusta lista → null (fallback sezonowy). */
+export function setItemSubstitutes(store: Store, itemId: string, productIds: string[]): void {
+  const item = store.packageItems.find((i) => i.id === itemId);
+  if (!item) throw new Error(`Brak pozycji o id ${itemId}.`);
+  item.substituteIds = productIds.length ? productIds : null;
+}
+
+/** Ustawia alternatywy pozycji „do wyboru" (Cukinia LUB Patison). */
+export function setItemAlternatives(store: Store, itemId: string, productIds: string[]): void {
+  const item = store.packageItems.find((i) => i.id === itemId);
+  if (!item) throw new Error(`Brak pozycji o id ${itemId}.`);
+  item.alternativeIds = productIds;
+}
+
 /** Pozycje należące do danej paczki. */
 export function itemsForPackage(store: Store, weeklyPackageId: string): PackageItem[] {
   return store.packageItems.filter((i) => i.weeklyPackageId === weeklyPackageId);

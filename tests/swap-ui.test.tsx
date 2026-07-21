@@ -26,12 +26,12 @@ describe('SwapPanel — moduł zamian (Wariant A)', () => {
     await user.click(screen.getAllByRole('button', { name: 'Zamień' })[0]);
     await user.selectOptions(
       screen.getByRole('combobox'),
-      screen.getByRole('option', { name: 'Ogórek gruntowy' }),
+      screen.getByRole('option', { name: 'Botwina' }),
     );
 
     const swaps = storedSwaps();
     expect(swaps).toHaveLength(1);
-    const ogorek = loadStore().products.find((p) => p.name === 'Ogórek gruntowy')!;
+    const ogorek = loadStore().products.find((p) => p.name === 'Botwina')!;
     expect(swaps[0].replacementProductId).toBe(ogorek.id);
   });
 
@@ -42,16 +42,16 @@ describe('SwapPanel — moduł zamian (Wariant A)', () => {
     await user.click(screen.getAllByRole('button', { name: 'Zamień' })[0]);
     await user.selectOptions(
       screen.getByRole('combobox'),
-      screen.getByRole('option', { name: 'Ogórek gruntowy' }),
+      screen.getByRole('option', { name: 'Botwina' }),
     );
     expect(storedSwaps()).toHaveLength(1);
 
     await user.click(screen.getByRole('button', { name: 'Zmień' }));
     await user.selectOptions(
       screen.getByRole('combobox'),
-      screen.getByRole('option', { name: 'Cukinia' }),
+      screen.getByRole('option', { name: 'Szczaw' }),
     );
-    const cukinia = loadStore().products.find((p) => p.name === 'Cukinia')!;
+    const cukinia = loadStore().products.find((p) => p.name === 'Szczaw')!;
     expect(storedSwaps()).toHaveLength(1);
     expect(storedSwaps()[0].replacementProductId).toBe(cukinia.id);
 

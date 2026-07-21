@@ -51,7 +51,11 @@
       "publishedInfo": "Wygenerowano paczki dla {{count}} aktywnych subskrypcji.",
       "preview": "Podgląd opublikowanej zawartości",
       "pointsTitle": "Punkty odbioru w tym tygodniu",
-      "pointsNone": "Zaznacz co najmniej jeden punkt odbioru."
+      "pointsNone": "Zaznacz co najmniej jeden punkt odbioru.",
+      "options": "Opcje",
+      "substitutes": "Zamienniki (klient może zamienić na)",
+      "alternatives": "Do wyboru zamiast (Cukinia LUB…)",
+      "orChoice": "do wyboru"
     },
     "swaps": {
       "title": "Podsumowanie zamian",
@@ -136,7 +140,8 @@
       "done": "Wykonane zamiany",
       "noSwaps": "Brak zamian.",
       "change": "Zmień",
-      "cancel": "Cofnij"
+      "cancel": "Cofnij",
+      "chooseOne": "do wyboru"
     },
     "status": {
       "title": "Status Twojej paczki"

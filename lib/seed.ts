@@ -341,13 +341,37 @@ export function createSeedData(): Store {
 
   // PackageItem: 11 sezonowych pozycji dostępnych w czerwcu (miesiąc 6).
   const juneProducts = productsAvailableInMonth(products, 6).slice(0, 11);
+  const prodByName = (name: string) => products.find((p) => p.name === name);
   const packageItems: PackageItem[] = juneProducts.map((prod) => ({
     id: id('pi'),
     weeklyPackageId: weeklyPackage.id,
     productId: prod.id,
     quantity: 1,
     unit: prod.unit,
+    substituteIds: null,
+    alternativeIds: [],
   }));
+
+  // Demo uwag Magdy (F2):
+  // (a) zamienniki definiowane przez admina — Rzodkiewka → Botwina / Szczaw (a nie cała pula sezonowa).
+  const rzodkiewka = packageItems.find((i) => i.productId === prodByName('Rzodkiewka')?.id);
+  if (rzodkiewka) {
+    rzodkiewka.substituteIds = [prodByName('Botwina')!.id, prodByName('Szczaw')!.id];
+  }
+  // (b) „warzywa do wyboru" — dedykowana pozycja „Cukinia LUB Ogórek gruntowy" (klient wybiera).
+  const cukinia = prodByName('Cukinia');
+  const ogorek = prodByName('Ogórek gruntowy');
+  if (cukinia && ogorek) {
+    packageItems.push({
+      id: id('pi'),
+      weeklyPackageId: weeklyPackage.id,
+      productId: cukinia.id,
+      quantity: 1,
+      unit: cukinia.unit,
+      substituteIds: null,
+      alternativeIds: [ogorek.id],
+    });
+  }
 
   // ---------- ClientPackage dla aktywnych subskrypcji paczek ----------
   const activePackageSubs = subscriptions.filter(

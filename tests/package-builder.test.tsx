@@ -92,3 +92,28 @@ describe('PackageBuilder — punkty odbioru tygodnia', () => {
     expect(cps.some((c) => c.userId === ewa.id)).toBe(false);
   });
 });
+
+describe('PackageBuilder — definiowanie zamienników (F2)', () => {
+  beforeEach(async () => {
+    localStorage.clear();
+    await i18n.changeLanguage('pl');
+  });
+
+  it('dodanie produktu, Opcje → zaznaczenie zamiennika zapisuje substituteIds', async () => {
+    const user = await openWeeklyPackage();
+    await user.selectOptions(
+      screen.getByLabelText('Produkt'),
+      screen.getByRole('option', { name: 'Ogórek gruntowy' }),
+    );
+    await user.click(screen.getByRole('button', { name: 'Dodaj' }));
+    await user.click(screen.getByRole('button', { name: 'Opcje' }));
+
+    // „Sałata masłowa" pojawia się w sekcji zamienników i „do wyboru"; [0] = zamienniki
+    const salata = loadStore().products.find((p) => p.name === 'Sałata masłowa')!;
+    await user.click(screen.getAllByLabelText('Sałata masłowa')[0]);
+
+    const draft = loadStore().weeklyPackages.find((w) => w.status === 'draft')!;
+    const item = loadStore().packageItems.find((i) => i.weeklyPackageId === draft.id)!;
+    expect(item.substituteIds).toContain(salata.id);
+  });
+});

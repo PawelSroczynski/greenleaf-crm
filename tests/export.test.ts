@@ -25,7 +25,7 @@ describe('export XLSX (MVP-9)', () => {
   it('Zbiory: agreguje ilość = ilość bazowa × liczba paczek klientów', () => {
     const { store, wp } = setup();
     const cps = store.clientPackages.filter((c) => c.weeklyPackageId === wp.id);
-    const firstItem = itemsForPackage(store, wp.id)[0];
+    const firstItem = itemsForPackage(store, wp.id).find((i) => !i.substituteIds && !(i.alternativeIds && i.alternativeIds.length))!;
     const rows = buildHarvestRows(store, wp.id);
     const productName = store.products.find((p) => p.id === firstItem.productId)!.name;
     const row = rows.find((r) => r.Produkt === productName)!;
@@ -43,7 +43,7 @@ describe('export XLSX (MVP-9)', () => {
     const cp = store.clientPackages.find((c) => c.weeklyPackageId === wp.id)!;
     const before = new Date(getSwapDeadline(wp).getTime() - 60_000);
     const repl = replacementOptions(store, cp.id)[0];
-    const original = itemsForPackage(store, wp.id)[0];
+    const original = itemsForPackage(store, wp.id).find((i) => !i.substituteIds && !(i.alternativeIds && i.alternativeIds.length))!;
     applySwap(store, cp.id, original.productId, repl.id, before);
 
     const rows = buildSwapRows(store, wp.id);

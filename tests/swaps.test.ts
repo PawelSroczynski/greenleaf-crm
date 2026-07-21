@@ -7,6 +7,7 @@ import {
   applySwap,
   swapSummary,
   swapsForClientPackage,
+  swapOptionsForItem,
 } from '@/lib/swaps';
 import { itemsForPackage } from '@/lib/packages';
 import type { Store } from '@/lib/types';
@@ -70,7 +71,7 @@ describe('swaps — applySwap', () => {
   it('przed terminem zapisuje Swap przypięty do ClientPackage', () => {
     const store = createSeedData();
     const cp = annaClientPackage(store);
-    const original = store.packageItems.find((i) => i.weeklyPackageId === cp.weeklyPackageId)!;
+    const original = store.packageItems.find((i) => i.weeklyPackageId === cp.weeklyPackageId && !i.substituteIds && !(i.alternativeIds && i.alternativeIds.length))!;
     const replacement = product(store, 'Ogórek gruntowy');
 
     applySwap(store, cp.id, original.productId, replacement.id, before);
@@ -85,7 +86,7 @@ describe('swaps — applySwap', () => {
   it('po terminie RZUCA błędem i nie zapisuje', () => {
     const store = createSeedData();
     const cp = annaClientPackage(store);
-    const original = store.packageItems.find((i) => i.weeklyPackageId === cp.weeklyPackageId)!;
+    const original = store.packageItems.find((i) => i.weeklyPackageId === cp.weeklyPackageId && !i.substituteIds && !(i.alternativeIds && i.alternativeIds.length))!;
     const replacement = product(store, 'Ogórek gruntowy');
 
     expect(() => applySwap(store, cp.id, original.productId, replacement.id, after)).toThrow();
@@ -95,7 +96,7 @@ describe('swaps — applySwap', () => {
   it('odrzuca zamiennik spoza listy sezonowej (pomidor w czerwcu)', () => {
     const store = createSeedData();
     const cp = annaClientPackage(store);
-    const original = store.packageItems.find((i) => i.weeklyPackageId === cp.weeklyPackageId)!;
+    const original = store.packageItems.find((i) => i.weeklyPackageId === cp.weeklyPackageId && !i.substituteIds && !(i.alternativeIds && i.alternativeIds.length))!;
     const tomato = product(store, 'Pomidor');
 
     expect(() => applySwap(store, cp.id, original.productId, tomato.id, before)).toThrow();
@@ -104,9 +105,9 @@ describe('swaps — applySwap', () => {
   it('idempotencja: kolejna zamiana tego samego oryginału AKTUALIZUJE istniejący Swap', () => {
     const store = createSeedData();
     const cp = annaClientPackage(store);
-    const original = store.packageItems.find((i) => i.weeklyPackageId === cp.weeklyPackageId)!;
+    const original = store.packageItems.find((i) => i.weeklyPackageId === cp.weeklyPackageId && !i.substituteIds && !(i.alternativeIds && i.alternativeIds.length))!;
     const first = product(store, 'Ogórek gruntowy');
-    const second = product(store, 'Cukinia');
+    const second = product(store, 'Groszek cukrowy'); // sezonowy w czerwcu, spoza paczki
 
     applySwap(store, cp.id, original.productId, first.id, before);
     applySwap(store, cp.id, original.productId, second.id, before);
@@ -150,7 +151,7 @@ describe('swaps — rozmyślenie się (zmiana i cofnięcie do terminu)', () => {
     const cp = store.clientPackages.find((c) => c.weeklyPackageId === wp.id)!;
     const before = new Date(getSwapDeadline(wp).getTime() - 60_000);
     const after = new Date(getSwapDeadline(wp).getTime() + 60_000);
-    const original = itemsForPackage(store, wp.id)[0].productId;
+    const original = itemsForPackage(store, wp.id).find((i) => !i.substituteIds && !(i.alternativeIds && i.alternativeIds.length))!.productId;
     return { store, wp, cp, before, after, original };
   }
 
@@ -181,5 +182,48 @@ describe('swaps — rozmyślenie się (zmiana i cofnięcie do terminu)', () => {
     applySwap(store, cp.id, original, opts[1].id, before);
     expect(store.swaps).toHaveLength(1);
     expect(store.swaps[0].replacementProductId).toBe(opts[1].id);
+  });
+});
+
+describe('swaps — opcje per pozycja (F2)', () => {
+  function currentCp(store: ReturnType<typeof createSeedData>) {
+    return store.clientPackages.find(
+      (c) => store.weeklyPackages.find((w) => w.id === c.weeklyPackageId)?.status === 'published',
+    )!;
+  }
+  it('pozycja z substituteIds oferuje TYLKO te zamienniki', () => {
+    const store = createSeedData();
+    const cp = currentCp(store);
+    const rzod = store.products.find((p) => p.name === 'Rzodkiewka')!;
+    const item = store.packageItems.find(
+      (i) => i.productId === rzod.id && i.weeklyPackageId === cp.weeklyPackageId,
+    )!;
+    expect(swapOptionsForItem(store, cp.id, item).map((p) => p.name).sort()).toEqual([
+      'Botwina',
+      'Szczaw',
+    ]);
+  });
+  it('pozycja „do wyboru": baza + alternatywy bez bieżącego wyboru', () => {
+    const store = createSeedData();
+    const cp = currentCp(store);
+    const cukinia = store.products.find((p) => p.name === 'Cukinia')!;
+    const item = store.packageItems.find(
+      (i) => i.productId === cukinia.id && (i.alternativeIds?.length ?? 0) > 0,
+    )!;
+    expect(swapOptionsForItem(store, cp.id, item).map((p) => p.name)).toEqual(['Ogórek gruntowy']);
+    const wp = store.weeklyPackages.find((w) => w.id === cp.weeklyPackageId)!;
+    const before = new Date(getSwapDeadline(wp).getTime() - 60_000);
+    const ogorek = store.products.find((p) => p.name === 'Ogórek gruntowy')!;
+    applySwap(store, cp.id, item.productId, ogorek.id, before);
+    expect(swapOptionsForItem(store, cp.id, item).map((p) => p.name)).toEqual(['Cukinia']);
+  });
+  it('applySwap odrzuca zamiennik spoza listy pozycji', () => {
+    const store = createSeedData();
+    const cp = currentCp(store);
+    const wp = store.weeklyPackages.find((w) => w.id === cp.weeklyPackageId)!;
+    const before = new Date(getSwapDeadline(wp).getTime() - 60_000);
+    const rzod = store.products.find((p) => p.name === 'Rzodkiewka')!;
+    const notAllowed = store.products.find((p) => p.name === 'Ogórek gruntowy')!;
+    expect(() => applySwap(store, cp.id, rzod.id, notAllowed.id, before)).toThrow();
   });
 });

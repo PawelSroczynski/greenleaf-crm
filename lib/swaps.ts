@@ -6,7 +6,7 @@ import { SWAP_DEADLINE } from './config';
 import { weeklyDeadline } from './deadlines';
 import { isProductAvailable } from './seed';
 import { getPackageMonth, itemsForPackage } from './packages';
-import type { Product, Store, Swap, WeeklyPackage } from './types';
+import type { PackageItem, Product, Store, Swap, WeeklyPackage } from './types';
 
 // Lokalny generator ID (unikalny w obrębie procesu, bez zależności od crypto).
 let _seq = 0;
@@ -51,14 +51,29 @@ export function replacementOptions(store: Store, clientPackageId: string): Produ
 }
 
 /**
- * Dozwolone opcje dla konkretnej pozycji paczki (Wariant A „Zmień").
- * F2 rozszerzy o zamienniki definiowane per pozycja; na razie = pula sezonowa.
+ * Dozwolone opcje dla konkretnej pozycji paczki (Wariant A „Zmień" / „do wyboru"):
+ * - pozycja „do wyboru" (alternativeIds) → produkt bazowy + alternatywy, bez bieżącego wyboru,
+ * - zamienniki zdefiniowane przez admina (substituteIds) → dokładnie ta lista,
+ * - w przeciwnym razie → pula sezonowa (fallback).
  */
 export function swapOptionsForItem(
   store: Store,
   clientPackageId: string,
-  _item: Pick<import('./types').PackageItem, 'productId'>,
+  item: Pick<PackageItem, 'productId' | 'substituteIds' | 'alternativeIds'>,
 ): Product[] {
+  const byId = (ids: string[]) =>
+    ids.map((id) => store.products.find((p) => p.id === id)).filter((p): p is Product => !!p);
+
+  if (item.alternativeIds && item.alternativeIds.length > 0) {
+    const swap = store.swaps.find(
+      (s) => s.clientPackageId === clientPackageId && s.originalProductId === item.productId,
+    );
+    const current = swap?.replacementProductId ?? item.productId;
+    return byId([item.productId, ...item.alternativeIds]).filter((p) => p.id !== current);
+  }
+  if (item.substituteIds != null) {
+    return byId(item.substituteIds).filter((p) => p.isActive);
+  }
   return replacementOptions(store, clientPackageId);
 }
 
@@ -81,7 +96,11 @@ export function applySwap(
     throw new Error('Zamiany po terminie — okno zamian jest zamknięte.');
   }
 
-  const allowed = replacementOptions(store, clientPackageId);
+  // Walidacja względem opcji KONKRETNEJ pozycji (zamienniki admina / „do wyboru" / pula sezonowa).
+  const item = itemsForPackage(store, wp.id).find((i) => i.productId === originalProductId);
+  const allowed = item
+    ? swapOptionsForItem(store, clientPackageId, item)
+    : replacementOptions(store, clientPackageId);
   if (!allowed.some((p) => p.id === replacementProductId)) {
     throw new Error(`Produkt ${replacementProductId} nie jest dozwolonym zamiennikiem.`);
   }

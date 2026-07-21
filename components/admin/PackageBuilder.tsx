@@ -17,6 +17,8 @@ import {
   publishPackage,
   removeItemFromPackage,
   setPackagePickupPoints,
+  setItemSubstitutes,
+  setItemAlternatives,
 } from '@/lib/packages';
 import type { ClientPackage, PackageItem, Product, Store, WeeklyPackage } from '@/lib/types';
 
@@ -40,6 +42,8 @@ export function PackageBuilder() {
   const [published, setPublished] = useState<ClientPackage[] | null>(null);
   // Punkty odbioru aktywne w tym tygodniu (default: wszystkie zaznaczone).
   const [pointIds, setPointIds] = useState<Set<string>>(new Set());
+  // Która pozycja ma rozwinięte opcje (zamienniki / do wyboru).
+  const [editItemId, setEditItemId] = useState<string | null>(null);
 
   // Inicjalizacja: wczytaj store i utwórz świeży szkic kolejnego tygodnia.
   useEffect(() => {
@@ -79,6 +83,29 @@ export function PackageBuilder() {
     setProductId('');
     setUnit('');
     setQuantity(1);
+  }
+
+  function refreshItems() {
+    setItems([...itemsForPackage(store!, draft!.id)]);
+    saveStore(store!);
+  }
+
+  function toggleSubstitute(itemId: string, productId: string, checked: boolean) {
+    const item = store!.packageItems.find((x) => x.id === itemId)!;
+    const cur = new Set(item.substituteIds ?? []);
+    if (checked) cur.add(productId);
+    else cur.delete(productId);
+    setItemSubstitutes(store!, itemId, [...cur]);
+    refreshItems();
+  }
+
+  function toggleAlternative(itemId: string, productId: string, checked: boolean) {
+    const item = store!.packageItems.find((x) => x.id === itemId)!;
+    const cur = new Set(item.alternativeIds ?? []);
+    if (checked) cur.add(productId);
+    else cur.delete(productId);
+    setItemAlternatives(store!, itemId, [...cur]);
+    refreshItems();
   }
 
   function handleRemove(itemId: string) {
@@ -201,17 +228,81 @@ export function PackageBuilder() {
           ) : (
             <ul className="mb-4 divide-y divide-leaf-100 rounded-xl border border-leaf-100 bg-white">
               {items.map((i) => (
-                <li key={i.id} className="flex items-center justify-between px-3 py-2 text-sm">
-                  <span>
-                    {productName(i.productId)} — {i.quantity} {i.unit}
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() => handleRemove(i.id)}
-                    className="rounded px-2 py-1 text-xs font-medium text-red-600 hover:bg-red-50"
-                  >
-                    {t('admin.package.remove')}
-                  </button>
+                <li key={i.id} className="px-3 py-2 text-sm">
+                  <div className="flex items-center justify-between">
+                    <span>
+                      {productName(i.productId)} — {i.quantity} {i.unit}
+                      {(i.substituteIds?.length ?? 0) > 0 && (
+                        <span className="ml-2 text-xs text-leaf-700">
+                          ↔ {i.substituteIds!.length}
+                        </span>
+                      )}
+                      {(i.alternativeIds?.length ?? 0) > 0 && (
+                        <span className="ml-2 text-xs text-amber-700">
+                          {t('admin.package.orChoice')}
+                        </span>
+                      )}
+                    </span>
+                    <span className="flex gap-1">
+                      <button
+                        type="button"
+                        onClick={() => setEditItemId(editItemId === i.id ? null : i.id)}
+                        className="rounded px-2 py-1 text-xs font-medium text-leaf-700 hover:bg-leaf-50"
+                      >
+                        {t('admin.package.options')}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleRemove(i.id)}
+                        className="rounded px-2 py-1 text-xs font-medium text-red-600 hover:bg-red-50"
+                      >
+                        {t('admin.package.remove')}
+                      </button>
+                    </span>
+                  </div>
+
+                  {editItemId === i.id && (
+                    <div className="mt-2 space-y-3 rounded-lg bg-leaf-50 p-3">
+                      <div>
+                        <p className="mb-1 text-xs font-semibold text-gray-600">
+                          {t('admin.package.substitutes')}
+                        </p>
+                        <div className="flex flex-wrap gap-x-3 gap-y-1">
+                          {seasonalProducts
+                            .filter((p) => p.id !== i.productId)
+                            .map((p) => (
+                              <label key={p.id} className="flex items-center gap-1 text-xs">
+                                <input
+                                  type="checkbox"
+                                  checked={i.substituteIds?.includes(p.id) ?? false}
+                                  onChange={(e) => toggleSubstitute(i.id, p.id, e.target.checked)}
+                                />
+                                {p.name}
+                              </label>
+                            ))}
+                        </div>
+                      </div>
+                      <div>
+                        <p className="mb-1 text-xs font-semibold text-gray-600">
+                          {t('admin.package.alternatives')}
+                        </p>
+                        <div className="flex flex-wrap gap-x-3 gap-y-1">
+                          {seasonalProducts
+                            .filter((p) => p.id !== i.productId)
+                            .map((p) => (
+                              <label key={p.id} className="flex items-center gap-1 text-xs">
+                                <input
+                                  type="checkbox"
+                                  checked={i.alternativeIds?.includes(p.id) ?? false}
+                                  onChange={(e) => toggleAlternative(i.id, p.id, e.target.checked)}
+                                />
+                                {p.name}
+                              </label>
+                            ))}
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </li>
               ))}
             </ul>
