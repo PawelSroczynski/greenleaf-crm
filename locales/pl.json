@@ -123,10 +123,6 @@
       "title": "Moja paczka — zamiany",
       "weekLine": "Tydzień {{week}} · odbiór {{date}}",
       "contents": "Zawartość paczki",
-      "variantLabel": "Wariant UI zamian",
-      "variantA": "Wariant A",
-      "variantB": "Wariant B",
-      "variantC": "Wariant C",
       "simulateAfter": "Symuluj: po terminie",
       "open": "Zamiany otwarte (termin: środa 20:00)",
       "closed": "Zamiany zamknięte (termin: środa 20:00)",
@@ -146,11 +142,11 @@
       "title": "Status Twojej paczki"
     },
     "absence": {
-      "simulateAfter": "Symuluj: po terminie (środa 10:00)",
+      "simulateAfter": "Symuluj: po terminie (środa 20:00)",
       "reported": "Zgłoszono brak odbioru w tym tygodniu.",
       "cancel": "Cofnij",
       "report": "Nie odbiorę w tym tygodniu",
-      "closed": "Termin zgłaszania braku minął (środa 10:00)."
+      "closed": "Termin zgłaszania braku minął (środa 20:00)."
     },
     "subscription": {
       "none": "Brak aktywnego abonamentu.",
@@ -165,7 +161,10 @@
       "delivery": "Sposób dostawy",
       "notes": "Uwagi",
       "save": "Zapisz",
-      "saved": "Zapisano ✓"
+      "saved": "Zapisano ✓",
+      "address": "Adres",
+      "hours": "Godziny odbioru",
+      "saturday": "sobota"
     }
   },
   "supplier": {

@@ -5,29 +5,29 @@ import { SwapPanel } from '@/components/client/SwapPanel';
 import { loadStore } from '@/lib/store';
 import i18n from '@/lib/i18n';
 
-// Bieżący klient (Anna) ma paczkę z 11 sezonowymi pozycjami czerwca.
-// "Ogórek gruntowy" jest sezonowym zamiennikiem spoza paczki.
+// Bieżący klient (Anna) ma paczkę z sezonowymi pozycjami czerwca.
+// "Ogórek gruntowy" i "Cukinia" to sezonowe zamienniki spoza paczki.
 
 function storedSwaps() {
   return loadStore().swaps;
 }
 
-describe('SwapPanel — moduł zamian (MVP-4)', () => {
+describe('SwapPanel — moduł zamian (Wariant A)', () => {
   beforeEach(async () => {
     localStorage.clear();
     await i18n.changeLanguage('pl');
   });
 
-  it('Wariant A: lista z przyciskiem zapisuje Swap do store', async () => {
+  it('zamiana zapisuje Swap do store', async () => {
     const user = userEvent.setup();
     render(<SwapPanel />);
-
-    // domyślnie wariant A, przed terminem (otwarte)
     expect(screen.getByText('Zamiany otwarte (termin: środa 20:00)')).toBeInTheDocument();
 
     await user.click(screen.getAllByRole('button', { name: 'Zamień' })[0]);
-    const select = screen.getByRole('combobox');
-    await user.selectOptions(select, screen.getByRole('option', { name: 'Ogórek gruntowy' }));
+    await user.selectOptions(
+      screen.getByRole('combobox'),
+      screen.getByRole('option', { name: 'Ogórek gruntowy' }),
+    );
 
     const swaps = storedSwaps();
     expect(swaps).toHaveLength(1);
@@ -35,85 +35,10 @@ describe('SwapPanel — moduł zamian (MVP-4)', () => {
     expect(swaps[0].replacementProductId).toBe(ogorek.id);
   });
 
-  it('Wariant B: formularz X→Y zapisuje Swap do store', async () => {
+  it('po zamianie można ZMIENIĆ wybór (upsert) i COFNĄĆ do oryginału', async () => {
     const user = userEvent.setup();
     render(<SwapPanel />);
 
-    await user.click(screen.getByRole('button', { name: 'Wariant B' }));
-    await user.selectOptions(
-      screen.getByLabelText('Produkt z paczki'),
-      screen.getByRole('option', { name: 'Sałata masłowa' }),
-    );
-    await user.selectOptions(
-      screen.getByLabelText('Zamiennik'),
-      screen.getByRole('option', { name: 'Ogórek gruntowy' }),
-    );
-    await user.click(screen.getByRole('button', { name: 'Zamień' }));
-
-    const swaps = storedSwaps();
-    expect(swaps).toHaveLength(1);
-    const store = loadStore();
-    const salata = store.products.find((p) => p.name === 'Sałata masłowa')!;
-    const ogorek = store.products.find((p) => p.name === 'Ogórek gruntowy')!;
-    expect(swaps[0].originalProductId).toBe(salata.id);
-    expect(swaps[0].replacementProductId).toBe(ogorek.id);
-  });
-
-  it('Wariant C: checkboxy + zbiorcze zatwierdzenie zapisuje Swap do store', async () => {
-    const user = userEvent.setup();
-    render(<SwapPanel />);
-
-    await user.click(screen.getByRole('button', { name: 'Wariant C' }));
-    await user.click(screen.getByLabelText('Sałata masłowa'));
-    await user.selectOptions(
-      screen.getByRole('combobox'),
-      screen.getByRole('option', { name: 'Ogórek gruntowy' }),
-    );
-    await user.click(screen.getByRole('button', { name: 'Zatwierdź zamiany' }));
-
-    const swaps = storedSwaps();
-    expect(swaps).toHaveLength(1);
-    const store = loadStore();
-    const salata = store.products.find((p) => p.name === 'Sałata masłowa')!;
-    expect(swaps[0].originalProductId).toBe(salata.id);
-  });
-
-  it('przełącznik wariantów A/B/C przełącza widoczne UI', async () => {
-    const user = userEvent.setup();
-    render(<SwapPanel />);
-
-    // A: przyciski "Zamień" per pozycja
-    expect(screen.getAllByRole('button', { name: 'Zamień' }).length).toBeGreaterThan(1);
-
-    await user.click(screen.getByRole('button', { name: 'Wariant B' }));
-    expect(screen.getByLabelText('Produkt z paczki')).toBeInTheDocument();
-
-    await user.click(screen.getByRole('button', { name: 'Wariant C' }));
-    expect(screen.getByRole('button', { name: 'Zatwierdź zamiany' })).toBeInTheDocument();
-  });
-
-  it('po terminie blokuje zamiany i pokazuje komunikat (każdy wariant)', async () => {
-    const user = userEvent.setup();
-    render(<SwapPanel />);
-
-    await user.click(screen.getByLabelText('Symuluj: po terminie'));
-
-    expect(screen.getByText('Zamiany zamknięte (termin: środa 20:00)')).toBeInTheDocument();
-    // brak przycisków zamiany w wariancie A
-    expect(screen.queryByRole('button', { name: 'Zamień' })).not.toBeInTheDocument();
-
-    // wariant C: checkboxy zablokowane
-    await user.click(screen.getByRole('button', { name: 'Wariant C' }));
-    expect(screen.queryByRole('button', { name: 'Zatwierdź zamiany' })).not.toBeInTheDocument();
-  });
-});
-
-describe('SwapPanel — rozmyślenie się (zmiana i cofnięcie)', () => {
-  it('Wariant A: po zamianie można ZMIENIĆ wybór (upsert) i COFNĄĆ do oryginału', async () => {
-    const user = userEvent.setup();
-    render(<SwapPanel />);
-
-    // pierwsza zamiana → Ogórek gruntowy
     await user.click(screen.getAllByRole('button', { name: 'Zamień' })[0]);
     await user.selectOptions(
       screen.getByRole('combobox'),
@@ -121,7 +46,6 @@ describe('SwapPanel — rozmyślenie się (zmiana i cofnięcie)', () => {
     );
     expect(storedSwaps()).toHaveLength(1);
 
-    // ZMIANA wyboru → Cukinia (upsert, wciąż 1 swap)
     await user.click(screen.getByRole('button', { name: 'Zmień' }));
     await user.selectOptions(
       screen.getByRole('combobox'),
@@ -131,50 +55,15 @@ describe('SwapPanel — rozmyślenie się (zmiana i cofnięcie)', () => {
     expect(storedSwaps()).toHaveLength(1);
     expect(storedSwaps()[0].replacementProductId).toBe(cukinia.id);
 
-    // COFNIĘCIE → zero swapów, wraca przycisk „Zamień"
     await user.click(screen.getByRole('button', { name: 'Cofnij' }));
     expect(storedSwaps()).toHaveLength(0);
   });
 
-  it('Wariant B: lista wykonanych zamian ma przycisk Cofnij', async () => {
+  it('po terminie zamiany zablokowane (brak przycisku Zamień)', async () => {
     const user = userEvent.setup();
     render(<SwapPanel />);
-    await user.click(screen.getByRole('button', { name: 'Wariant B' }));
-
-    await user.selectOptions(
-      screen.getByLabelText('Produkt z paczki'),
-      screen.getByRole('option', { name: 'Sałata masłowa' }),
-    );
-    await user.selectOptions(
-      screen.getByLabelText('Zamiennik'),
-      screen.getByRole('option', { name: 'Ogórek gruntowy' }),
-    );
-    await user.click(screen.getByRole('button', { name: 'Zamień' }));
-    expect(storedSwaps()).toHaveLength(1);
-
-    await user.click(screen.getByRole('button', { name: 'Cofnij' }));
-    expect(storedSwaps()).toHaveLength(0);
-  });
-
-  it('Wariant C: checkbox zamienionej pozycji NIE jest zablokowany (można zmienić)', async () => {
-    const user = userEvent.setup();
-    render(<SwapPanel />);
-    await user.click(screen.getByRole('button', { name: 'Wariant C' }));
-
-    // zamień pierwszą pozycję
-    const firstBox = screen.getAllByRole('checkbox')[1]; // [0] to symulacja czasu
-    await user.click(firstBox);
-    await user.selectOptions(
-      screen.getByRole('combobox'),
-      screen.getByRole('option', { name: 'Ogórek gruntowy' }),
-    );
-    await user.click(screen.getByRole('button', { name: 'Zatwierdź zamiany' }));
-    expect(storedSwaps()).toHaveLength(1);
-
-    // checkbox pozycji nadal aktywny (nie disabled)
-    expect(firstBox).not.toBeDisabled();
-    // cofnięcie działa
-    await user.click(screen.getByRole('button', { name: 'Cofnij' }));
-    expect(storedSwaps()).toHaveLength(0);
+    await user.click(screen.getByLabelText('Symuluj: po terminie'));
+    expect(screen.getByText('Zamiany zamknięte (termin: środa 20:00)')).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Zamień' })).not.toBeInTheDocument();
   });
 });

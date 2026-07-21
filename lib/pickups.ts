@@ -118,7 +118,13 @@ export function pickupStatusList(
       const point = cp.pickupPointId ?? user?.defaultPickupPointId ?? null;
       return { clientPackage: cp, user, pickupPointId: point };
     })
-    .filter((row) => (pickupPointId ? row.pickupPointId === pickupPointId : true));
+    .filter((row) => (pickupPointId ? row.pickupPointId === pickupPointId : true))
+    // kolejność alfabetyczna po nazwisku, potem imieniu (uwaga Magdy)
+    .sort((a, b) => {
+      const an = `${a.user?.lastName ?? ''} ${a.user?.firstName ?? ''}`;
+      const bn = `${b.user?.lastName ?? ''} ${b.user?.firstName ?? ''}`;
+      return an.localeCompare(bn, 'pl');
+    });
 }
 
 /** Klienci, którzy NIE odebrali I NIE zgłosili braku — flaga „nie zgłosił" dla admina. */

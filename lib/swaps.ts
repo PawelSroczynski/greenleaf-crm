@@ -51,6 +51,18 @@ export function replacementOptions(store: Store, clientPackageId: string): Produ
 }
 
 /**
+ * Dozwolone opcje dla konkretnej pozycji paczki (Wariant A „Zmień").
+ * F2 rozszerzy o zamienniki definiowane per pozycja; na razie = pula sezonowa.
+ */
+export function swapOptionsForItem(
+  store: Store,
+  clientPackageId: string,
+  _item: Pick<import('./types').PackageItem, 'productId'>,
+): Product[] {
+  return replacementOptions(store, clientPackageId);
+}
+
+/**
  * Zapisuje zamianę originalProductId → replacementProductId dla ClientPackage.
  * Walidacja: (a) now < termin (inaczej „po terminie"); (b) replacement w replacementOptions.
  * Idempotencja: kolejna zamiana tego samego oryginału AKTUALIZUJE istniejący Swap (upsert).

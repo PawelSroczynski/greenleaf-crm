@@ -70,6 +70,23 @@ export function ProfilePanel() {
           </select>
         </label>
 
+        {/* Godziny i adres wybranego punktu (ustala Magda; klient widzi) */}
+        {(() => {
+          const sel = points.find((p) => p.id === pointId);
+          if (!sel) return null;
+          return (
+            <div className="rounded-lg bg-leaf-50 p-3 text-sm">
+              <p className="text-gray-700">
+                <span className="text-gray-500">{t('client.profile.address')}:</span> {sel.address}
+              </p>
+              <p className="text-gray-700">
+                <span className="text-gray-500">{t('client.profile.hours')}:</span>{' '}
+                {t('client.profile.saturday')} {sel.hoursFrom}–{sel.hoursTo}
+              </p>
+            </div>
+          );
+        })()}
+
         <label className="block text-sm">
           <span className="mb-1 block text-gray-600">{t('client.profile.delivery')}</span>
           <select

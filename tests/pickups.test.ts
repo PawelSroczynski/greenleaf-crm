@@ -25,11 +25,11 @@ describe('pickups — deadline braku odbioru (MVP-5)', () => {
     expect(isAbsenceOpen(wp, after)).toBe(false);
   });
 
-  it('deadline to środa 10:00 (UTC)', () => {
+  it('deadline to środa 20:00 (UTC)', () => {
     const { wp } = publishedPkg();
     const d = getAbsenceDeadline(wp);
     expect(d.getUTCDay()).toBe(3); // środa
-    expect(d.getUTCHours()).toBe(10);
+    expect(d.getUTCHours()).toBe(20);
     expect(d.getUTCMinutes()).toBe(0);
   });
 

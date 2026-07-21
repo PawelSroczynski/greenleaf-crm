@@ -51,9 +51,9 @@ describe('ETAP 4 — domknięcie cyklu (UI)', () => {
   it('Po terminie: zgłoszenie zablokowane (komunikat zamiast przycisku)', async () => {
     const user = userEvent.setup();
     render(<PackageStatus />);
-    await user.click(screen.getByLabelText('Symuluj: po terminie (środa 10:00)'));
+    await user.click(screen.getByLabelText('Symuluj: po terminie (środa 20:00)'));
     expect(
-      screen.getByText('Termin zgłaszania braku minął (środa 10:00).'),
+      screen.getByText('Termin zgłaszania braku minął (środa 20:00).'),
     ).toBeInTheDocument();
     expect(
       screen.queryByRole('button', { name: 'Nie odbiorę w tym tygodniu' }),

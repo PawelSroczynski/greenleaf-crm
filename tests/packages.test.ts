@@ -146,7 +146,7 @@ describe('packages — poprawki skanu (guardy)', () => {
     const store = createSeedData();
     const draft = createDraftPackage(store, 5, '2026-06-20'); // sobota
     expect(draft.swapDeadline).toBe('2026-06-17T20:00:00.000Z'); // środa 20:00
-    expect(draft.absenceDeadline).toBe('2026-06-17T10:00:00.000Z'); // środa 10:00
+    expect(draft.absenceDeadline).toBe('2026-06-17T20:00:00.000Z'); // środa 20:00
   });
 
   it('addItemToPackage odrzuca ilość NaN, zero i ujemną', () => {

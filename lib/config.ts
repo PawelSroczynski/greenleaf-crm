@@ -14,7 +14,8 @@ export const SEASON_MONTH_END = 10;
  * dayOfWeek: 0 = niedziela ... 3 = środa (konwencja Date.getDay()).
  */
 export const SWAP_DEADLINE = { dayOfWeek: 3, hour: 20, minute: 0 } as const; // środa 20:00
-export const ABSENCE_DEADLINE = { dayOfWeek: 3, hour: 10, minute: 0 } as const; // środa 10:00
+// Deadline zgłoszenia braku odbioru = środa 20:00 (uwaga Magdy 2026-07-02: wcześniej 10:00).
+export const ABSENCE_DEADLINE = { dayOfWeek: 3, hour: 20, minute: 0 } as const; // środa 20:00
 
 /** Dzień odbioru — soboty (PRD §12). */
 export const PICKUP_DAY = 'saturday' as const;

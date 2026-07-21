@@ -123,10 +123,6 @@
       "title": "My box — swaps",
       "weekLine": "Week {{week}} · pickup {{date}}",
       "contents": "Box contents",
-      "variantLabel": "Swap UI variant",
-      "variantA": "Variant A",
-      "variantB": "Variant B",
-      "variantC": "Variant C",
       "simulateAfter": "Simulate: past deadline",
       "open": "Swaps open (deadline: Wednesday 20:00)",
       "closed": "Swaps closed (deadline: Wednesday 20:00)",
@@ -146,11 +142,11 @@
       "title": "Your package status"
     },
     "absence": {
-      "simulateAfter": "Simulate: after deadline (Wed 10:00)",
+      "simulateAfter": "Simulate: after deadline (Wed 20:00)",
       "reported": "Absence reported for this week.",
       "cancel": "Undo",
       "report": "I won't pick up this week",
-      "closed": "Absence reporting deadline passed (Wed 10:00)."
+      "closed": "Absence reporting deadline passed (Wed 20:00)."
     },
     "subscription": {
       "none": "No active subscription.",
@@ -165,7 +161,10 @@
       "delivery": "Delivery",
       "notes": "Notes",
       "save": "Save",
-      "saved": "Saved ✓"
+      "saved": "Saved ✓",
+      "address": "Address",
+      "hours": "Pickup hours",
+      "saturday": "Saturday"
     }
   },
   "supplier": {
