@@ -129,6 +129,11 @@
       "message": "message",
       "dateChangeBody": "Requests moving pickup from {{from}} to {{to}}",
       "markRead": "Mark as read"
+    },
+    "history": {
+      "title": "Package history (past weeks)",
+      "week": "Week {{week}}",
+      "itemCount": "{{n}} items"
     }
   },
   "client": {

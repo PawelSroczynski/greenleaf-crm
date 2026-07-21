@@ -129,6 +129,11 @@
       "message": "wiadomość",
       "dateChangeBody": "Prośba o zmianę odbioru z {{from}} na {{to}}",
       "markRead": "Oznacz jako przeczytane"
+    },
+    "history": {
+      "title": "Historia paczek (co już było)",
+      "week": "Tydzień {{week}}",
+      "itemCount": "{{n}} pozycji"
     }
   },
   "client": {

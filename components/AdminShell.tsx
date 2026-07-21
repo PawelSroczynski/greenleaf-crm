@@ -12,6 +12,7 @@ import { PickupList } from '@/components/admin/PickupList';
 import { ExportPanel } from '@/components/admin/ExportPanel';
 import { ClientsList } from '@/components/admin/ClientsList';
 import { PointsManager } from '@/components/admin/PointsManager';
+import { PackageHistory } from '@/components/admin/PackageHistory';
 import { InboxPanel } from '@/components/admin/InboxPanel';
 import { loadStore } from '@/lib/store';
 import { currentPickupWeek } from '@/lib/pickups';
@@ -64,6 +65,7 @@ function Dashboard() {
           </div>
         </div>
       )}
+      <PackageHistory />
       <PointsManager />
     </section>
   );

@@ -66,3 +66,19 @@ describe('PointsManager — bezpiecznik usuwania', () => {
     expect(loadStore().pickupPoints.some((p) => p.name === 'Oborniki')).toBe(false);
   });
 });
+
+describe('PackageHistory — historia paczek na Pulpicie (F7)', () => {
+  it('listuje tygodnie i po kliknięciu pokazuje skład', async () => {
+    const { PackageHistory } = await import('@/components/admin/PackageHistory');
+    const user = userEvent.setup();
+    localStorage.clear();
+    await i18n.changeLanguage('pl');
+    render(<PackageHistory />);
+    expect(screen.getByText('Historia paczek (co już było)')).toBeInTheDocument();
+    // 4 tygodnie (1-3 archiwum + 4 bieżący)
+    expect(screen.getAllByText(/Tydzień \d/).length).toBeGreaterThanOrEqual(4);
+    await user.click(screen.getByText('Tydzień 4'));
+    // skład rozwinięty — jakaś pozycja warzywna widoczna
+    expect(screen.getByText(/Rzodkiewka —/)).toBeInTheDocument();
+  });
+});

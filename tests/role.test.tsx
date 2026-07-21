@@ -49,6 +49,6 @@ describe('role: RolePicker + przełączanie shelli', () => {
     await user.click(screen.getByRole('button', { name: /Rolnik \/ Admin/i }));
 
     expect(await screen.findByText('5')).toBeInTheDocument();
-    expect(screen.getByText(/tydzień 4/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/tydzień 4/i).length).toBeGreaterThanOrEqual(1);
   });
 });
