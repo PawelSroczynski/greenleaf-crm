@@ -15,13 +15,15 @@ import { PointsManager } from '@/components/admin/PointsManager';
 import { PackageHistory } from '@/components/admin/PackageHistory';
 import { InboxPanel } from '@/components/admin/InboxPanel';
 import { PaymentsPanel } from '@/components/admin/PaymentsPanel';
+import { ChickensAdmin } from '@/components/admin/ChickensAdmin';
+import { OrdersAdmin } from '@/components/admin/OrdersAdmin';
 import { loadStore } from '@/lib/store';
 import { currentPickupWeek } from '@/lib/pickups';
 import { unreadCount } from '@/lib/inbox';
 
-type Section = 'dashboard' | 'weeklyPackage' | 'clients' | 'pickups' | 'payments' | 'inbox' | 'export';
+type Section = 'dashboard' | 'weeklyPackage' | 'clients' | 'pickups' | 'payments' | 'chickens' | 'orders' | 'inbox' | 'export';
 
-const SECTIONS: Section[] = ['dashboard', 'weeklyPackage', 'clients', 'pickups', 'payments', 'inbox', 'export'];
+const SECTIONS: Section[] = ['dashboard', 'weeklyPackage', 'clients', 'pickups', 'payments', 'chickens', 'orders', 'inbox', 'export'];
 
 interface DashboardStats {
   activeClients: number;
@@ -114,6 +116,8 @@ export function AdminShell() {
         {active === 'clients' && <ClientsList />}
         {active === 'pickups' && <PickupList />}
         {active === 'payments' && <PaymentsPanel />}
+        {active === 'chickens' && <ChickensAdmin />}
+        {active === 'orders' && <OrdersAdmin />}
         {active === 'inbox' && <InboxPanel />}
         {active === 'export' && <ExportPanel />}
       </main>

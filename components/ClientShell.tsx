@@ -9,12 +9,16 @@ import { SwapPanel } from '@/components/client/SwapPanel';
 import { PackageStatus } from '@/components/client/PackageStatus';
 import { SubscriptionPanel } from '@/components/client/SubscriptionPanel';
 import { ProfilePanel } from '@/components/client/ProfilePanel';
+import { ChickensPanel } from '@/components/client/ChickensPanel';
+import { ExtraOrdersPanel } from '@/components/client/ExtraOrdersPanel';
 
-type Tab = 'myPackage' | 'subscription' | 'profile';
+type Tab = 'myPackage' | 'subscription' | 'chickens' | 'orders' | 'profile';
 
 const TABS: { tab: Tab; emoji: string }[] = [
   { tab: 'myPackage', emoji: '🧺' },
   { tab: 'subscription', emoji: '📦' },
+  { tab: 'chickens', emoji: '🐔' },
+  { tab: 'orders', emoji: '🛒' },
   { tab: 'profile', emoji: '👤' },
 ];
 
@@ -34,6 +38,8 @@ export function ClientShell() {
           </>
         )}
         {active === 'subscription' && <SubscriptionPanel />}
+        {active === 'chickens' && <ChickensPanel />}
+        {active === 'orders' && <ExtraOrdersPanel />}
         {active === 'profile' && <ProfilePanel />}
       </main>
 

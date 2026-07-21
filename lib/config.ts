@@ -54,6 +54,13 @@ export const CHICKEN = {
   avgCarcassWeight: 2.8,
 } as const;
 
+/** Partie kurczaków w sezonie (kiedy kolejna partia — do zapisów klientów). */
+export const CHICKEN_BATCHES = [
+  { batch: 'batch_1', plannedDate: `${SEASON}-06-20` },
+  { batch: 'batch_2', plannedDate: `${SEASON}-08-01` },
+  { batch: 'batch_3', plannedDate: `${SEASON}-09-19` },
+] as const;
+
 /** Raty: 10 maja / 10 lipca / 10 września (PRD §4.4, §12). */
 export const INSTALLMENT_DATES = [
   `${SEASON}-05-10`,

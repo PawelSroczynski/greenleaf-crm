@@ -28,7 +28,9 @@
       "pickups": "Odbiory",
       "export": "Eksport",
       "inbox": "Skrzynka",
-      "payments": "Płatności"
+      "payments": "Płatności",
+      "chickens": "Kurczaki",
+      "orders": "Zamówienia"
     },
     "dashboard": {
       "title": "Pulpit",
@@ -138,6 +140,16 @@
     },
     "payments": {
       "paid": "zapłacone"
+    },
+    "chickens": {
+      "total": "razem {{n}} szt",
+      "noReservations": "Brak zapisów.",
+      "pcs": "szt"
+    },
+    "orders": {
+      "empty": "Brak zamówień dodatkowych.",
+      "approve": "Zatwierdź",
+      "reject": "Odrzuć"
     }
   },
   "client": {
@@ -203,6 +215,24 @@
       "requested": "Wysłano prośbę",
       "note": "Zmiana daty wymaga potwierdzenia przez gospodarstwo.",
       "requestedShort": "prośba wysłana"
+    },
+    "chickens": {
+      "title": "Kurczaki",
+      "batch": "Partia {{n}}",
+      "count": "Ile tuszek",
+      "giblets": "z podrobami",
+      "reserve": "Zapisz się",
+      "reserved": "Zapisano: {{n}} szt",
+      "cancel": "Anuluj"
+    },
+    "orders": {
+      "title": "Zamówienia dodatkowe",
+      "intro": "Domów produkty poza paczką.",
+      "product": "Produkt",
+      "add": "+ dodaj produkt",
+      "qty": "ilość",
+      "submit": "Złóż zamówienie",
+      "mine": "Twoje zamówienia"
     }
   },
   "supplier": {
@@ -245,5 +275,12 @@
   "frequency": {
     "weekly": "co tydzień",
     "biweekly": "co 2 tygodnie"
+  },
+  "orderStatus": {
+    "submitted": "złożone",
+    "approved": "zatwierdzone",
+    "rejected": "odrzucone",
+    "ready": "gotowe",
+    "picked_up": "odebrane"
   }
 }

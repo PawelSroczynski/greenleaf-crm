@@ -28,7 +28,9 @@
       "pickups": "Pickups",
       "export": "Export",
       "inbox": "Inbox",
-      "payments": "Payments"
+      "payments": "Payments",
+      "chickens": "Chickens",
+      "orders": "Orders"
     },
     "dashboard": {
       "title": "Dashboard",
@@ -138,6 +140,16 @@
     },
     "payments": {
       "paid": "paid"
+    },
+    "chickens": {
+      "total": "total {{n}} pcs",
+      "noReservations": "No sign-ups.",
+      "pcs": "pcs"
+    },
+    "orders": {
+      "empty": "No extra orders.",
+      "approve": "Approve",
+      "reject": "Reject"
     }
   },
   "client": {
@@ -203,6 +215,24 @@
       "requested": "Request sent",
       "note": "Date change needs farm confirmation.",
       "requestedShort": "request sent"
+    },
+    "chickens": {
+      "title": "Chickens",
+      "batch": "Batch {{n}}",
+      "count": "Carcasses",
+      "giblets": "with giblets",
+      "reserve": "Sign up",
+      "reserved": "Signed up: {{n}} pcs",
+      "cancel": "Cancel"
+    },
+    "orders": {
+      "title": "Extra orders",
+      "intro": "Order products beyond your box.",
+      "product": "Product",
+      "add": "+ add product",
+      "qty": "qty",
+      "submit": "Place order",
+      "mine": "Your orders"
     }
   },
   "supplier": {
@@ -245,5 +275,12 @@
   "frequency": {
     "weekly": "weekly",
     "biweekly": "every 2 weeks"
+  },
+  "orderStatus": {
+    "submitted": "submitted",
+    "approved": "approved",
+    "rejected": "rejected",
+    "ready": "ready",
+    "picked_up": "picked up"
   }
 }
